@@ -4,6 +4,8 @@ extends Node
 
 func _ready() -> void:
 	var app := OS.has_feature("mobile") or "--app" in OS.get_cmdline_user_args()
+	var version := str(ProjectSettings.get_setting("application/config/version", ""))
+	get_window().title = "Acuaris V%s %s · EXPERIMENTAL" % [version, "App" if app else "Editor"]
 	if not app:
 		var pantalla := DisplayServer.screen_get_usable_rect()
 		var tam := Vector2i(mini(1680, pantalla.size.x - 40), mini(1000, pantalla.size.y - 60))

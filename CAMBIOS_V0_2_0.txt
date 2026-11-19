@@ -1,0 +1,22 @@
+ACUARIS — CAMBIOS
+=================
+
+V0.2.0 (experimental, 19-11-2026)
+- Editor de interfaces para PC: abrir el acuario original (protegido), crear
+  interfaces nuevas para móvil, tablet o PC, vertical u horizontal.
+- Paleta con los elementos reales; lienzo con marco del dispositivo, rejilla,
+  mover y estirar, zoom y tamaño real; propiedades por tipo de elemento.
+- Páginas, deshacer/rehacer, guardar/abrir, atajos de teclado.
+- Probar con el simulador del acuario dentro del editor.
+- App: pestañas si hay varias páginas y orientación según el proyecto.
+- Perfiles de tablet (8" y 10" genéricas) y PC.
+- 98 pruebas automáticas.
+
+V0.1.1 (experimental)
+- Corrige "Sin conexión" al elegir el módulo Bluetooth.
+- Probado con el acuario real: lectura (hora, temperatura, consigna, bomba,
+  luz) y escritura (interruptor de luces) por Bluetooth con el HC-05.
+
+V0.1.0 (prueba de concepto)
+- Protocolo VirtuinoCM, simulador del Arduino, panel del acuario, complemento
+  Bluetooth para Android y compilación automática del APK.

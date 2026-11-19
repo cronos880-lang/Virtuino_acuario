@@ -2,3 +2,4 @@
 /.godot-bin/
 android-plugin/build/
 android-plugin/.gradle/
+/motor/
