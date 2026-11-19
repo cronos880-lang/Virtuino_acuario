@@ -1,0 +1,41 @@
+{
+  "formato": "acuaris-perfiles",
+  "version": 1,
+  "nota": "Los campos *_verificado indican si el dato procede de una medición real con Acuaris en el teléfono. Los datos no verificados son provisionales.",
+  "perfiles": [
+    {
+      "id": "samsung_galaxy_a56",
+      "nombre": "Samsung Galaxy A56 5G",
+      "pantalla_px": [1080, 2340],
+      "diagonal_pulgadas": 6.7,
+      "ppi_fisico": 385,
+      "fuente_ficha": "Ficha técnica pública: 6,7\", 1080 x 2340 px, 385 ppi, Super AMOLED 120 Hz, Android 15",
+      "densidad": 2.8125,
+      "densidad_verificado": false,
+      "nota_densidad": "Estimación (450 dpi lógicos, habitual en Samsung FHD+ con tamaño de pantalla por defecto). Se confirma con 'Medir este móvil'.",
+      "margen_superior_dp": 32,
+      "margen_inferior_dp": 24,
+      "margenes_verificado": false
+    },
+    {
+      "id": "generico_compacto",
+      "nombre": "Android genérico compacto (360 x 800 dp)",
+      "pantalla_px": [1080, 2400],
+      "densidad": 3.0,
+      "densidad_verificado": false,
+      "margen_superior_dp": 24,
+      "margen_inferior_dp": 24,
+      "margenes_verificado": false
+    },
+    {
+      "id": "generico_grande",
+      "nombre": "Android genérico grande (412 x 915 dp)",
+      "pantalla_px": [1080, 2400],
+      "densidad": 2.625,
+      "densidad_verificado": false,
+      "margen_superior_dp": 24,
+      "margen_inferior_dp": 24,
+      "margenes_verificado": false
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+/build/
+/.godot-bin/
+android-plugin/build/
+android-plugin/.gradle/

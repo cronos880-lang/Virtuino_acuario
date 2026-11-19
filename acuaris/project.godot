@@ -1,0 +1,38 @@
+; Proyecto Godot 4.7.2 (renderizador de compatibilidad: funciona en cualquier Android con OpenGL ES 3).
+
+config_version=5
+
+[application]
+
+config/name="Acuaris"
+config/description="Paneles de control Bluetooth para Arduino (protocolo VirtuinoCM)"
+config/version="0.1.0"
+run/main_scene="res://ui/principal.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=432
+window/size/viewport_height=936
+window/handheld/orientation=1
+window/stretch/mode="disabled"
+window/dpi/allow_hidpi=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/acuaris_bluetooth/plugin.cfg")
+
+[gui]
+
+common/drop_mouse_on_gui_input_disabled=true
+
+[input_devices]
+
+pointing/emulate_mouse_from_touch=true
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

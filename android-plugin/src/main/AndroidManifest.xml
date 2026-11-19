@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Android 11 o anterior -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <!-- Android 12 o posterior: solo conexión a dispositivos ya emparejados (no busca ni localiza) -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
+
+    <application>
+        <meta-data
+            android:name="org.godotengine.plugin.v2.AcuarisBluetooth"
+            android:value="org.acuaris.bluetooth.AcuarisBluetooth" />
+    </application>
+</manifest>

@@ -1,0 +1,29 @@
+// Complemento Android de Acuaris (Bluetooth SPP). Gradle 8.11.1, Android Gradle Plugin 8.7.3, Java 17.
+plugins {
+    id 'com.android.library' version '8.7.3'
+}
+
+android {
+    namespace 'org.acuaris.bluetooth'
+    compileSdk 35
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    // La librería de Godot la aporta la propia exportación; aquí solo se compila contra ella.
+    compileOnly 'org.godotengine:godot:4.7.2.stable'
+}

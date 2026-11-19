@@ -1,0 +1,224 @@
+{
+  "formato": "acuaris-proyecto",
+  "version": 1,
+  "nombre": "Acuario",
+  "perfil": "samsung_galaxy_a56",
+  "lienzo_dp": [
+    384,
+    832
+  ],
+  "conexion": {
+    "tipo": "bluetooth_spp",
+    "nombre_dispositivo": "HC-06",
+    "intervalo_ms": 400
+  },
+  "paginas": [
+    {
+      "id": "principal",
+      "nombre": "Acuario",
+      "widgets": [
+        {
+          "id": "reloj",
+          "tipo": "reloj",
+          "x": 16,
+          "y": 8,
+          "w": 352,
+          "h": 60,
+          "props": {
+            "titulo": "Hora del controlador",
+            "pin_h": "V2",
+            "pin_m": "V3",
+            "pin_s": "V4",
+            "tam": 28
+          }
+        },
+        {
+          "id": "panel_temp",
+          "tipo": "panel",
+          "x": 16,
+          "y": 80,
+          "w": 352,
+          "h": 252,
+          "props": {
+            "titulo": "Temperatura del agua",
+            "subtitulo": "Sonda DS18B20 · histéresis ±0,2 °C · relé mín. 3 min"
+          }
+        },
+        {
+          "id": "temp",
+          "tipo": "indicador",
+          "x": 24,
+          "y": 124,
+          "w": 204,
+          "h": 204,
+          "pin": "V35",
+          "props": {
+            "min": 18,
+            "max": 32,
+            "unidad": "°C",
+            "decimales": 1,
+            "titulo": "Agua",
+            "pin_consigna": "V27",
+            "tolerancia": 0.5
+          }
+        },
+        {
+          "id": "calentador",
+          "tipo": "led",
+          "x": 232,
+          "y": 134,
+          "w": 128,
+          "h": 56,
+          "pin": "V6",
+          "props": {
+            "texto": "Calentador",
+            "texto_on": "ENCENDIDO",
+            "texto_off": "APAGADO",
+            "color_on": "#ff8a3d",
+            "vertical": true,
+            "con_fondo": true,
+            "radio": 10
+          }
+        },
+        {
+          "id": "consigna",
+          "tipo": "valor",
+          "x": 232,
+          "y": 200,
+          "w": 128,
+          "h": 58,
+          "pin": "V27",
+          "props": {
+            "titulo": "Consigna",
+            "unidad": "°C",
+            "decimales": 1,
+            "tam": 20,
+            "color": "#ffc145"
+          }
+        },
+        {
+          "id": "lumens_txt",
+          "tipo": "etiqueta",
+          "x": 232,
+          "y": 266,
+          "w": 128,
+          "h": 52,
+          "props": {
+            "texto": "Ajustes en el\nmenú del Arduino",
+            "tam": 11,
+            "color": "#5d8299",
+            "alineacion": "centro"
+          }
+        },
+        {
+          "id": "panel_bomba",
+          "tipo": "panel",
+          "x": 16,
+          "y": 344,
+          "w": 352,
+          "h": 170,
+          "props": {
+            "titulo": "Bomba / aireador",
+            "subtitulo": "Automático de 15:00 a 22:00"
+          }
+        },
+        {
+          "id": "bomba",
+          "tipo": "led",
+          "x": 28,
+          "y": 394,
+          "w": 328,
+          "h": 40,
+          "pin": "V8",
+          "props": {
+            "texto": "Bomba",
+            "texto_on": "EN MARCHA",
+            "texto_off": "PARADA",
+            "color_on": "#2ec4d6"
+          }
+        },
+        {
+          "id": "bomba_manual",
+          "tipo": "interruptor",
+          "x": 28,
+          "y": 436,
+          "w": 328,
+          "h": 36,
+          "pin": "V29",
+          "props": {
+            "texto": "Modo manual",
+            "texto_on": "Manual: manda el interruptor de abajo",
+            "texto_off": "Automático por horario"
+          }
+        },
+        {
+          "id": "bomba_on",
+          "tipo": "interruptor",
+          "x": 28,
+          "y": 474,
+          "w": 328,
+          "h": 36,
+          "pin": "V15",
+          "props": {
+            "texto": "Bomba ON (en manual)"
+          }
+        },
+        {
+          "id": "panel_luces",
+          "tipo": "panel",
+          "x": 16,
+          "y": 526,
+          "w": 352,
+          "h": 150,
+          "props": {
+            "titulo": "Iluminación",
+            "subtitulo": "Amanecer 16:00 · atardecer 21:45 · apagado 22:00"
+          }
+        },
+        {
+          "id": "luces_manual",
+          "tipo": "interruptor",
+          "x": 28,
+          "y": 574,
+          "w": 328,
+          "h": 36,
+          "pin": "V16",
+          "props": {
+            "texto": "Luces al máximo (manual)",
+            "color_on": "#ffd166"
+          }
+        },
+        {
+          "id": "intensidad",
+          "tipo": "barra",
+          "x": 28,
+          "y": 618,
+          "w": 328,
+          "h": 48,
+          "pin": "V10",
+          "props": {
+            "titulo": "Intensidad configurada",
+            "min": 0,
+            "max": 255,
+            "mostrar": "porcentaje",
+            "color": "#ffd166"
+          }
+        },
+        {
+          "id": "pie",
+          "tipo": "etiqueta",
+          "x": 16,
+          "y": 688,
+          "w": 352,
+          "h": 22,
+          "props": {
+            "texto": "Acuaris · protocolo VirtuinoCM · Arduino Mega 2560",
+            "tam": 11,
+            "color": "#5d8299",
+            "alineacion": "centro"
+          }
+        }
+      ]
+    }
+  ]
+}

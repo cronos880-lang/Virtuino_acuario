@@ -1,0 +1,194 @@
+void Luces(int*incrementa, int*cuenta, int*lumen, int* luz, int*luz1, DateTime now)
+{
+    int minutos = now.minute();
+    int hora = now.hour();
+   
+    //PRUEBAS DE BUCLE
+    if((hora==16)&(minutos<=*cuenta))
+      {
+        *cuenta=*cuenta+1;
+        if(*incrementa<=*lumen)
+        {
+          *incrementa=*incrementa+16;
+          *luz=*incrementa;
+          *luz1=*incrementa;
+        }
+      }
+    if((hora>=16)&(minutos>=16)&(hora<21))
+       {
+         *luz=*lumen;
+         *luz1=*lumen;
+       }
+}
+        
+ /*   
+  
+    /////////// Cuando ponemos en hora miramos si esta encendido o no////////////////
+   
+    if((hora>=16) & (hora<=21)){
+       *luz=255;
+       *luz1=255; 
+    }
+   
+    //////////////////
+    if(hora==23){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==0){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==1){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==2){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==3){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==4){
+       *luz=0;
+       *luz1=0; 
+    }  
+    if(hora==5){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==6){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==7){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==8){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==9){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==10){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==11){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==12){
+       *luz=0;
+       *luz1=0; 
+    }
+    if(hora==13){
+       *luz=0;
+       *luz1=0; 
+    }
+    
+      
+    /////////// MIRAMOS LA HORA PARA ENCENDER LUCES ////////////
+    if((hora==16) & (minutos<=15))
+    {
+     if(minutos==1){
+        *luz=17;
+        *luz1=17;}
+     if(minutos==2){
+        *luz=34;
+        *luz1=34;}       
+     if(minutos==3){
+        *luz=51;
+        *luz1=51;} 
+     if(minutos==4){
+        *luz=68;
+        *luz1=68;}      
+     if(minutos==5){
+        *luz=85;
+        *luz1=85;}
+     if(minutos==6){
+        *luz=102;
+        *luz1=102;}           
+     if(minutos==7){
+        *luz=119;
+        *luz1=119;}
+     if(minutos==8){
+        *luz=136;
+        *luz1=136;}
+     if(minutos==9){
+        *luz=153;
+        *luz1=153;}
+     if(minutos==10){
+        *luz=170;
+        *luz1=170;}  
+     if(minutos==11){
+        *luz=187;
+        *luz1=187;}
+     if(minutos==12){
+        *luz=204;
+        *luz1=204;}          
+     if(minutos==13){
+        *luz=221;
+        *luz1=221;}
+     if(minutos==14){
+        *luz=238;
+        *luz1=238;}   
+     if(minutos==15){
+        *luz=255;
+        *luz1=255;}   
+   }
+   /////////// MIRAMOS LA HORA PARA APAGAR LUCES ///////////
+   if((hora==22) & (minutos<=15))
+    {
+     if(minutos==1){
+        *luz=245;
+        *luz1=245;}
+     if(minutos==2){
+        *luz=238;
+        *luz1=238;}   
+     if(minutos==3){
+        *luz=221;
+        *luz1=221;}
+     if(minutos==4){
+        *luz=204;
+        *luz1=204;}     
+     if(minutos==5){
+        *luz=187;
+        *luz1=187;}
+     if(minutos==6){
+        *luz=170;
+        *luz1=170;}          
+     if(minutos==7){
+        *luz=153;
+        *luz1=153;}
+     if(minutos==8){
+        *luz=136;
+        *luz1=136;}
+     if(minutos==9){
+        *luz=119;
+        *luz1=119;}
+     if(minutos==10){
+        *luz=102;
+        *luz1=102;}  
+     if(minutos==11){
+        *luz=85;
+        *luz1=85;}
+     if(minutos==12){
+        *luz=68;
+        *luz1=68;}          
+     if(minutos==13){
+        *luz=51;
+        *luz1=51;}
+     if(minutos==14){
+        *luz=34;
+        *luz1=34;}   
+     if(minutos==15){
+        *luz=0;
+        *luz1=0;}      
+  }
+}*/
