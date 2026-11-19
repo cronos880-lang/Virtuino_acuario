@@ -3,8 +3,9 @@
 Diseñador de paneles de control en PC y app Android para controladores Arduino por Bluetooth,
 compatible con el protocolo **VirtuinoCM**: tu sketch actual no necesita cambios.
 
-> **Estado:** V0.1.0, prueba de concepto (fase 0 + POC). **No es una versión oficial**: solo el
-> propietario aprueba versiones oficiales.
+> **Estado:** en desarrollo. Hay una app Android probada con el acuario real (lectura y escritura por
+> Bluetooth) y la primera versión del editor de PC. **No es una versión oficial**: solo el propietario
+> aprueba versiones oficiales.
 
 ## Contenido
 
@@ -25,6 +26,18 @@ Tras cada push, GitHub Actions compila. Ve a la pestaña **Actions** del reposit
 - `Acuaris-Android` → `Acuaris.apk` (instalar en el móvil, permitiendo "orígenes desconocidos").
 - El `.exe` de Windows no se publica hasta que el programa esté terminado.
 
+## Editor de PC
+
+En el PC, Acuaris abre el **editor**:
+
+- **Acuario**: abre tu interfaz original (protegida: los cambios se guardan con otro nombre).
+- **Nuevo**: interfaz desde cero eligiendo dispositivo (móvil, tablet o PC) y orientación.
+- Paleta: clic para añadir o arrastrar al dispositivo. Ratón para mover y estirar (rejilla de 4 dp).
+- Propiedades a la derecha: pin, posición, tamaño, textos, colores, límites…
+- Páginas, deshacer/rehacer, zoom (ajustar, + / −, 1:1 tamaño real aproximado).
+- **▶ Probar**: la interfaz funciona con el simulador del acuario.
+- Atajos: Supr borrar · Ctrl+D duplicar · flechas mover · Ctrl+Z/Ctrl+Y · Ctrl+S.
+
 ## Uso con el acuario
 
 1. Empareja el HC-06 en los ajustes de Bluetooth de Android (si ya usas Virtuino 6, ya lo está).
@@ -39,7 +52,7 @@ En el PC se trabaja con el **simulador**, que reproduce la lógica del sketch.
 - Complemento Android: Java 17, Android Gradle Plugin 8.7.3, Gradle 8.11.1, compileSdk 35, minSdk 21,
   compilado contra `org.godotengine:godot:4.7.2.stable`.
 - Pruebas: `godot --headless --path acuaris -s res://tests/ejecutar_pruebas.gd`
-- Maqueta del diseñador (fase 1, no funcional): `godot --path acuaris res://ui/disenador_maqueta.tscn`
+- Editor: `godot --path acuaris` (en el PC arranca el editor; `-- --app` arranca la app)
 - Capturas: `godot --path acuaris --resolution 1080x2340 -- --captura=salida.png [--pantalla=conexion|medir] [--hora=16:20] [--segundos=240]`
 
 Más detalle en `docs/ESPECIFICACION.md`.

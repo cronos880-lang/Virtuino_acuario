@@ -22,6 +22,7 @@ func _initialize() -> void:
 	prueba_proyecto()
 	prueba_perfiles()
 	prueba_comunicador()
+	load("res://tests/pruebas_editor.gd").new(self).ejecutar()
 	# Prueba de la aplicación completa: se termina en _process tras unos fotogramas.
 	_app = load("res://ui/principal.tscn").instantiate()
 	root.add_child(_app)
@@ -31,6 +32,7 @@ func _initialize() -> void:
 var _app: Node = null
 var _t_inicio := 0
 var _fase := 0
+var _editor: Node = null
 
 
 func _process(_delta: float) -> bool:
@@ -42,6 +44,17 @@ func _process(_delta: float) -> bool:
 		_t_inicio = Time.get_ticks_msec()
 		return false
 	if _fase == 1 and t > 3000:
+		# El editor también debe cargar sin errores.
+		_editor = load("res://ui/editor/editor.tscn").instantiate()
+		root.add_child(_editor)
+		_fase = 3
+		return false
+	if _fase == 3:
+		_fase = 4
+		return false
+	if _fase == 4:
+		comprobar(_editor.modelo.paginas().size() == 1 and _editor.modelo.widgets().size() > 10, "app editor: abre el acuario")
+		comprobar(_editor.lienzo.zoom >= 0.1 and _editor.lienzo.modelo != null, "app editor: lienzo preparado")
 		comprobar(is_instance_valid(_app.enlace), "app: la conexión sobrevive al redibujado")
 		comprobar(is_instance_valid(_app.enlace) and _app.enlace.esta_conectado(), "app: conexión activa")
 		comprobar(_app.comunicador.valores.has("V35"), "app: llegan valores a la pantalla")

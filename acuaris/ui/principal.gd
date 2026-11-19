@@ -22,6 +22,7 @@ var config := ConfigFile.new()
 var _reintentos := 0
 var _desconexion_voluntaria := false
 var _t_estado := 0.0
+var _pagina := 0
 
 
 func _ready() -> void:
@@ -34,6 +35,8 @@ func _ready() -> void:
 	proyecto = Proyecto.desde_archivo(str(args.get("proyecto", PROYECTO_DEFECTO)))
 	comunicador.intervalo_ronda_ms = proyecto.intervalo_ms()
 	comunicador.fijar_pines(proyecto.todos_los_pines())
+	if OS.has_feature("mobile") and proyecto.errores.is_empty():
+		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_LANDSCAPE if proyecto.ancho_dp() > proyecto.alto_dp() else DisplayServer.SCREEN_PORTRAIT)
 	_construir()
 	get_viewport().size_changed.connect(_construir)
 	if not proyecto.errores.is_empty():
@@ -85,17 +88,30 @@ func _construir() -> void:
 	barra.size = Vector2(tam.x, ALTO_BARRA_DP * s)
 	barra.pulsado_estado.connect(mostrar_conexion)
 	add_child(barra)
+	var y_contenido := barra.position.y + barra.size.y
+	if proyecto.paginas().size() > 1:
+		var pest := PestanasApp.new()
+		pest.s = s
+		pest.actual = _pagina
+		for p in proyecto.paginas():
+			pest.nombres.append(str(p.get("nombre", "Página")))
+		pest.position = Vector2(0, y_contenido)
+		pest.size = Vector2(tam.x, 46 * s)
+		pest.elegida.connect(func(i): _pagina = i; _construir())
+		add_child(pest)
+		y_contenido += pest.size.y
 	scroll = ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	scroll.position = Vector2(0, barra.position.y + barra.size.y)
+	scroll.position = Vector2(0, y_contenido)
 	scroll.size = Vector2(tam.x, tam.y - scroll.position.y)
 	add_child(scroll)
 	vista = VistaPagina.new()
 	scroll.add_child(vista)
 	vista.escritura_solicitada.connect(comunicador.escribir)
 	if not proyecto.paginas().is_empty():
-		vista.construir(proyecto.paginas()[0], s, proyecto.ancho_dp(), proyecto.alto_dp())
+		_pagina = clampi(_pagina, 0, proyecto.paginas().size() - 1)
+		vista.construir(proyecto.paginas()[_pagina], s, proyecto.ancho_dp(), proyecto.alto_dp())
 	for p in comunicador.valores:
 		vista.recibir(p, comunicador.valores[p])
 	_actualizar_estado()

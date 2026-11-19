@@ -34,9 +34,9 @@ func _draw() -> void:
 		draw_circle(c + Vector2.from_angle(a) * radio, grosor * 0.5, col, true, -1, true)
 		draw_circle(c + Vector2.from_angle(a) * radio, grosor * 0.22, Color.WHITE, true, -1, true)
 	# Marcas
-	var divisiones := int(prop("divisiones", 14))
+	var divisiones := int(prop("divisiones", 14)) if lado >= px(120) else 0
 	var r_ext := radio - grosor * 0.5 - px(5)
-	for i in divisiones + 1:
+	for i in (divisiones + 1 if divisiones > 0 else 0):
 		var a := lerpf(A0, A1, float(i) / divisiones)
 		var mayor := i % 2 == 0
 		var largo := px(7) if mayor else px(4)
@@ -57,10 +57,11 @@ func _draw() -> void:
 		var perp := dir.orthogonal()
 		var tri := PackedVector2Array([p1, p1 + dir * px(9) + perp * px(5), p1 + dir * px(9) - perp * px(5)])
 		draw_colored_polygon(tri, Estilo.AMBAR)
-	# Texto central
+	# Texto central (proporcional al tamaño del indicador; referencia: 200 dp)
+	var k := lado / px(200.0)
 	var txt := formatear(valor(), dec) if tiene_valor() else "--"
-	texto(txt, Rect2(0, c.y - px(26), size.x, px(40)), float(prop("tam", 34)), Estilo.TEXTO, "centro", true)
-	texto(str(prop("unidad", "")), Rect2(0, c.y + px(12), size.x, px(18)), 14, Estilo.TEXTO_SEC)
+	texto(txt, Rect2(0, c.y - px(26) * k, size.x, px(40) * k), float(prop("tam", 34)) * k, Estilo.TEXTO, "centro", true)
+	texto(str(prop("unidad", "")), Rect2(0, c.y + px(12) * k, size.x, px(18) * k), 14.0 * k, Estilo.TEXTO_SEC)
 	var titulo := str(prop("titulo", ""))
 	if titulo != "":
-		texto(titulo, Rect2(0, c.y + radio * 0.62, size.x, px(18)), 12, Estilo.TEXTO_SEC)
+		texto(titulo, Rect2(0, c.y + radio * 0.62, size.x, px(18) * k), 12.0 * k, Estilo.TEXTO_SEC)

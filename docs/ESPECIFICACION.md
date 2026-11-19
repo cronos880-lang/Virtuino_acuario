@@ -11,8 +11,9 @@
 ```
 
 El mismo código Godot dibuja en el PC y en el móvil: lo que se diseña es lo que se ve.
-El diseñador visual llega en la fase 1; esta entrega incluye la app (ejecución), el simulador,
-el protocolo, el formato de proyecto y los perfiles.
+Al arrancar: en móvil/tablet se abre la app; en el PC, el editor (`ui/editor/`).
+El editor trabaja sobre `ModeloEditor` (operaciones, rejilla de 4 dp, deshacer/rehacer, abrir/guardar)
+y dibuja con los mismos elementos que la app. Catálogo de elementos y propiedades: `widgets/esquema.gd`.
 
 ## 2. Protocolo VirtuinoCM 1.0.02
 
@@ -48,12 +49,18 @@ Reglas:
 }
 ```
 
+- `orientacion`: "vertical" u "horizontal". La app gira la pantalla según el proyecto.
+- Varias páginas: la app muestra pestañas si hay más de una.
 - Medidas en **dp**. En el dispositivo: `px = dp × (ancho de pantalla en px / lienzo_dp[0])`.
 - `pin` es el pin principal; cualquier propiedad `pin_*` es un pin adicional que también se lee.
 - Tipos: `panel`, `etiqueta`, `valor`, `led`, `interruptor`, `pulsador` (conmutado, momentáneo o valor),
   `indicador`, `barra`, `reloj`, `deslizador`.
 
-## 4. Perfiles de móvil y nitidez (DPI)
+## 4. Perfiles de dispositivo y nitidez (DPI)
+
+Tipos: `movil`, `tablet`, `pc`. Incluidos: Galaxy A56, dos móviles genéricos, tablets genéricas de 8" y 10"
+y PC (ventana 1280 × 800 y pantalla 1920 × 1080). Los "genéricos" no son modelos concretos.
+
 
 `acuaris/data/perfiles_moviles.json`. Samsung Galaxy A56 5G: 1080 × 2340 px, 6,7", 385 ppi (ficha pública).
 La **densidad lógica** (px por dp) es una **estimación (2,8125, es decir 450 dpi lógicos: 384 × 832 dp)**
@@ -73,7 +80,8 @@ temperatura (V5, V35, V6, V7, histéresis ±0,2 °C y relé mínimo de 3 min) co
 
 ## 6. Límites conocidos (V0.1.0)
 
-- Sin diseñador visual todavía (fase 1).
+- La app del móvil abre de momento solo el proyecto incluido; falta "pasar al móvil" los proyectos del editor.
+- Editor y .exe sin probar aún en un Windows real.
 - Bluetooth no probado aún en el A56 real (no hay acceso al hardware desde la nube).
 - El menú de configuración del sketch (V9, V20–V26) no está en el panel de ejemplo: es un bucle
   bloqueante con riesgo (ver el informe inicial) y conviene rediseñarlo en el Arduino antes de llevarlo a la app.

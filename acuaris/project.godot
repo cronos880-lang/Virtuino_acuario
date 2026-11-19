@@ -7,7 +7,7 @@ config_version=5
 config/name="Acuaris"
 config/description="Paneles de control Bluetooth para Arduino (protocolo VirtuinoCM)"
 config/version="0.1.1"
-run/main_scene="res://ui/principal.tscn"
+run/main_scene="res://ui/inicio.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
