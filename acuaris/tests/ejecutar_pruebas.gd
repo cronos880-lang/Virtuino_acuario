@@ -22,8 +22,34 @@ func _initialize() -> void:
 	prueba_proyecto()
 	prueba_perfiles()
 	prueba_comunicador()
-	print("Pruebas superadas: %d  ·  fallos: %d" % [_ok, _fallos.size()])
-	quit(0 if _fallos.is_empty() else 1)
+	# Prueba de la aplicación completa: se termina en _process tras unos fotogramas.
+	_app = load("res://ui/principal.tscn").instantiate()
+	root.add_child(_app)
+	_t_inicio = Time.get_ticks_msec()
+
+
+var _app: Node = null
+var _t_inicio := 0
+var _fase := 0
+
+
+func _process(_delta: float) -> bool:
+	var t := Time.get_ticks_msec() - _t_inicio
+	if _fase == 0 and t > 300:
+		# Cambiar de conexión: la nueva debe sobrevivir al redibujado de la pantalla.
+		_app.conectar_simulador()
+		_fase = 1
+		_t_inicio = Time.get_ticks_msec()
+		return false
+	if _fase == 1 and t > 3000:
+		comprobar(is_instance_valid(_app.enlace), "app: la conexión sobrevive al redibujado")
+		comprobar(is_instance_valid(_app.enlace) and _app.enlace.esta_conectado(), "app: conexión activa")
+		comprobar(_app.comunicador.valores.has("V35"), "app: llegan valores a la pantalla")
+		comprobar(_app.comunicador.respuestas > 3, "app: el sondeo funciona")
+		print("Pruebas superadas: %d  ·  fallos: %d" % [_ok, _fallos.size()])
+		quit(0 if _fallos.is_empty() else 1)
+		_fase = 2
+	return false
 
 
 func prueba_protocolo() -> void:

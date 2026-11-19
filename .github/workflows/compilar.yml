@@ -1,6 +1,6 @@
 name: Compilar Acuaris
 
-# Pruebas automáticas + Windows (.exe) + Android (.apk) en cada push.
+# Pruebas automáticas + Android (.apk) en cada push.
 # Los resultados se descargan en la pestaña "Actions" > ejecución > "Artifacts".
 
 on:
@@ -13,7 +13,7 @@ env:
   GODOT_DIR: ${{ github.workspace }}/.godot-bin
 
 jobs:
-  pruebas-y-windows:
+  pruebas:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -35,21 +35,11 @@ jobs:
       - name: Pruebas automáticas
         run: $GODOT_DIR/godot --headless --path acuaris -s res://tests/ejecutar_pruebas.gd
 
-      - name: Exportar Windows
-        run: |
-          mkdir -p build/windows
-          $GODOT_DIR/godot --headless --path acuaris --export-release "Windows" ../build/windows/Acuaris.exe
-          test -s build/windows/Acuaris.exe
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Acuaris-Windows
-          path: build/windows/Acuaris.exe
-          retention-days: 30
+      # El .exe de Windows no se genera hasta que el programa esté terminado (decisión del propietario).
 
   android:
     runs-on: ubuntu-24.04
-    needs: pruebas-y-windows
+    needs: pruebas
     steps:
       - uses: actions/checkout@v4
 

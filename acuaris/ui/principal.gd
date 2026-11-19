@@ -67,8 +67,9 @@ func _leer_args() -> Dictionary:
 func _construir() -> void:
 	var tam := get_viewport_rect().size
 	s = tam.x / proyecto.ancho_dp()
+	# Se redibuja solo la interfaz: el comunicador y la conexión activa se conservan.
 	for h in get_children():
-		if h != comunicador:
+		if h != comunicador and h != enlace and not (h is Enlace):
 			h.queue_free()
 	capa = null
 	var fondo := FondoDegradado.new()

@@ -23,7 +23,7 @@ Tras cada push, GitHub Actions compila. Ve a la pestaña **Actions** del reposit
 última ejecución de "Compilar Acuaris" y descarga en **Artifacts**:
 
 - `Acuaris-Android` → `Acuaris.apk` (instalar en el móvil, permitiendo "orígenes desconocidos").
-- `Acuaris-Windows` → `Acuaris.exe` (no necesita instalación).
+- El `.exe` de Windows no se publica hasta que el programa esté terminado.
 
 ## Uso con el acuario
 
