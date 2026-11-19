@@ -39,6 +39,7 @@ En el PC se trabaja con el **simulador**, que reproduce la lógica del sketch.
 - Complemento Android: Java 17, Android Gradle Plugin 8.7.3, Gradle 8.11.1, compileSdk 35, minSdk 21,
   compilado contra `org.godotengine:godot:4.7.2.stable`.
 - Pruebas: `godot --headless --path acuaris -s res://tests/ejecutar_pruebas.gd`
+- Maqueta del diseñador (fase 1, no funcional): `godot --path acuaris res://ui/disenador_maqueta.tscn`
 - Capturas: `godot --path acuaris --resolution 1080x2340 -- --captura=salida.png [--pantalla=conexion|medir] [--hora=16:20] [--segundos=240]`
 
 Más detalle en `docs/ESPECIFICACION.md`.
