@@ -25,7 +25,7 @@ var _sobre := false
 func preparar(t: String, escala: float) -> ElementoPaleta:
 	tipo = t
 	u = escala
-	custom_minimum_size = Vector2(140, 112) * u
+	custom_minimum_size = Vector2(132, 108) * u
 	tooltip_text = "%s · clic para añadir o arrastra al dispositivo" % Esquema.info(tipo).nombre
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	mouse_entered.connect(func(): _sobre = true; queue_redraw())
@@ -36,7 +36,7 @@ func preparar(t: String, escala: float) -> ElementoPaleta:
 		d["pin"] = m.pin
 	var w := FabricaWidgets.crear(d, u)
 	w.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	w.position = Vector2((140 - m.w) * 0.5, 10 + (74 - m.h) * 0.5) * u
+	w.position = Vector2((132 - m.w) * 0.5, 8 + (74 - m.h) * 0.5) * u
 	add_child(w)
 	for p in Proyecto.pines_de(d):
 		w.recibir(AcWidget.normalizar(p), m.v if p == m.pin else (16.0 if p == "V2" else 20.0))

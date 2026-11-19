@@ -11,5 +11,5 @@ func _ready() -> void:
 		var tam := Vector2i(mini(1680, pantalla.size.x - 40), mini(1000, pantalla.size.y - 60))
 		get_window().size = tam
 		get_window().position = pantalla.position + (pantalla.size - tam) / 2
-		get_window().min_size = Vector2i(1100, 680)
+		get_window().min_size = Vector2i(mini(1100, pantalla.size.x), mini(680, pantalla.size.y))
 	get_tree().change_scene_to_file.call_deferred("res://ui/principal.tscn" if app else "res://ui/editor/editor.tscn")

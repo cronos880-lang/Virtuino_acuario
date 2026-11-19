@@ -33,6 +33,9 @@ var comunicador := Comunicador.new()
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	u = clampf(float(DisplayServer.screen_get_dpi()) / 96.0, 1.0, 3.0)
+	var a := _args()
+	if a.has("escala-ui"):  # solo para pruebas: simula el escalado de Windows
+		u = clampf(str(a["escala-ui"]).to_float(), 1.0, 3.0)
 	theme = TemaEditor.crear(u)
 	perfiles = Perfiles.cargar_todos()
 	get_tree().set_auto_accept_quit(false)
@@ -121,8 +124,10 @@ func _construir_interfaz() -> void:
 func _barra_herramientas() -> Control:
 	var panel := PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", TemaEditor.caja(Color("#0f2433"), 0, u, Vector4(10, 8, 10, 8)))
-	var h := HBoxContainer.new()
-	h.add_theme_constant_override("separation", roundi(6 * u))
+	# HFlowContainer: si la ventana es estrecha, la barra pasa a dos filas en vez de salirse.
+	var h := HFlowContainer.new()
+	h.add_theme_constant_override("h_separation", roundi(6 * u))
+	h.add_theme_constant_override("v_separation", roundi(6 * u))
 	panel.add_child(h)
 	var marca := Label.new()
 	marca.text = "Acuaris"
@@ -170,17 +175,21 @@ func _barra_herramientas() -> Control:
 		zoom_modo = "manual"
 		zoom_manual = lienzo.zoom_real()
 		_actualizar_zoom(), "Tamaño real: el dispositivo a su tamaño físico aproximado (según el DPI del monitor)"))
-	titulo = Label.new()
-	titulo.add_theme_color_override("font_color", Estilo.TEXTO_SEC)
-	titulo.clip_text = true
-	titulo.custom_minimum_size.x = 40 * u
-	titulo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	h.add_child(titulo)
 	boton_probar = _boton("▶ Probar", _alternar_prueba, "Usar la interfaz con el simulador (los interruptores funcionan)")
 	boton_probar.toggle_mode = true
 	h.add_child(boton_probar)
 	return panel
+
+
+func _barra_titulo() -> Control:
+	# Nombre del proyecto y archivo, en la línea de las pestañas (no ocupa la barra superior).
+	titulo = Label.new()
+	titulo.add_theme_color_override("font_color", Estilo.TEXTO_SEC)
+	titulo.clip_text = true
+	titulo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	titulo.custom_minimum_size.x = 60 * u
+	return titulo
 
 
 func _separador() -> Control:
@@ -200,7 +209,7 @@ func _boton(t: String, f: Callable, ayuda := "") -> Button:
 
 func _panel_paleta() -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size.x = 316 * u
+	panel.custom_minimum_size.x = 300 * u
 	var sc := ScrollContainer.new()
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	panel.add_child(sc)
@@ -236,9 +245,11 @@ func _zona_central() -> Control:
 	var h := HBoxContainer.new()
 	pestanas = TabBar.new()
 	pestanas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	pestanas.size_flags_stretch_ratio = 2.0
 	pestanas.clip_tabs = true
 	pestanas.tab_clicked.connect(func(i): modelo.ir_a_pagina(i))
 	h.add_child(pestanas)
+	h.add_child(_barra_titulo())
 	h.add_child(_boton("+ Página", func(): modelo.anadir_pagina(), "Añadir una página"))
 	h.add_child(_boton("Borrar página", func():
 		if modelo.paginas().size() <= 1:
@@ -264,7 +275,7 @@ func _zona_central() -> Control:
 
 func _panel_inspector() -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size.x = 340 * u
+	panel.custom_minimum_size.x = 320 * u
 	var sc := ScrollContainer.new()
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	panel.add_child(sc)
