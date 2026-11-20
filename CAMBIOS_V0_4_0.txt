@@ -1,6 +1,13 @@
 ACUARIS — CAMBIOS
 =================
 
+V0.4.0 (experimental, 20-11-2026)
+- Proyecto «Acuario V2»: páginas Acuario, Consignas, Horarios y Estado.
+- Simulador del sketch Control_Acuario_V2 (elegible en el proyecto).
+- Valor con formato hora (16:30) y texto cuando vale 0.
+- Sketch Control_Acuario_V2 2.0.0 de prueba (ver su LEEME.md).
+- 274 pruebas de Acuaris + 71 del sketch.
+
 V0.3.1 (experimental, 20-11-2026) — solo APK
 - Corrige: no se podía escribir la dirección del PC en el móvil (el teclado
   decimal de Android solo admite un punto). Ahora usa el teclado de

@@ -214,6 +214,16 @@ const TIPOS := {
 				"defecto": false
 			},
 			{
+				"clave": "formato",
+				"nombre": "Formato",
+				"tipo": "opcion",
+				"defecto": "numero",
+				"opciones": [
+					"numero",
+					"hora"
+				]
+			},
+			{
 				"clave": "limite_alto",
 				"nombre": "Límite alto",
 				"tipo": "texto",
@@ -310,6 +320,22 @@ const TIPOS := {
 				"nombre": "Editable al tocar",
 				"tipo": "bool",
 				"defecto": true
+			},
+			{
+				"clave": "formato",
+				"nombre": "Formato",
+				"tipo": "opcion",
+				"defecto": "numero",
+				"opciones": [
+					"numero",
+					"hora"
+				]
+			},
+			{
+				"clave": "texto_cero",
+				"nombre": "Texto si vale 0 (vacío = mostrar 0)",
+				"tipo": "texto",
+				"defecto": ""
 			},
 			{
 				"clave": "confirmar",

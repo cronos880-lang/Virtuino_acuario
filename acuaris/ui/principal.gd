@@ -169,6 +169,10 @@ func _al_recibir_proyecto(datos: Dictionary, revision: int) -> void:
 		f.close()
 	var estaba := _pantalla
 	_aplicar_proyecto(p)
+	var sim_modelo := str(p.datos.get("simulador", "acuario_v1"))
+	if enlace is EnlaceSimulado and (enlace as EnlaceSimulado).simulador.modelo != sim_modelo:
+		(enlace as EnlaceSimulado).simulador.configurar_modelo(sim_modelo)
+		comunicador.valores.clear()
 	_construir()
 	if estaba == "recepcion":
 		mostrar_recepcion()
@@ -238,6 +242,7 @@ func _cambiar_enlace(nuevo: Enlace) -> void:
 
 func conectar_simulador() -> void:
 	var e := EnlaceSimulado.new()
+	e.simulador.configurar_modelo(str(proyecto.datos.get("simulador", "acuario_v1")))
 	if args.has("hora"):
 		var hm := str(args.hora).split(":")
 		e.simulador.fijar_hora(hm[0].to_int(), hm[1].to_int() if hm.size() > 1 else 0)
@@ -537,6 +542,8 @@ func _notification(what: int) -> void:
 
 # ------------------------------------------------------------------ capturas (PC)
 func _modo_captura() -> void:
+	if args.has("pagina"):
+		_pagina = int(args.pagina)
 	conectar_simulador()
 	var e: EnlaceSimulado = enlace
 	var segundos := float(args.get("segundos", 20))

@@ -25,6 +25,7 @@ func _initialize() -> void:
 	load("res://tests/pruebas_editor.gd").new(self).ejecutar()
 	load("res://tests/pruebas_envio.gd").new(self).ejecutar()
 	load("res://tests/pruebas_elementos.gd").new(self).ejecutar()
+	load("res://tests/pruebas_simulador_v2.gd").new(self).ejecutar()
 	# Prueba de la aplicación completa: se termina en _process tras unos fotogramas.
 	_app = load("res://ui/principal.tscn").instantiate()
 	root.add_child(_app)

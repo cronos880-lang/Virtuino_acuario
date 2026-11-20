@@ -1,0 +1,32 @@
+ACUARIS V0.4.0 — VERSIÓN EXPERIMENTAL DE PRUEBA
+================================================
+NO es una versión oficial. Incluye el proyecto «Acuario V2» con páginas de
+consignas, horarios y estado, pensado para el nuevo sketch Control_Acuario_V2.
+
+ORIGEN: V0.3.1 (PC: V0.3.0). Rama claude/inspiring-bell-j28igo.
+
+PC (ZIP COMPLETO, carpeta nueva; no toca la V0.3.0)
+1. Descomprime en una carpeta NUEVA, por ejemplo Documentos\Acuaris_V0_4_0
+   (copia dentro la carpeta "motor" de la versión anterior para no descargar
+   Godot otra vez).
+2. INICIAR_WINDOWS.bat. El título debe decir «Acuaris V0.4.0 Editor».
+3. Abrir → acuaris\proyectos\acuario_v2.acuaris.json
+   Pulsa «Probar»: funciona con el simulador del sketch V2.
+4. «Enviar al móvil» para verlo en el teléfono.
+
+MÓVIL (APK, ACTUALIZACIÓN encima de la anterior: conserva HC-05 y ajustes)
+- Necesaria para ver bien las horas (16:30) y el «Tocar» de «Poner en hora».
+
+ARDUINO (ZIP del sketch Control_Acuario_V2, versión 2.0.0 de prueba)
+- Es OTRO sketch: el que tienes funcionando no se toca.
+- Lee arduino\Control_Acuario_V2\LEEME.md antes de cargarlo:
+  mapa de variables, prueba en banco y cómo volver atrás.
+- Con el sketch antiguo cargado, las páginas nuevas mostrarán "--" o 0:
+  es normal (esas variables solo existen en la V2).
+
+ATENCIÓN
+- El sketch V2 está probado en el PC (71 comprobaciones), pero NO compilado
+  con el compilador de AVR ni probado en tu placa: haz primero la prueba en
+  banco (bombilla en lugar del calentador).
+- Virtuino 6: lecturas y mandos siguen funcionando con la V2; su menú de
+  configuración antiguo ya no.

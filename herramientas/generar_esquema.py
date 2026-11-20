@@ -24,12 +24,14 @@ tipo("valor", "Valor", 128, 60, "V1", [
     P("decimales", "Decimales", "entero", 1), P("factor", "Factor", "numero", 1),
     P("tam", "Tamaño texto", "numero", 22), P("color", "Color", "color", "#e8f3fa"),
     P("alineacion", "Alineación", "opcion", "centro", ALINEACION), P("con_fondo", "Con fondo", "bool", True),
-    P("editable", "Editable al tocar", "bool", False)] + ALARMA + SEGURO, "w_valor")
+    P("editable", "Editable al tocar", "bool", False), P("formato", "Formato", "opcion", "numero", ["numero", "hora"])] + ALARMA + SEGURO, "w_valor")
 tipo("valor_editable", "Valor editable", 128, 60, "V1", [
     P("titulo", "Título", "texto", "Consigna"), P("unidad", "Unidad", "texto", ""),
     P("decimales", "Decimales", "entero", 1), P("tam", "Tamaño texto", "numero", 22),
     P("color", "Color", "color", "#ffc145"), P("alineacion", "Alineación", "opcion", "centro", ALINEACION),
-    P("con_fondo", "Con fondo", "bool", True), P("editable", "Editable al tocar", "bool", True)] + SEGURO, "w_valor")
+    P("con_fondo", "Con fondo", "bool", True), P("editable", "Editable al tocar", "bool", True),
+    P("formato", "Formato", "opcion", "numero", ["numero", "hora"]),
+    P("texto_cero", "Texto si vale 0 (vacío = mostrar 0)", "texto", "")] + SEGURO, "w_valor")
 tipo("led", "LED", 200, 40, "V1", [
     P("texto", "Texto", "texto", "Piloto"), P("texto_on", "Texto encendido", "texto", "ON"),
     P("texto_off", "Texto apagado", "texto", "OFF"), P("color_on", "Color encendido", "color", "#3ddc84"),
@@ -222,7 +224,8 @@ out = '''class_name Esquema
 extends RefCounted
 ## Catálogo de elementos: nombre visible, tamaño inicial (dp), script y propiedades editables.
 ## Lo usan la paleta, el inspector, la fábrica y la creación de elementos nuevos.
-## ARCHIVO GENERADO por la definición del catálogo: los cambios se hacen allí y se regenera.
+## ARCHIVO GENERADO: se edita herramientas/generar_esquema.py y se ejecuta
+##   python3 herramientas/generar_esquema.py acuaris/widgets/esquema.gd
 ##
 ## Tipos de propiedad: "texto", "numero", "entero", "color", "bool", "opcion", "pin", "imagen".
 

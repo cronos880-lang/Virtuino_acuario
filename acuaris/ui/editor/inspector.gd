@@ -261,6 +261,17 @@ func _proyecto() -> void:
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_theme_color_override("font_color", Estilo.TEXTO_SEC)
 	add_child(info)
+	_seccion("Simulador (para Probar)")
+	var ob := OptionButton.new()
+	var modelos := [["acuario_v1", "Acuario: sketch original"], ["acuario_v2", "Acuario: Control_Acuario_V2"]]
+	for i in modelos.size():
+		ob.add_item(modelos[i][1])
+		if str(modelo.datos.get("simulador", "acuario_v1")) == modelos[i][0]:
+			ob.select(i)
+	ob.item_selected.connect(func(i): _cambiar(func():
+		modelo.datos["simulador"] = modelos[i][0]
+		modelo.registrar()))
+	_fila("Arduino", ob)
 	_seccion("Conexión Bluetooth")
 	var con: Dictionary = modelo.datos.get("conexion", {})
 	_fila("Módulo", _texto(str(con.get("nombre_dispositivo", "")), func(t):

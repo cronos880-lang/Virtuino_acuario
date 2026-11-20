@@ -524,6 +524,10 @@ func _actualizar_zoom() -> void:
 
 
 func _al_cambiar() -> void:
+	var sim_modelo := str(modelo.datos.get("simulador", "acuario_v1"))
+	if enlace.simulador.modelo != sim_modelo:
+		enlace.simulador.configurar_modelo(sim_modelo)
+		enlace.simulador.fijar_hora(16, 20)
 	if servidor.activo and panel_envio.auto:
 		_temporizador_envio.start()
 	comunicador.fijar_pines(_pines_proyecto())

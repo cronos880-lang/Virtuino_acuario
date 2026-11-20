@@ -9,6 +9,9 @@ extends RefCounted
 ##   - Reloj (V2,V3,V4), Bomba (V8 <- V29/V15 u horario 15-22 h), Luces (V16, rampa 16:00-16:14,
 ##     21:45-21:59, V10 = lumen), Temperatura (V5, V35, V6, V7, histéresis 0,2 y 3 min de relé).
 ## No reproduce el menú bloqueante Config() (V9): se anota y se ignora.
+##
+## Con modelo = "acuario_v2" se comporta como arduino/Control_Acuario_V2 (ajustes escritos desde la
+## app con validación, horarios configurables, rampas por segundos, alarmas y diagnóstico).
 
 const V_MEMORIA := 256
 const MENSAJE_BIENVENIDA := "!C=VirtuinoCM 1.0.02"
@@ -39,6 +42,20 @@ var _t_ultima_temp := -1000.0
 var _buffer_serie := ""
 var avisos: Array[String] = []
 
+## "acuario_v1" (sketch original) o "acuario_v2" (Control_Acuario_V2)
+var modelo := "acuario_v1"
+## Pruebas: simular la sonda desconectada (solo modelo V2)
+var sonda_conectada := true
+
+# --- Estado del modelo V2
+var aj := {}                 # ajustes (como la EEPROM del V2)
+var _publicado := {}
+var _t_ultima_valida := 0.0
+var _rele_libre := true
+var _temperatura_v2 := NAN
+var _ms_calentador_hoy := 0.0
+var _dia_v2 := 0
+
 const TIEMPO_MINIMO_RELE_MS := 180000.0
 const CONSTANTE_PERDIDA_S := 3600.0      # el agua tiende al ambiente con tau = 1 h
 const POTENCIA_CALENTADOR_C_S := 8.0 / 3600.0
@@ -50,6 +67,27 @@ func _init() -> void:
 	# setup()
 	V[27] = setpoint
 	V[28] = lumen
+
+
+func configurar_modelo(m: String) -> void:
+	modelo = m
+	if modelo != "acuario_v2":
+		return
+	aj = {"consigna": 25.0, "histeresis": 0.2, "alarma_alta": 29.0, "alarma_baja": 21.0, "intensidad": 125,
+		"luz_on": 1600, "luz_off": 2200, "rampa": 15, "bomba_on": 1500, "bomba_off": 2200}
+	V.fill(0.0)
+	_publicado.clear()
+	for par in [[27, "consigna"], [28, "intensidad"], [50, "luz_on"], [51, "luz_off"], [52, "rampa"], [53, "bomba_on"],
+			[54, "bomba_off"], [55, "histeresis"], [57, "alarma_alta"], [58, "alarma_baja"]]:
+		_publicar(par[0], aj[par[1]])
+	_publicar(44, 0)
+	V[10] = aj.intensidad
+	V[70] = 200
+	V[71] = 1
+	V[72] = 1
+	_t_ultima_valida = millis_sim
+	_rele_libre = true
+	rele_calentador = false
 
 
 func fijar_hora(h: int, m: int, s: int = 0) -> void:
@@ -77,6 +115,8 @@ func recibir(texto: String) -> void:
 
 ## Avanza la simulación. Devuelve el texto que el Arduino "escribe" por Serial1.
 func avanzar(delta_s: float) -> String:
+	if modelo == "acuario_v2":
+		return _avanzar_v2(delta_s)
 	segundos_del_dia = fmod(segundos_del_dia + delta_s, 86400.0)
 	millis_sim += delta_s * 1000.0
 	_fisica(delta_s)
@@ -243,3 +283,169 @@ static func _to_float(t: String) -> float:
 		fin += 1
 	var pref := t.substr(0, fin)
 	return pref.to_float() if pref.is_valid_float() else 0.0
+
+
+# =============================================================================== modelo V2
+static func hhmm_valido(v: int) -> bool:
+	return v >= 0 and v <= 2359 and v % 100 < 60
+
+
+static func segundos_de(hhmm: int) -> int:
+	@warning_ignore("integer_division")
+	return (hhmm / 100) * 3600 + (hhmm % 100) * 60
+
+
+static func en_horario(seg: int, inicio: int, fin: int) -> bool:
+	var a := segundos_de(inicio)
+	var b := segundos_de(fin)
+	if a == b:
+		return false
+	if a < b:
+		return seg >= a and seg < b
+	return seg >= a or seg < b
+
+
+## Misma fórmula que Logica::nivel_luz del sketch V2 (aritmética entera).
+static func nivel_luz(seg: int, on: int, off: int, rampa_min: int, maximo: int) -> int:
+	if not en_horario(seg, on, off):
+		return 0
+	var dia := 86400
+	var a := segundos_de(on)
+	var b := segundos_de(off)
+	var desde_on := posmod(seg - a, dia)
+	var hasta_off := posmod(b - seg, dia)
+	var rampa := rampa_min * 60
+	var duracion := posmod(b - a, dia)
+	if rampa * 2 > duracion:
+		@warning_ignore("integer_division")
+		rampa = duracion / 2
+	if rampa <= 0:
+		return maximo
+	var nivel := maximo
+	if desde_on < rampa:
+		@warning_ignore("integer_division")
+		nivel = maximo * desde_on / rampa
+	if hasta_off < rampa:
+		@warning_ignore("integer_division")
+		nivel = mini(nivel, maximo * hasta_off / rampa)
+	return clampi(nivel, 0, maximo)
+
+
+func _publicar(v: int, valor: float) -> void:
+	V[v] = valor
+	_publicado[v] = valor
+
+
+func _escrito(v: int) -> bool:
+	return absf(V[v] - float(_publicado.get(v, 0.0))) > 0.001
+
+
+func _tomar_real(v: int, clave: String, mn: float, mx: float) -> void:
+	if not _escrito(v):
+		return
+	var x := V[v]
+	if x >= mn and x <= mx:
+		aj[clave] = x
+	_publicar(v, aj[clave])
+
+
+func _tomar_hhmm(v: int, clave: String) -> void:
+	if not _escrito(v):
+		return
+	var x := roundi(V[v])
+	if hhmm_valido(x):
+		aj[clave] = x
+	_publicar(v, aj[clave])
+
+
+func _ajustes_v2() -> void:
+	_tomar_real(27, "consigna", 18.0, 32.0)
+	_tomar_real(55, "histeresis", 0.1, 2.0)
+	var alta: float = aj.alarma_alta
+	var baja: float = aj.alarma_baja
+	if _escrito(57) or _escrito(58):
+		var na := V[57] if (V[57] >= 5.0 and V[57] <= 40.0) else alta
+		var nb := V[58] if (V[58] >= 5.0 and V[58] <= 40.0) else baja
+		if nb < na:
+			aj.alarma_alta = na
+			aj.alarma_baja = nb
+		_publicar(57, aj.alarma_alta)
+		_publicar(58, aj.alarma_baja)
+	if _escrito(28):
+		var n := roundi(V[28])
+		if n >= 0 and n <= 255:
+			aj.intensidad = n
+		_publicar(28, aj.intensidad)
+	if _escrito(52):
+		var n := roundi(V[52])
+		if n >= 0 and n <= 60:
+			aj.rampa = n
+		_publicar(52, aj.rampa)
+	for par in [[50, "luz_on"], [51, "luz_off"], [53, "bomba_on"], [54, "bomba_off"]]:
+		_tomar_hhmm(par[0], par[1])
+	V[10] = aj.intensidad
+	if _escrito(44):
+		var hhmm := roundi(V[44])
+		if hhmm_valido(hhmm):
+			@warning_ignore("integer_division")
+			fijar_hora(hhmm / 100, hhmm % 100, 0)
+			V[62] = 0
+		_publicar(44, 0)
+
+
+func _avanzar_v2(delta_s: float) -> String:
+	segundos_del_dia = fmod(segundos_del_dia + delta_s, 86400.0)
+	millis_sim += delta_s * 1000.0
+	_fisica(delta_s)
+	var salida := _virtuino_run()
+	_ajustes_v2()
+	# Temperatura sin bloqueo: una lectura por segundo
+	if millis_sim - _t_ultima_temp >= 1000.0:
+		_t_ultima_temp = millis_sim
+		if sonda_conectada:
+			_temperatura_v2 = snappedf(temperatura_agua, 0.0625)
+			_t_ultima_valida = millis_sim
+			V[5] = _temperatura_v2
+			V[35] = _temperatura_v2
+	var fallo := millis_sim - _t_ultima_valida > 15000.0
+	if (fallo or is_nan(_temperatura_v2)) and rele_calentador:
+		rele_calentador = false
+		_ultimo_cambio_rele = millis_sim
+		_rele_libre = false
+	if not fallo and not is_nan(_temperatura_v2):
+		if _rele_libre or millis_sim - _ultimo_cambio_rele >= TIEMPO_MINIMO_RELE_MS:
+			var nuevo := rele_calentador
+			if rele_calentador and _temperatura_v2 >= aj.consigna + aj.histeresis:
+				nuevo = false
+			elif not rele_calentador and _temperatura_v2 <= aj.consigna - aj.histeresis:
+				nuevo = true
+			if nuevo != rele_calentador:
+				rele_calentador = nuevo
+				_ultimo_cambio_rele = millis_sim
+				_rele_libre = false
+	V[6] = 1.0 if rele_calentador else 0.0
+	V[7] = 0.0 if rele_calentador else 1.0
+	var alta: bool = not fallo and not is_nan(_temperatura_v2) and _temperatura_v2 > aj.alarma_alta
+	var baja: bool = not fallo and not is_nan(_temperatura_v2) and _temperatura_v2 < aj.alarma_baja
+	V[60] = 1.0 if fallo else 0.0
+	V[61] = 1.0 if alta else 0.0
+	V[65] = 1.0 if baja else 0.0
+	V[63] = 3.0 if fallo else (1.0 if alta else (2.0 if baja else (4.0 if V[62] == 1.0 else 0.0)))
+	# Reloj
+	V[2] = hora()
+	V[3] = minuto()
+	V[4] = segundo()
+	salida += _virtuino_run()
+	# Bomba y luces
+	var seg := int(segundos_del_dia)
+	rele_bomba = (V[15] == 1.0) if V[29] == 1.0 else en_horario(seg, aj.bomba_on, aj.bomba_off)
+	V[8] = 1.0 if rele_bomba else 0.0
+	luz_pwm = aj.intensidad if V[16] == 1.0 else nivel_luz(seg, aj.luz_on, aj.luz_off, aj.rampa, aj.intensidad)
+	V[11] = luz_pwm
+	# Diagnóstico
+	if rele_calentador:
+		_ms_calentador_hoy += delta_s * 1000.0
+	V[73] = floorf(_ms_calentador_hoy / 60000.0)
+	V[74] = 5480
+	V[75] = floorf(millis_sim / 60000.0)
+	return salida

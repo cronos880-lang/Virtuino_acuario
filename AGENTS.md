@@ -4,7 +4,9 @@
 - El propietario fija objetivos y **aprueba versiones oficiales**; publicar código o compilar no es aprobar.
 - No generar versiones, etiquetas, releases ni ZIP salvo petición expresa.
 - Rama de trabajo: la indicada en el encargo; nada de force-push ni reescritura de historial.
-- `arduino/` contiene el sketch original del propietario: no modificarlo sin encargo expreso.
+- `arduino/Control_Acuario_01_09_2026_Final` es el sketch original del propietario (el que funciona):
+  no modificarlo. `arduino/Control_Acuario_V2` es la versión mejorada de prueba, con sus pruebas en
+  `pruebas/ejecutar_pruebas.sh`.
 - Compatibilidad obligatoria con VirtuinoCM 1.0.02 (ver `docs/ESPECIFICACION.md`): pines con dos
   cifras (`!V05=?$`), escrituras sin respuesta, una petición de lectura en vuelo.
 - Gráficos: todo vectorial y medido en dp; se dibuja a la resolución real (px = dp × escala).

@@ -130,15 +130,28 @@ static func confirmar(origen: Node, escala: float, texto: String, clave: String,
 
 
 ## Pide un número y lo devuelve a al_aceptar(valor).
-static func pedir_numero(origen: Node, escala: float, titulo: String, actual: String, al_aceptar: Callable) -> DialogoApp:
+## "convertir" (opcional) recibe el texto y devuelve un número o null si no es válido.
+static func pedir_numero(origen: Node, escala: float, titulo: String, actual: String, al_aceptar: Callable, convertir := Callable(), ayuda := "") -> DialogoApp:
 	var d := _nuevo(origen, escala, titulo)
 	var le := d.campo("Valor")
 	le.text = actual
+	if convertir.is_valid():
+		le.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_URL   # admite ":" y "."
 	d.anadir(le)
+	if ayuda != "":
+		d.anadir(d.etiqueta(ayuda, 12, Estilo.TEXTO_SEC))
 	var aviso := d.etiqueta("", 13, Estilo.ROJO)
 	d.anadir(aviso)
 	d.botones([["Cancelar", false, d.cerrar], ["Enviar", true, func():
 		var t := le.text.strip_edges().replace(",", ".")
+		if convertir.is_valid():
+			var v = convertir.call(t)
+			if v == null:
+				aviso.text = "Valor no válido"
+				return
+			d.cerrar()
+			al_aceptar.call(float(v))
+			return
 		if not t.is_valid_float():
 			aviso.text = "Escribe un número"
 			return
