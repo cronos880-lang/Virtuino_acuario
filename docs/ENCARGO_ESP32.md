@@ -49,3 +49,31 @@ Estado: **pendiente de empezar** (decisiones tomadas el 20-11-2026; se retoma cu
 - **Acceso desde fuera de casa:** decidir el sistema (servicio en la nube, VPN o abrir un puerto) teniendo
   en cuenta la seguridad.
 - **Preguntas pendientes del propietario:** las planteará antes de empezar.
+
+## Notas añadidas por el propietario (20-11-2026)
+
+### A. Intensidad de referencia frente a regulación temporal (también para el sketch V2)
+- **Propuesta del propietario:**
+  - La página **Consignas** fija la **intensidad de referencia**, que es la que se guarda en la EEPROM.
+  - La barra de la **primera página** sirve para **jugar**: cambia la luz al momento pero **no se guarda**.
+- **Comportamiento propuesto:**
+  - La intensidad temporal va en una variable V nueva y no toca la EEPROM.
+  - Se vuelve a la referencia: con un botón «Volver a la referencia», al empezar el siguiente amanecer o al reiniciar la placa.
+- **Datos de desgaste de la memoria:**
+  - EEPROM del ATmega2560: 100 000 escrituras por celda, según la hoja de datos de Microchip.
+  - El V2 ya espera 2 s sin cambios antes de guardar, así que un movimiento de la barra = una escritura.
+  - En el ESP32 no hay EEPROM: se usa la memoria flash (NVS, Preferences), que reparte el desgaste. Se aplicará la misma separación entre referencia y valor temporal.
+
+### B. Regulación de la luz en la placa ESP32 (a decidir con pruebas)
+- Las dicroicas son LED con driver incorporado y **no regulables**. Bajar la tensión no garantiza
+  atenuar: muchos drivers mantienen el brillo hasta una tensión mínima y por debajo parpadean o se apagan.
+- **Plan:**
+  1. **Modo tensión fija (por defecto):** encendido y apagado a la tensión configurada. La tensión sube en rampa en
+     unos segundos para evitar el pico de arranque. Funciona con el horario y con el manual.
+  2. **Página de prueba en la app:** barrido de tensión controlado, con lectura de corriente y tensión, para medir
+     si las dicroicas se atenúan de forma útil y en qué margen.
+  3. Si hay margen útil, **regulación por tensión** dentro de ese margen, con amanecer y atardecer suaves.
+     Si no lo hay, solo encendido y apagado.
+  4. **Modo PWM** disponible para futuras luminarias regulables.
+- Siempre dentro de los límites de seguridad: tensión máxima por software, fallo del eFuse y sobretensión.
+- Pendiente: el consumo real (7 × 8 W) frente al límite de corriente del eFuse (ver puntos abiertos).
