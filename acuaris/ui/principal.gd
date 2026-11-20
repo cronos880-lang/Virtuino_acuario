@@ -37,6 +37,12 @@ func _ready() -> void:
 	add_child(comunicador)
 	comunicador.valor_actualizado.connect(_al_valor)
 	config.load(CONFIG)
+	Historial.cargar()
+	var t_hist := Timer.new()
+	t_hist.wait_time = 60.0
+	t_hist.autostart = true
+	t_hist.timeout.connect(Historial.guardar)
+	add_child(t_hist)
 	add_child(receptor)
 	receptor.proyecto_recibido.connect(_al_recibir_proyecto)
 	receptor.estado_cambiado.connect(func(_e, _d): _al_cambiar_recepcion())
@@ -81,7 +87,7 @@ func _construir() -> void:
 	s = tam.x / proyecto.ancho_dp()
 	# Se redibuja solo la interfaz: el comunicador y la conexión activa se conservan.
 	for h in get_children():
-		if h != comunicador and h != enlace and h != receptor and not (h is Enlace):
+		if h != comunicador and h != enlace and h != receptor and not (h is Enlace) and not (h is Timer):
 			h.queue_free()
 	capa = null
 	var fondo := FondoDegradado.new()
@@ -520,6 +526,8 @@ func _mostrar_errores() -> void:
 
 
 func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_APPLICATION_PAUSED:
+		Historial.guardar()
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		if capa and enlace:
 			cerrar_capa()

@@ -1,0 +1,658 @@
+{
+  "formato": "acuaris-proyecto",
+  "version": 1,
+  "nombre": "Todos los elementos",
+  "perfil": "generico_tablet_10",
+  "orientacion": "horizontal",
+  "lienzo_dp": [
+    1280,
+    800
+  ],
+  "conexion": {
+    "tipo": "bluetooth_spp",
+    "nombre_dispositivo": "",
+    "intervalo_ms": 400
+  },
+  "paginas": [
+    {
+      "id": "pagina_1",
+      "nombre": "Visualización",
+      "widgets": [
+        {
+          "id": "valor_1",
+          "tipo": "valor",
+          "x": 20.0,
+          "y": 20.0,
+          "w": 160.0,
+          "h": 70.0,
+          "props": {
+            "titulo": "Temperatura",
+            "unidad": "°C",
+            "decimales": 1,
+            "factor": 1,
+            "tam": 22,
+            "color": "#e8f3fa",
+            "alineacion": "centro",
+            "con_fondo": true,
+            "editable": false,
+            "limite_alto": "26",
+            "limite_bajo": "",
+            "color_alto": "#ff5a5f",
+            "color_bajo": "#2ec4d6",
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "valor_editable_1",
+          "tipo": "valor_editable",
+          "x": 200.0,
+          "y": 20.0,
+          "w": 160.0,
+          "h": 70.0,
+          "props": {
+            "titulo": "Consigna",
+            "unidad": "°C",
+            "decimales": 1,
+            "tam": 22,
+            "color": "#ffc145",
+            "alineacion": "centro",
+            "con_fondo": true,
+            "editable": true,
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V27"
+        },
+        {
+          "id": "led_1",
+          "tipo": "led",
+          "x": 380.0,
+          "y": 20.0,
+          "w": 240.0,
+          "h": 44.0,
+          "props": {
+            "texto": "Bomba",
+            "texto_on": "EN MARCHA",
+            "texto_off": "PARADA",
+            "color_on": "#2ec4d6",
+            "color_off": "#26465c",
+            "umbral": 0.5,
+            "radio": 11,
+            "vertical": false,
+            "con_fondo": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "estado_1",
+          "tipo": "estado",
+          "x": 640.0,
+          "y": 20.0,
+          "w": 260.0,
+          "h": 64.0,
+          "props": {
+            "titulo": "Calentador",
+            "reglas": "==0|Apagado|#5d8299; ==1|Calentando|#ff8a3d",
+            "defecto": "?",
+            "tam": 18,
+            "alineacion": "centro",
+            "con_fondo": true
+          },
+          "pin": "V6"
+        },
+        {
+          "id": "indicador_1",
+          "tipo": "indicador",
+          "x": 20.0,
+          "y": 110.0,
+          "w": 200.0,
+          "h": 200.0,
+          "props": {
+            "titulo": "Agua",
+            "unidad": "°C",
+            "min": 18,
+            "max": 32,
+            "decimales": 1,
+            "tolerancia": 0.5,
+            "color": "#2ec4d6",
+            "tam": 34,
+            "limite_alto": "",
+            "limite_bajo": "",
+            "color_alto": "#ff5a5f",
+            "color_bajo": "#2ec4d6",
+            "pin_consigna": "V27"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "manometro_1",
+          "tipo": "manometro",
+          "x": 240.0,
+          "y": 110.0,
+          "w": 200.0,
+          "h": 200.0,
+          "props": {
+            "titulo": "Agua",
+            "unidad": "°C",
+            "min": 15,
+            "max": 35,
+            "decimales": 1,
+            "decimales_escala": 0,
+            "divisiones": 10,
+            "zona_verde": 27,
+            "zona_ambar": 30,
+            "sin_zonas": false,
+            "color_aguja": "#ff5a5f",
+            "limite_alto": "",
+            "limite_bajo": "",
+            "color_alto": "#ff5a5f",
+            "color_bajo": "#2ec4d6"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "barra_1",
+          "tipo": "barra",
+          "x": 460.0,
+          "y": 110.0,
+          "w": 300.0,
+          "h": 48.0,
+          "props": {
+            "titulo": "Intensidad luz",
+            "min": 0,
+            "max": 255,
+            "mostrar": "porcentaje",
+            "unidad": "",
+            "decimales": 0,
+            "color": "#ffd166",
+            "escala": false,
+            "limite_alto": "",
+            "limite_bajo": "",
+            "color_alto": "#ff5a5f",
+            "color_bajo": "#2ec4d6"
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "barra_escala_1",
+          "tipo": "barra_escala",
+          "x": 460.0,
+          "y": 170.0,
+          "w": 300.0,
+          "h": 64.0,
+          "props": {
+            "titulo": "Temperatura",
+            "min": 18,
+            "max": 32,
+            "mostrar": "valor",
+            "unidad": "°C",
+            "decimales": 1,
+            "color": "#2ec4d6",
+            "escala": true,
+            "limite_alto": "",
+            "limite_bajo": "",
+            "color_alto": "#ff5a5f",
+            "color_bajo": "#2ec4d6"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "barra_vertical_1",
+          "tipo": "barra_vertical",
+          "x": 780.0,
+          "y": 110.0,
+          "w": 90.0,
+          "h": 230.0,
+          "props": {
+            "titulo": "Temp.",
+            "unidad": "°C",
+            "min": 15,
+            "max": 35,
+            "decimales": 1,
+            "decimales_escala": 0,
+            "degradado": true,
+            "color_inicio": "#2ec4d6",
+            "color_fin": "#ff5a5f",
+            "color": "#2ec4d6",
+            "limite_alto": "",
+            "limite_bajo": "",
+            "color_alto": "#ff5a5f",
+            "color_bajo": "#2ec4d6"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "giratorio_1",
+          "tipo": "giratorio",
+          "x": 890.0,
+          "y": 110.0,
+          "w": 110.0,
+          "h": 130.0,
+          "props": {
+            "titulo": "Bomba",
+            "icono": "bomba",
+            "min": 0,
+            "max": 1,
+            "color": "#2ec4d6",
+            "limite_alto": "",
+            "limite_bajo": "",
+            "color_alto": "#ff5a5f",
+            "color_bajo": "#2ec4d6"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "segmentos_1",
+          "tipo": "segmentos",
+          "x": 1020.0,
+          "y": 110.0,
+          "w": 220.0,
+          "h": 70.0,
+          "props": {
+            "titulo": "Luz",
+            "min": 0,
+            "max": 255,
+            "segmentos": 5,
+            "umbral_malo": 25,
+            "umbral_regular": 50,
+            "escalera": true,
+            "unidad": "",
+            "decimales": 0
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "imagen_1",
+          "tipo": "imagen",
+          "x": 1020.0,
+          "y": 200.0,
+          "w": 220.0,
+          "h": 130.0,
+          "props": {
+            "condicion": ">= 0.5",
+            "ajuste": "contener"
+          },
+          "pin": "V1"
+        },
+        {
+          "id": "reloj_1",
+          "tipo": "reloj",
+          "x": 460.0,
+          "y": 250.0,
+          "w": 300.0,
+          "h": 60.0,
+          "props": {
+            "titulo": "Hora",
+            "pin_h": "V2",
+            "pin_m": "V3",
+            "pin_s": "V4",
+            "tam": 28,
+            "con_fondo": true
+          }
+        },
+        {
+          "id": "etiqueta_1",
+          "tipo": "etiqueta",
+          "x": 20.0,
+          "y": 330.0,
+          "w": 700.0,
+          "h": 30.0,
+          "props": {
+            "texto": "Ejemplo con todos los elementos de visualización (datos del simulador del acuario)",
+            "tam": 13,
+            "color": "#8db3ca",
+            "alineacion": "izquierda",
+            "negrita": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "pagina_2",
+      "nombre": "Control",
+      "widgets": [
+        {
+          "id": "interruptor_1",
+          "tipo": "interruptor",
+          "x": 20.0,
+          "y": 20.0,
+          "w": 300.0,
+          "h": 40.0,
+          "props": {
+            "texto": "Modo manual",
+            "texto_on": "",
+            "texto_off": "",
+            "color_on": "#2ec4d6",
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V29"
+        },
+        {
+          "id": "interruptor_seguro_1",
+          "tipo": "interruptor_seguro",
+          "x": 20.0,
+          "y": 70.0,
+          "w": 300.0,
+          "h": 40.0,
+          "props": {
+            "texto": "Bomba (con confirmación)",
+            "texto_on": "",
+            "texto_off": "",
+            "color_on": "#ff8a3d",
+            "confirmar": true,
+            "clave": ""
+          },
+          "pin": "V15"
+        },
+        {
+          "id": "pulsador_1",
+          "tipo": "pulsador",
+          "x": 340.0,
+          "y": 20.0,
+          "w": 140.0,
+          "h": 50.0,
+          "props": {
+            "texto": "Luces",
+            "modo": "conmutado",
+            "valor": 1,
+            "color": "#2ec4d6",
+            "tam": 15,
+            "radio": 14,
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V16"
+        },
+        {
+          "id": "pulsador_seguro_1",
+          "tipo": "pulsador_seguro",
+          "x": 500.0,
+          "y": 20.0,
+          "w": 140.0,
+          "h": 50.0,
+          "props": {
+            "texto": "Con PIN",
+            "modo": "valor",
+            "valor": 1,
+            "color": "#ff5a5f",
+            "tam": 15,
+            "radio": 14,
+            "confirmar": true,
+            "clave": "1234"
+          },
+          "pin": "V16"
+        },
+        {
+          "id": "casilla_1",
+          "tipo": "casilla",
+          "x": 340.0,
+          "y": 90.0,
+          "w": 260.0,
+          "h": 40.0,
+          "props": {
+            "texto": "Luces al máximo",
+            "valor_on": 1,
+            "valor_off": 0,
+            "color": "#2ec4d6",
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V16"
+        },
+        {
+          "id": "opciones_1",
+          "tipo": "opciones",
+          "x": 20.0,
+          "y": 130.0,
+          "w": 220.0,
+          "h": 80.0,
+          "props": {
+            "opciones": "Automático:0, Manual:1",
+            "color": "#2ec4d6",
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V29"
+        },
+        {
+          "id": "grupo_botones_1",
+          "tipo": "grupo_botones",
+          "x": 260.0,
+          "y": 150.0,
+          "w": 340.0,
+          "h": 48.0,
+          "props": {
+            "opciones": "Auto:0, Manual:1",
+            "color": "#2ec4d6",
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V29"
+        },
+        {
+          "id": "selector_1",
+          "tipo": "selector",
+          "x": 620.0,
+          "y": 20.0,
+          "w": 170.0,
+          "h": 180.0,
+          "props": {
+            "titulo": "Modo",
+            "opciones": "Auto:0, Manual:1",
+            "color": "#2ec4d6",
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V29"
+        },
+        {
+          "id": "potenciometro_1",
+          "tipo": "potenciometro",
+          "x": 810.0,
+          "y": 20.0,
+          "w": 170.0,
+          "h": 190.0,
+          "props": {
+            "titulo": "Luz",
+            "min": 0,
+            "max": 255,
+            "paso": 1,
+            "unidad": "",
+            "decimales": 0,
+            "color": "#ffd166",
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "deslizador_1",
+          "tipo": "deslizador",
+          "x": 20.0,
+          "y": 280.0,
+          "w": 400.0,
+          "h": 60.0,
+          "props": {
+            "titulo": "Intensidad",
+            "min": 0,
+            "max": 255,
+            "paso": 1,
+            "unidad": "",
+            "decimales": 0,
+            "color": "#2ec4d6",
+            "vertical": false,
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "deslizador_v_1",
+          "tipo": "deslizador_v",
+          "x": 1000.0,
+          "y": 20.0,
+          "w": 90.0,
+          "h": 240.0,
+          "props": {
+            "titulo": "Consigna",
+            "min": 20,
+            "max": 30,
+            "paso": 0.5,
+            "unidad": "°C",
+            "decimales": 1,
+            "color": "#2ec4d6",
+            "vertical": true,
+            "confirmar": false,
+            "clave": ""
+          },
+          "pin": "V27"
+        }
+      ]
+    },
+    {
+      "id": "pagina_3",
+      "nombre": "Gráficas",
+      "widgets": [
+        {
+          "id": "grafica_1",
+          "tipo": "grafica",
+          "x": 20.0,
+          "y": 20.0,
+          "w": 600.0,
+          "h": 260.0,
+          "props": {
+            "titulo": "Temperatura del agua",
+            "rango": "15 min",
+            "min": "",
+            "max": "",
+            "decimales": 1,
+            "color": "#2ec4d6"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "grafica_avanzada_1",
+          "tipo": "grafica_avanzada",
+          "x": 640.0,
+          "y": 20.0,
+          "w": 600.0,
+          "h": 260.0,
+          "props": {
+            "titulo": "Agua y consigna",
+            "rango": "15 min",
+            "min": "",
+            "max": "",
+            "decimales": 1,
+            "color": "#2ec4d6",
+            "color_2": "#ffc145",
+            "color_3": "#3ddc84",
+            "pin_2": "V27"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "grafica_emergente_1",
+          "tipo": "grafica_emergente",
+          "x": 20.0,
+          "y": 300.0,
+          "w": 270.0,
+          "h": 60.0,
+          "props": {
+            "titulo": "Temperatura",
+            "unidad": "°C",
+            "decimales": 1,
+            "rango": "6 h",
+            "color": "#2ec4d6"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "historial_tabla_1",
+          "tipo": "historial_tabla",
+          "x": 310.0,
+          "y": 300.0,
+          "w": 270.0,
+          "h": 60.0,
+          "props": {
+            "titulo": "Datos de temperatura",
+            "dias": 1,
+            "unidad": "",
+            "decimales": 1,
+            "color": "#2ec4d6"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "tabla_1",
+          "tipo": "tabla",
+          "x": 600.0,
+          "y": 300.0,
+          "w": 320.0,
+          "h": 150.0,
+          "props": {
+            "titulo": "Resumen",
+            "filas": "Temperatura|V35|°C|1; Consigna|V27|°C|1; Bomba|V8||0"
+          }
+        },
+        {
+          "id": "estado_dispositivo_1",
+          "tipo": "estado_dispositivo",
+          "x": 940.0,
+          "y": 300.0,
+          "w": 300.0,
+          "h": 56.0,
+          "props": {
+            "titulo": "Controlador",
+            "segundos": 10
+          }
+        },
+        {
+          "id": "regla_1",
+          "tipo": "regla",
+          "x": 20.0,
+          "y": 380.0,
+          "w": 560.0,
+          "h": 56.0,
+          "props": {
+            "titulo": "Si hace calor, apaga las luces",
+            "condicion": "> 28",
+            "pin_destino": "V16",
+            "valor": 0,
+            "valor_si_no": "",
+            "al_iniciar": false
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "programador_1",
+          "tipo": "programador",
+          "x": 940.0,
+          "y": 370.0,
+          "w": 300.0,
+          "h": 110.0,
+          "props": {
+            "titulo": "Horario",
+            "eventos": "08:00|LMXJV|1; 22:00|*|0"
+          },
+          "pin": "V16"
+        },
+        {
+          "id": "mapa_1",
+          "tipo": "mapa",
+          "x": 20.0,
+          "y": 460.0,
+          "w": 400.0,
+          "h": 240.0,
+          "props": {
+            "pin_lat": "V50",
+            "pin_lon": "V51",
+            "radio_m": 200
+          }
+        }
+      ]
+    }
+  ]
+}

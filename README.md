@@ -36,6 +36,8 @@ En el PC, Acuaris abre el **editor**:
 - Propiedades a la derecha: pin, posición, tamaño, textos, colores, límites…
 - Páginas, deshacer/rehacer, zoom (ajustar, + / −, 1:1 tamaño real aproximado).
 - **▶ Probar**: la interfaz funciona con el simulador del acuario.
+- **Enviar al móvil**: la app recibe la interfaz por WiFi y cada cambio llega solo (ver especificación).
+- 57 elementos en 4 grupos, con buscador. Ejemplos en `acuaris/proyectos/ejemplos/`.
 - Atajos: Supr borrar · Ctrl+D duplicar · flechas mover · Ctrl+Z/Ctrl+Y · Ctrl+S.
 
 ## Uso con el acuario

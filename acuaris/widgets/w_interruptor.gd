@@ -7,7 +7,7 @@ func _init() -> void:
 
 
 func al_tocar() -> void:
-	solicitar(0.0 if valor() >= 0.5 else 1.0)
+	solicitar_seguro(0.0 if valor() >= 0.5 else 1.0, "pin", "¿%s «%s»?" % ["Desactivar" if valor() >= 0.5 else "Activar", str(prop("texto", pin_de()))])
 
 
 func _draw() -> void:

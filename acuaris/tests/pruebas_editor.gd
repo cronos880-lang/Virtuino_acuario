@@ -21,8 +21,8 @@ func ejecutar() -> void:
 	var p := Proyecto.new()
 	p.datos = m.datos
 	t.comprobar(p.validar(), "editor: proyecto con todos los tipos es válido " + str(p.errores))
-	var id := str(m.widgets()[0].id)
-	t.comprobar(id == "indicador_1", "editor: identificador automático")
+	var id := "indicador_1"
+	t.comprobar(not m.buscar(id).is_empty() and m.buscar("valor_1").get("tipo") == "valor", "editor: identificador automático")
 	# Mover con ajuste a la rejilla y límites
 	m.fijar_rect(id, Rect2(13, 21, 201, 199))
 	t.comprobar(m.rect_de(id) == Rect2(12, 20, 200, 200), "editor: ajuste a rejilla de 4 dp")

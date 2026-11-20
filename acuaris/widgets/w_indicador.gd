@@ -27,6 +27,7 @@ func _draw() -> void:
 		var d := valor() - valor("pin_consigna")
 		col = Estilo.VERDE if absf(d) <= float(prop("tolerancia", 0.5)) else (Estilo.CALOR if d > 0 else Estilo.AGUA)
 	if tiene_valor():
+		col = color_alarma(valor(), col)
 		var a := _ang(valor(), mn, mx)
 		if a > A0 + 0.001:
 			draw_arc(c, radio, A0, a, puntos, col, grosor, true)

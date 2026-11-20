@@ -23,6 +23,8 @@ var respuestas := 0
 var sin_respuesta := 0
 var latencia_ms := 0
 var ultima_respuesta_ms := -1
+## Hora (unix) de la última respuesta del controlador, para el elemento "Estado del controlador".
+static var ultima_respuesta_unix := 0.0
 
 var _buffer := ""
 var _pendiente := ""
@@ -127,12 +129,14 @@ func _al_recibir(texto: String) -> void:
 			respuestas += 1
 			latencia_ms = ahora - _t_envio
 			ultima_respuesta_ms = ahora
+			Comunicador.ultima_respuesta_unix = Time.get_unix_time_from_system()
 		# Lectura pedida antes de una escritura posterior: valor obsoleto, se ignora.
 		if _t_ultima_escritura.has(nombre) and es_pendiente and _t_envio <= _t_ultima_escritura[nombre]:
 			continue
 		if not m.numerico:
 			continue
 		valores[nombre] = m.valor
+		Historial.anotar(nombre, m.valor)
 		valor_actualizado.emit(nombre, m.valor)
 	if not r.mensajes.is_empty():
 		estadisticas_cambiadas.emit()

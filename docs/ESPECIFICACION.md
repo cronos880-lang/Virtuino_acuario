@@ -53,8 +53,18 @@ Reglas:
 - Varias páginas: la app muestra pestañas si hay más de una.
 - Medidas en **dp**. En el dispositivo: `px = dp × (ancho de pantalla en px / lienzo_dp[0])`.
 - `pin` es el pin principal; cualquier propiedad `pin_*` es un pin adicional que también se lee.
-- Tipos: `panel`, `etiqueta`, `valor`, `led`, `interruptor`, `pulsador` (conmutado, momentáneo o valor),
-  `indicador`, `barra`, `reloj`, `deslizador`.
+- 57 tipos en 4 grupos (catálogo en `widgets/esquema.gd`, generado con `herramientas/generar_esquema.py`):
+  - **Visualización (15):** valor, valor editable, LED, texto de estado (reglas), indicador, manómetro de aguja,
+    barra, barra con escala, barra vertical, icono giratorio, segmentos, imagen, reloj, texto y panel.
+  - **Control (11):** interruptor, interruptor seguro, pulsador, pulsador seguro, casilla, opciones, grupo de botones,
+    selector giratorio, potenciómetro, deslizador y deslizador vertical.
+  - **Gráficas y especiales (9):** gráfica, gráfica avanzada (3 valores), gráfica emergente, historial en tabla
+    (copiar CSV), tabla de valores, estado del controlador, regla automática, programador horario y mapa.
+  - **Hidráulica (22):** depósito (5 formas), tuberías, acoplamientos, codo, te, cruz, reducción, válvulas de 2 y 3 vías,
+    bomba, antirretorno, caudalímetro, volante, maneta, motor, solenoide, manómetro de línea, sensor, agitador y chorro.
+- Comunes: colores de alarma (`limite_alto`, `limite_bajo`) y envío seguro (`confirmar`, `clave` = PIN).
+- Reglas, programador e historial funcionan **mientras la app está abierta** (el Arduino sigue siendo quien
+  controla el acuario).
 
 ## 4. Perfiles de dispositivo y nitidez (DPI)
 
@@ -71,16 +81,26 @@ Nitidez: los elementos se dibujan con primitivas vectoriales (arcos, círculos y
 con suavizado) y el texto se rasteriza al tamaño final en píxeles. No se escalan imágenes, así que no hay
 desenfoque a ninguna densidad ni en ningún zoom.
 
-## 5. Simulador
+## 5. Envío del editor al móvil (opción C)
+
+- Descubrimiento por difusión UDP en el puerto 47801 ("ACUARIS?" / "ACUARIS!{json}").
+- Conexión TCP 47800 con mensajes JSON de una línea: `hola` (código de 6 cifras o token), `bienvenida`,
+  `proyecto` (con número de revisión), `recibido`, `rechazado`, `ping`/`pong`.
+- El token de emparejamiento se guarda en los dos lados; "Olvidar dispositivos" en el editor lo anula.
+- La app guarda la interfaz recibida (`user://proyecto_recibido.acuaris.json`) y la aplica sin cortar el Bluetooth.
+  "Cambios del PC: bloqueados" rechaza envíos; "Volver a la interfaz original" recupera la del acuario.
+
+## 6. Simulador
 
 `core/simulador_arduino.gd` reproduce `getResponse()` de VirtuinoCM y la lógica del sketch:
 reloj (V2–V4), bomba (V8, con V29/V15 o el horario de 15 a 22 h), luces (V16, rampas, V10),
 temperatura (V5, V35, V6, V7, histéresis ±0,2 °C y relé mínimo de 3 min) con un modelo térmico sencillo.
 **No** reproduce el menú bloqueante `Config()` (V9).
 
-## 6. Límites conocidos (V0.1.0)
+## 7. Límites conocidos (V0.1.0)
 
-- La app del móvil abre de momento solo el proyecto incluido; falta "pasar al móvil" los proyectos del editor.
+- Envío por WiFi probado en red local simulada (127.0.0.1); falta la prueba real PC Windows ↔ móvil.
+- Mapa sin calles (necesitaría un servicio de mapas por Internet). Depósito con 5 formas (Virtuino tiene 11).
 - Editor y .exe sin probar aún en un Windows real.
 - Bluetooth no probado aún en el A56 real (no hay acceso al hardware desde la nube).
 - El menú de configuración del sketch (V9, V20–V26) no está en el panel de ejemplo: es un bucle

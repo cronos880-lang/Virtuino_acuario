@@ -69,11 +69,15 @@ func _ready() -> void:
 	_actualizar_zoom()
 	if args.has("envio"):
 		_abrir_envio()
+	if args.has("pagina"):
+		modelo.ir_a_pagina(int(args.pagina))
 	if args.has("captura"):
-		# Simula unos minutos para que los valores sean realistas.
+		# Simula unos minutos para que los valores (y las gráficas) sean realistas.
 		var t := 0
-		for i in 2600:
+		var base := Time.get_unix_time_from_system() - 900.0
+		for i in 9000:
 			t += 100
+			Historial.reloj_externo = base + t / 1000.0
 			enlace.paso(0.1)
 			comunicador.tick(t)
 		for i in 4:
@@ -233,19 +237,51 @@ func _panel_paleta() -> Control:
 	t.add_theme_font_override("font", Estilo.fuente(true))
 	t.add_theme_font_size_override("font_size", roundi(17 * u))
 	v.add_child(t)
-	var rejilla := GridContainer.new()
-	rejilla.columns = 2
-	rejilla.add_theme_constant_override("h_separation", roundi(8 * u))
-	rejilla.add_theme_constant_override("v_separation", roundi(8 * u))
-	v.add_child(rejilla)
-	for tipo in Esquema.ORDEN:
-		var e := ElementoPaleta.new().preparar(tipo, u)
-		e.elegido.connect(func(tp):
-			if boton_probar.button_pressed:
-				return
-			modelo.anadir(tp)
-			_estado("Añadido: %s" % Esquema.info(tp).nombre))
-		rejilla.add_child(e)
+	var buscar := LineEdit.new()
+	buscar.placeholder_text = "Buscar elemento…"
+	buscar.clear_button_enabled = true
+	v.add_child(buscar)
+	var grupos: Array = []   # [cabecera, rejilla, [casillas]]
+	for g in Esquema.GRUPOS:
+		var cab := Button.new()
+		cab.flat = true
+		cab.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		cab.focus_mode = Control.FOCUS_NONE
+		cab.add_theme_font_override("font", Estilo.fuente(true))
+		cab.add_theme_color_override("font_color", Estilo.AGUA)
+		cab.add_theme_color_override("font_hover_color", Color.WHITE)
+		v.add_child(cab)
+		var rejilla := GridContainer.new()
+		rejilla.columns = 2
+		rejilla.add_theme_constant_override("h_separation", roundi(8 * u))
+		rejilla.add_theme_constant_override("v_separation", roundi(8 * u))
+		v.add_child(rejilla)
+		var casillas: Array = []
+		for tipo in g[1]:
+			var e := ElementoPaleta.new().preparar(tipo, u)
+			e.elegido.connect(func(tp):
+				if boton_probar.button_pressed:
+					return
+				modelo.anadir(tp)
+				_estado("Añadido: %s" % Esquema.info(tp).nombre))
+			rejilla.add_child(e)
+			casillas.append(e)
+		var nombre_grupo: String = g[0]
+		var actualizar_cab := func(): cab.text = "%s %s (%d)" % ["▾" if rejilla.visible else "▸", nombre_grupo, casillas.size()]
+		cab.pressed.connect(func(): rejilla.visible = not rejilla.visible; actualizar_cab.call())
+		actualizar_cab.call()
+		grupos.append([cab, rejilla, casillas])
+	buscar.text_changed.connect(func(texto):
+		var q: String = texto.strip_edges().to_lower()
+		for gr in grupos:
+			var visibles := 0
+			for e in gr[2]:
+				var ok: bool = q == "" or str(Esquema.info(e.tipo).nombre).to_lower().contains(q)
+				e.visible = ok
+				visibles += 1 if ok else 0
+			gr[0].visible = visibles > 0
+			if q != "":
+				gr[1].visible = visibles > 0)
 	return panel
 
 
@@ -280,7 +316,7 @@ func _zona_central() -> Control:
 	lienzo.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	lienzo.mensaje.connect(_estado)
 	scroll_lienzo.add_child(lienzo)
-	scroll_lienzo.resized.connect(func(): lienzo.reconstruir())
+	scroll_lienzo.resized.connect(func(): _actualizar_zoom() if zoom_modo == "ajustar" else lienzo.reconstruir())
 	return v
 
 
@@ -516,7 +552,8 @@ func _actualizar_barra() -> void:
 	pestanas.clear_tabs()
 	for p in modelo.paginas():
 		pestanas.add_tab(str(p.get("nombre", "Página")))
-	pestanas.current_tab = modelo.pagina_actual
+	if pestanas.tab_count > 0:
+		pestanas.current_tab = clampi(modelo.pagina_actual, 0, pestanas.tab_count - 1)
 
 
 func _estado(t: String) -> void:

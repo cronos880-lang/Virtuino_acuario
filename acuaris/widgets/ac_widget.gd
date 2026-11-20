@@ -61,6 +61,58 @@ func solicitar(v: float, clave := "pin") -> void:
 		escritura_solicitada.emit(p, v)
 
 
+## Igual que solicitar(), pero pide confirmación y/o PIN si el elemento lo tiene configurado
+## (props "confirmar" y "clave"). En el editor (modo prueba) también se pide.
+func solicitar_seguro(v: float, clave := "pin", descripcion := "") -> void:
+	var pide := bool(prop("confirmar", false)) or str(prop("clave", "")) != ""
+	if not pide:
+		solicitar(v, clave)
+		return
+	var txt := descripcion if descripcion != "" else "¿Enviar %s a %s?" % [ProtocoloVCM.formatear_valor(v), pin_de(clave)]
+	DialogoApp.confirmar(self, s, txt, str(prop("clave", "")), func(): solicitar(v, clave))
+
+
+## Condición sencilla tipo "> 80", "== 1", "<= 0.5", "!= 0". Sin operador = igualdad.
+static func cumple(condicion: String, v: float) -> bool:
+	var c := condicion.strip_edges().replace(" ", "")
+	for op in [">=", "<=", "==", "!=", ">", "<", "="]:
+		if c.begins_with(op):
+			var n := c.substr(op.length()).replace(",", ".")
+			if not n.is_valid_float():
+				return false
+			var x := n.to_float()
+			match op:
+				">=": return v >= x
+				"<=": return v <= x
+				"==", "=": return is_equal_approx(v, x)
+				"!=": return not is_equal_approx(v, x)
+				">": return v > x
+				"<": return v < x
+	return c.replace(",", ".").is_valid_float() and is_equal_approx(v, c.replace(",", ".").to_float())
+
+
+## Color de alarma: si el valor pasa de "limite_alto" o baja de "limite_bajo" (props opcionales).
+func color_alarma(v: float, normal: Color) -> Color:
+	var alto = prop("limite_alto", null)
+	var bajo = prop("limite_bajo", null)
+	if alto != null and str(alto) != "" and v > float(alto):
+		return Estilo.color(prop("color_alto"), Estilo.ROJO)
+	if bajo != null and str(bajo) != "" and v < float(bajo):
+		return Estilo.color(prop("color_bajo"), Estilo.AGUA)
+	return normal
+
+
+## Lista "Etiqueta:valor, Etiqueta:valor" -> [[etiqueta, valor], ...]
+func opciones_prop(clave := "opciones") -> Array:
+	var r := []
+	for parte in str(prop(clave, "")).split(",", false):
+		var kv := parte.split(":")
+		var et := kv[0].strip_edges()
+		var val := kv[1].strip_edges().replace(",", ".") if kv.size() > 1 else str(r.size())
+		r.append([et, val.to_float() if val.is_valid_float() else float(r.size())])
+	return r
+
+
 # ------------------------------------------------------------------ ayudas de dibujo
 func px(dp: float) -> float:
 	return dp * s

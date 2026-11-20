@@ -71,7 +71,7 @@ func zoom_ajustado(area: Vector2) -> float:
 		return 1.0
 	var l := modelo.lienzo()
 	var marco := _grosor_marco()
-	var disp := area - Vector2.ONE * ((MARGEN * 2.0 + 16.0) * u) - Vector2(marco.x * 2.0, marco.y + marco.z)
+	var disp := area - Vector2.ONE * ((MARGEN * 2.0 + 40.0) * u) - Vector2(marco.x * 2.0, marco.y + marco.z)
 	return maxf(0.1, minf(disp.x / l.x, disp.y / l.y))
 
 

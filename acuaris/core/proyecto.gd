@@ -4,7 +4,6 @@ extends RefCounted
 
 const FORMATO := "acuaris-proyecto"
 const VERSION_FORMATO := 1
-const TIPOS := ["etiqueta", "panel", "valor", "led", "interruptor", "pulsador", "indicador", "barra", "reloj", "deslizador"]
 
 var datos: Dictionary = {}
 var errores: Array[String] = []
@@ -48,7 +47,7 @@ func validar() -> bool:
 			if id == "" or ids.has(id):
 				errores.append("Identificador vacío o repetido: '%s'" % id)
 			ids[id] = true
-			if not TIPOS.has(w.get("tipo")):
+			if Esquema.info(str(w.get("tipo", ""))).is_empty():
 				errores.append("Tipo de elemento desconocido '%s' en %s" % [w.get("tipo"), id])
 			for k in ["x", "y", "w", "h"]:
 				if not (w.get(k) is float or w.get(k) is int):
@@ -87,6 +86,12 @@ static func pines_de(w: Dictionary) -> Array[String]:
 	for k in w.get("props", {}):
 		if str(k).begins_with("pin_") and str(w.props[k]) != "":
 			r.append(str(w.props[k]))
+	# Tabla de valores: los pines van dentro de "filas" (texto|pin|unidad|decimales; ...)
+	if w.get("props", {}).has("filas"):
+		for f in str(w.props.filas).split(";", false):
+			var c := f.split("|")
+			if c.size() >= 2 and c[1].strip_edges() != "":
+				r.append(c[1].strip_edges().to_upper())
 	return r
 
 

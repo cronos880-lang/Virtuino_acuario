@@ -1,0 +1,512 @@
+{
+  "formato": "acuaris-proyecto",
+  "version": 1,
+  "nombre": "Circuito hidráulico (ejemplo)",
+  "perfil": "generico_tablet_10",
+  "orientacion": "horizontal",
+  "lienzo_dp": [
+    1280,
+    800
+  ],
+  "conexion": {
+    "tipo": "bluetooth_spp",
+    "nombre_dispositivo": "",
+    "intervalo_ms": 400
+  },
+  "paginas": [
+    {
+      "id": "pagina_1",
+      "nombre": "Filtro",
+      "widgets": [
+        {
+          "id": "etiqueta_1",
+          "tipo": "etiqueta",
+          "x": 20.0,
+          "y": 16.0,
+          "w": 700.0,
+          "h": 30.0,
+          "props": {
+            "texto": "Circuito del filtro · ejemplo animado con el simulador",
+            "tam": 16,
+            "color": "#e8f3fa",
+            "alineacion": "izquierda",
+            "negrita": true
+          }
+        },
+        {
+          "id": "deposito_1",
+          "tipo": "deposito",
+          "x": 520.0,
+          "y": 160.0,
+          "w": 200.0,
+          "h": 280.0,
+          "props": {
+            "forma": "redondeado",
+            "min": 0,
+            "max": 255,
+            "mostrar": "porcentaje",
+            "unidad": "L",
+            "decimales": 0,
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "etiqueta": "Acuario"
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "agitador_1",
+          "tipo": "agitador",
+          "x": 590.0,
+          "y": 220.0,
+          "w": 60.0,
+          "h": 150.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "condicion": ">= 0.5"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "sensor_1",
+          "tipo": "sensor",
+          "x": 732.0,
+          "y": 260.0,
+          "w": 40.0,
+          "h": 48.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "etiqueta": "TT"
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "tuberia_h_1",
+          "tipo": "tuberia_h",
+          "x": 400.0,
+          "y": 380.0,
+          "w": 124.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "bomba_h_1",
+          "tipo": "bomba_h",
+          "x": 300.0,
+          "y": 370.0,
+          "w": 100.0,
+          "h": 60.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false,
+            "etiqueta": "Bomba"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "manometro_peq_1",
+          "tipo": "manometro_peq",
+          "x": 248,
+          "y": 330.0,
+          "w": 44.0,
+          "h": 52.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 15,
+            "max": 35,
+            "decimales": 1
+          },
+          "pin": "V35"
+        },
+        {
+          "id": "acoplamiento_eje_1",
+          "tipo": "acoplamiento_eje",
+          "x": 240,
+          "y": 370.0,
+          "w": 60.0,
+          "h": 60.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "tuberia_h_2",
+          "tipo": "tuberia_h",
+          "x": 180.0,
+          "y": 380.0,
+          "w": 60,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "codo_1",
+          "tipo": "codo",
+          "x": 140.0,
+          "y": 380.0,
+          "w": 40.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false,
+            "orientacion": 3
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "tuberia_v_1",
+          "tipo": "tuberia_v",
+          "x": 140.0,
+          "y": 140.0,
+          "w": 40.0,
+          "h": 240.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "caudalimetro_1",
+          "tipo": "caudalimetro",
+          "x": 130.0,
+          "y": 220.0,
+          "w": 60.0,
+          "h": 60.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false,
+            "etiqueta": ""
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "codo_2",
+          "tipo": "codo",
+          "x": 140.0,
+          "y": 100.0,
+          "w": 40.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false,
+            "orientacion": 0
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "tuberia_h_3",
+          "tipo": "tuberia_h",
+          "x": 180.0,
+          "y": 100.0,
+          "w": 280.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "valvula_2v_1",
+          "tipo": "valvula_2v",
+          "x": 460.0,
+          "y": 90.0,
+          "w": 80.0,
+          "h": 60.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "condicion": ">= 0.5",
+            "etiqueta": "Válvula"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "volante_1",
+          "tipo": "volante",
+          "x": 480.0,
+          "y": 50.0,
+          "w": 40.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "condicion": ">= 0.5"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "tuberia_h_4",
+          "tipo": "tuberia_h",
+          "x": 540.0,
+          "y": 100.0,
+          "w": 120.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "codo_3",
+          "tipo": "codo",
+          "x": 660.0,
+          "y": 100.0,
+          "w": 40.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false,
+            "orientacion": 1
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "chorro_1",
+          "tipo": "chorro",
+          "x": 665.0,
+          "y": 140.0,
+          "w": 30.0,
+          "h": 120.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "condicion": ">= 0.5"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "valvula_3v_1",
+          "tipo": "valvula_3v",
+          "x": 820.0,
+          "y": 370.0,
+          "w": 80.0,
+          "h": 60.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "orientacion": 0,
+            "etiqueta": "3 vías"
+          },
+          "pin": "V29"
+        },
+        {
+          "id": "antirretorno_1",
+          "tipo": "antirretorno",
+          "x": 900.0,
+          "y": 380.0,
+          "w": 80.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "condicion": ">= 0.5",
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "reduccion_1",
+          "tipo": "reduccion",
+          "x": 980.0,
+          "y": 380.0,
+          "w": 60.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "tubo_2": 10,
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "te_1",
+          "tipo": "te",
+          "x": 1040.0,
+          "y": 380.0,
+          "w": 60.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false,
+            "orientacion": 0
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "cruz_1",
+          "tipo": "cruz",
+          "x": 1100.0,
+          "y": 380.0,
+          "w": 40.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "motor_1",
+          "tipo": "motor",
+          "x": 920.0,
+          "y": 160.0,
+          "w": 40.0,
+          "h": 48.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "condicion": ">= 0.5"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "solenoide_1",
+          "tipo": "solenoide",
+          "x": 980.0,
+          "y": 160.0,
+          "w": 32.0,
+          "h": 44.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "condicion": ">= 0.5"
+          },
+          "pin": "V6"
+        },
+        {
+          "id": "maneta_1",
+          "tipo": "maneta",
+          "x": 1030.0,
+          "y": 160.0,
+          "w": 40.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "condicion": ">= 0.5"
+          },
+          "pin": "V29"
+        },
+        {
+          "id": "acoplamiento_1",
+          "tipo": "acoplamiento",
+          "x": 760.0,
+          "y": 380.0,
+          "w": 60.0,
+          "h": 40.0,
+          "props": {
+            "tubo": 18,
+            "color_tubo": "#5f7c8e",
+            "color_liquido": "#2ec4d6",
+            "min": 0,
+            "max": 1,
+            "invertir": false
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "led_1",
+          "tipo": "led",
+          "x": 820.0,
+          "y": 480.0,
+          "w": 300.0,
+          "h": 44.0,
+          "props": {
+            "texto": "Bomba del filtro",
+            "texto_on": "EN MARCHA",
+            "texto_off": "PARADA",
+            "color_on": "#2ec4d6",
+            "color_off": "#26465c",
+            "umbral": 0.5,
+            "radio": 11,
+            "vertical": false,
+            "con_fondo": false
+          },
+          "pin": "V8"
+        }
+      ]
+    }
+  ]
+}

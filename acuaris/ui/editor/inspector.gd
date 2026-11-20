@@ -177,6 +177,23 @@ func _elemento(w: Dictionary) -> void:
 				cb.button_pressed = bool(actual)
 				cb.toggled.connect(func(v): _cambiar(func(): modelo.fijar_prop(id, clave, v)))
 				control = cb
+			"imagen":
+				var hb := HBoxContainer.new()
+				var tiene := str(actual) != ""
+				var b_el := Button.new()
+				b_el.text = "Cambiar…" if tiene else "Elegir…"
+				b_el.pressed.connect(func(): _elegir_imagen(id, clave))
+				hb.add_child(b_el)
+				if tiene:
+					var b_q := Button.new()
+					b_q.text = "Quitar"
+					b_q.pressed.connect(func(): _cambiar(func(): modelo.fijar_prop(id, clave, "")); reconstruir())
+					hb.add_child(b_q)
+					var l := Label.new()
+					l.text = "%d KB" % roundi(str(actual).length() * 0.75 / 1024.0)
+					l.add_theme_color_override("font_color", Estilo.TEXTO_TENUE)
+					hb.add_child(l)
+				control = hb
 			"opcion":
 				var ob := OptionButton.new()
 				for o in p.opciones:
@@ -195,6 +212,36 @@ func _elemento(w: Dictionary) -> void:
 	b_borrar.add_theme_color_override("font_color", Estilo.ROJO)
 	h.add_child(b_borrar)
 	add_child(h)
+
+
+const MAX_IMAGEN_KB := 600
+
+
+func _elegir_imagen(id: String, clave: String) -> void:
+	var fd := FileDialog.new()
+	fd.access = FileDialog.ACCESS_FILESYSTEM
+	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	fd.use_native_dialog = true
+	fd.filters = PackedStringArray(["*.png, *.jpg, *.jpeg, *.webp ; Imágenes"])
+	fd.title = "Elegir imagen"
+	get_tree().root.add_child(fd)
+	fd.file_selected.connect(func(ruta):
+		fd.queue_free()
+		var datos := FileAccess.get_file_as_bytes(ruta)
+		if datos.is_empty():
+			mensaje.emit("No se pudo leer la imagen")
+			return
+		if datos.size() > MAX_IMAGEN_KB * 1024:
+			mensaje.emit("Imagen demasiado grande (%d KB). Máximo %d KB: redúcela antes." % [datos.size() / 1024, MAX_IMAGEN_KB])
+			return
+		var img := Image.new()
+		if img.load_png_from_buffer(datos) != OK and img.load_jpg_from_buffer(datos) != OK and img.load_webp_from_buffer(datos) != OK:
+			mensaje.emit("Formato no reconocido (usa PNG, JPG o WEBP)")
+			return
+		_cambiar(func(): modelo.fijar_prop(id, clave, Marshalls.raw_to_base64(datos)))
+		reconstruir())
+	fd.canceled.connect(fd.queue_free)
+	fd.popup_centered_ratio(0.6)
 
 
 # ------------------------------------------------------------------ proyecto

@@ -14,9 +14,9 @@ func al_presionar(presionado: bool) -> void:
 func al_tocar() -> void:
 	match str(prop("modo", "conmutado")):
 		"conmutado":
-			solicitar(0.0 if valor() >= 0.5 else 1.0)
+			solicitar_seguro(0.0 if valor() >= 0.5 else 1.0, "pin", "¿Pulsar «%s»?" % str(prop("texto", "")))
 		"valor":
-			solicitar(float(prop("valor", 1.0)))
+			solicitar_seguro(float(prop("valor", 1.0)), "pin", "¿Pulsar «%s»?" % str(prop("texto", "")))
 
 
 func _draw() -> void:
