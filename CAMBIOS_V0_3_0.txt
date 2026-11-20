@@ -1,6 +1,11 @@
 ACUARIS — CAMBIOS
 =================
 
+V0.3.1 (experimental, 20-11-2026) — solo APK
+- Corrige: no se podía escribir la dirección del PC en el móvil (el teclado
+  decimal de Android solo admite un punto). Ahora usa el teclado de
+  direcciones y acepta también comas.
+
 V0.3.0 (experimental, 20-11-2026)
 - Enviar al móvil (opción C): el editor envía la interfaz por WiFi a la app;
   emparejamiento con código de 6 cifras; cada cambio llega solo; bloqueo de

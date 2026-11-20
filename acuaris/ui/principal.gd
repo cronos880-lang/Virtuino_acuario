@@ -406,7 +406,7 @@ func mostrar_conexion() -> void:
 		caja.add_child(b_volver)
 
 
-func _campo(texto: String, marcador: String, numerico: bool, al_cambiar: Callable) -> LineEdit:
+func _campo(texto: String, marcador: String, teclado: int, al_cambiar: Callable) -> LineEdit:
 	var le := LineEdit.new()
 	le.text = texto
 	le.placeholder_text = marcador
@@ -426,8 +426,8 @@ func _campo(texto: String, marcador: String, numerico: bool, al_cambiar: Callabl
 	var sbf: StyleBoxFlat = sb.duplicate()
 	sbf.border_color = Estilo.AGUA
 	le.add_theme_stylebox_override("focus", sbf)
-	if numerico:
-		le.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_NUMBER_DECIMAL
+	# Ojo: el teclado "decimal" de Android solo admite UN punto; para direcciones se usa el de URL.
+	le.virtual_keyboard_type = teclado
 	le.text_changed.connect(al_cambiar)
 	return le
 
@@ -451,7 +451,7 @@ func mostrar_recepcion() -> void:
 	if receptor.bloqueado:
 		caja.add_child(_etiqueta("Los cambios del PC están BLOQUEADOS en esta app (Conexión → Cambios del PC).", 13, Estilo.AMBAR))
 	if e == "necesita_codigo":
-		caja.add_child(_campo(_codigo_escrito, "Código (6 cifras)", true, func(t): _codigo_escrito = t))
+		caja.add_child(_campo(_codigo_escrito, "Código (6 cifras)", LineEdit.KEYBOARD_TYPE_NUMBER, func(t): _codigo_escrito = t))
 		var b_ok := BotonUi.new().preparar(s, "Aceptar código")
 		b_ok.destacado = true
 		b_ok.pulsado.connect(func(): receptor.conectar(receptor.pc_actual, _codigo_escrito.replace(" ", "")); _codigo_escrito = "")
@@ -473,10 +473,10 @@ func mostrar_recepcion() -> void:
 		b_bus.pulsado.connect(func(): receptor.buscar())
 		caja.add_child(b_bus)
 		caja.add_child(_etiqueta("O ESCRIBE LA DIRECCIÓN QUE MUESTRA EL EDITOR", 12, Estilo.TEXTO_TENUE, true))
-		caja.add_child(_campo(_ip_escrita, "Ejemplo: 192.168.1.20", true, func(t): _ip_escrita = t))
+		caja.add_child(_campo(_ip_escrita, "Ejemplo: 192.168.1.20", LineEdit.KEYBOARD_TYPE_URL, func(t): _ip_escrita = t))
 		var b_ip := BotonUi.new().preparar(s, "Conectar a esta dirección")
 		b_ip.pulsado.connect(func():
-			var ip := _ip_escrita.strip_edges()
+			var ip := _ip_escrita.strip_edges().replace(",", ".").replace(" ", "")
 			if ip.is_valid_ip_address():
 				receptor.conectar({"pc": ip, "ip": ip, "puerto": EnvioProtocolo.PUERTO_TCP})
 			else:
