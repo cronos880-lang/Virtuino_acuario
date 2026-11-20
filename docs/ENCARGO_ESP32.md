@@ -43,7 +43,7 @@ Estado: **pendiente de empezar** (decisiones tomadas el 20-11-2026; se retoma cu
 - **Límites de la placa:** unos 4,85–5,58 A (eFuse), unos 68 W y 4,7 A de diseño.
 
 ## Puntos abiertos (antes de programar)
-- **Corriente de las luces:** 7 × 8 W = 56 W. A 10 V serían unos **5,6 A**, por encima del límite del
+- **Corriente de las luces: RESUELTO** (ver C.3). Planteamiento inicial: 7 × 8 W = 56 W. A 10 V serían unos **5,6 A**, por encima del límite del
   eFuse (unos 4,85–5,58 A) y de los 4,7 A de diseño. A 12 V serían unos 4,7 A.
   Hay que confirmar la tensión de trabajo de las dicroicas, su consumo real y si la placa lo admite.
 - **Acceso desde fuera de casa:** decidir el sistema (servicio en la nube, VPN o abrir un puerto) teniendo
@@ -77,3 +77,20 @@ Estado: **pendiente de empezar** (decisiones tomadas el 20-11-2026; se retoma cu
   4. **Modo PWM** disponible para futuras luminarias regulables.
 - Siempre dentro de los límites de seguridad: tensión máxima por software, fallo del eFuse y sobretensión.
 - Pendiente: el consumo real (7 × 8 W) frente al límite de corriente del eFuse (ver puntos abiertos).
+
+### C. Decisiones del 20-11-2026 (respuestas del propietario)
+1. La intensidad temporal vuelve a la referencia **al empezar el amanecer**. Como no se guarda en
+   memoria, después de un reinicio también se arranca con la referencia.
+2. **Hoy las luces se regulan por PWM en el Mega y funcionan bien**, aunque el fabricante diga que
+   no son regulables por PWM. En la placa ESP32:
+   - **Modo principal: el mismo que hoy.** El buck da una tensión fija y el PWM regula
+     (TC4427 + MOSFET Q1).
+   - **Frecuencia:** igual que la actual del Mega en los pines 3 y 6 (unos 490 Hz), configurable por si
+     hiciera falta.
+   - **Riesgo a vigilar:** el aviso del fabricante podría significar que el driver interno sufre más
+     (temperatura, duración). Hay que observar si las dicroicas se calientan.
+   - El modo tensión regulable queda como alternativa, a probar si algún día hace falta.
+3. **Luces reales: 2 × 8 W + 4 × 6 W = 40 W como máximo** (6 lámparas), con la misma fuente de 24 V / 5 A.
+   A 10 V son unos 4,0 A y a 12 V unos 3,3 A: **dentro del límite de la placa** (4,7 A de diseño). Queda
+   resuelto el punto abierto de la corriente. Hay margen, pero conviene un arranque suave de la tensión
+   por el pico de los drivers.
