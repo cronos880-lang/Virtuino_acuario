@@ -23,6 +23,7 @@ func _initialize() -> void:
 	prueba_perfiles()
 	prueba_comunicador()
 	load("res://tests/pruebas_editor.gd").new(self).ejecutar()
+	load("res://tests/pruebas_envio.gd").new(self).ejecutar()
 	# Prueba de la aplicación completa: se termina en _process tras unos fotogramas.
 	_app = load("res://ui/principal.tscn").instantiate()
 	root.add_child(_app)
@@ -33,6 +34,8 @@ var _app: Node = null
 var _t_inicio := 0
 var _fase := 0
 var _editor: Node = null
+var _srv: ServidorEnvio = null
+var _enlace_antes: Object = null
 
 
 func _process(_delta: float) -> bool:
@@ -52,7 +55,32 @@ func _process(_delta: float) -> bool:
 	if _fase == 3:
 		_fase = 4
 		return false
+	if _fase == 4 and _srv == null:
+		# Extremo a extremo: el editor envía una interfaz y la app la aplica sin perder la conexión.
+		_srv = ServidorEnvio.new()
+		_srv.archivo = "user://prueba_e2e_emparejados.cfg"
+		root.add_child(_srv)
+		_srv.iniciar(47910, 47911)
+		var d: Dictionary = Proyecto.desde_archivo("res://proyectos/acuario.acuaris.json").datos.duplicate(true)
+		d["nombre"] = "Prueba envío"
+		_srv.publicar(d)
+		_app.receptor.archivo = "user://prueba_e2e_receptor.cfg"
+		_app.receptor._ready()
+		_app.receptor.conectar({"pc": "PC-PRUEBA", "ip": "127.0.0.1", "puerto": 47910}, _srv.codigo)
+		_enlace_antes = _app.enlace
+		_t_inicio = Time.get_ticks_msec()
+		return false
+	if _fase == 4 and _srv != null and _app.proyecto.nombre() != "Prueba envío" and t < 4000:
+		return false
 	if _fase == 4:
+		comprobar(_app.proyecto.nombre() == "Prueba envío", "e2e: la app aplica la interfaz enviada por el editor")
+		comprobar(is_instance_valid(_enlace_antes) and _app.enlace == _enlace_antes and _app.enlace.esta_conectado(), "e2e: la conexión con el controlador no se corta")
+		comprobar(FileAccess.file_exists(_app.PROYECTO_RECIBIDO), "e2e: la interfaz recibida se guarda en la app")
+		_app.volver_a_original()
+		comprobar(_app.proyecto.nombre() == "Acuario" and not FileAccess.file_exists(_app.PROYECTO_RECIBIDO), "e2e: volver a la interfaz original")
+		_srv.detener()
+		for f in ["user://prueba_e2e_emparejados.cfg", "user://prueba_e2e_receptor.cfg"]:
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(f))
 		comprobar(_editor.modelo.paginas().size() == 1 and _editor.modelo.widgets().size() > 10, "app editor: abre el acuario")
 		comprobar(_editor.lienzo.zoom >= 0.1 and _editor.lienzo.modelo != null, "app editor: lienzo preparado")
 		comprobar(is_instance_valid(_app.enlace), "app: la conexión sobrevive al redibujado")

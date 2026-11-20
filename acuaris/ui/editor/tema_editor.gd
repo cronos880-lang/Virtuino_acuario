@@ -68,7 +68,16 @@ static func crear(u: float) -> Theme:
 	t.set_color("font_unselected_color", "TabBar", Estilo.TEXTO_SEC)
 	t.set_color("font_hovered_color", "TabBar", Estilo.TEXTO)
 	t.set_stylebox("panel", "AcceptDialog", caja(Color("#0f2433"), 0, u, Vector4(16, 16, 16, 16)))
-	t.set_stylebox("embedded_border", "Window", caja(Color("#0f2433"), 10, u, Vector4(8, 32, 8, 8), borde))
+	# Marco de las ventanas emergentes: la barra de título se dibuja en el margen de expansión.
+	var marco := caja(Color("#123247"), 10, u, Vector4(0, 0, 0, 0), borde)
+	marco.expand_margin_left = 8 * u
+	marco.expand_margin_right = 8 * u
+	marco.expand_margin_bottom = 8 * u
+	marco.expand_margin_top = 34 * u
+	t.set_stylebox("embedded_border", "Window", marco)
+	t.set_stylebox("embedded_unfocused_border", "Window", marco)
+	t.set_constant("title_height", "Window", roundi(34 * u))
+	t.set_font_size("title_font_size", "Window", roundi(15 * u))
 	t.set_color("title_color", "Window", Estilo.TEXTO)
 	t.set_constant("separation", "VSeparator", roundi(10 * u))
 	return t

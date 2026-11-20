@@ -8,6 +8,7 @@ extends Control
 const PROYECTO_DEFECTO := "res://proyectos/acuario.acuaris.json"
 const CONFIG := "user://acuaris.cfg"
 const ALTO_BARRA_DP := 60.0
+const PROYECTO_RECIBIDO := "user://proyecto_recibido.acuaris.json"
 
 var proyecto: Proyecto
 var s := 1.0
@@ -23,6 +24,10 @@ var _reintentos := 0
 var _desconexion_voluntaria := false
 var _t_estado := 0.0
 var _pagina := 0
+var receptor := ReceptorEnvio.new()
+var _pantalla := ""
+var _ip_escrita := ""
+var _codigo_escrito := ""
 
 
 func _ready() -> void:
@@ -32,11 +37,11 @@ func _ready() -> void:
 	add_child(comunicador)
 	comunicador.valor_actualizado.connect(_al_valor)
 	config.load(CONFIG)
-	proyecto = Proyecto.desde_archivo(str(args.get("proyecto", PROYECTO_DEFECTO)))
-	comunicador.intervalo_ronda_ms = proyecto.intervalo_ms()
-	comunicador.fijar_pines(proyecto.todos_los_pines())
-	if OS.has_feature("mobile") and proyecto.errores.is_empty():
-		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_LANDSCAPE if proyecto.ancho_dp() > proyecto.alto_dp() else DisplayServer.SCREEN_PORTRAIT)
+	add_child(receptor)
+	receptor.proyecto_recibido.connect(_al_recibir_proyecto)
+	receptor.estado_cambiado.connect(func(_e, _d): _al_cambiar_recepcion())
+	receptor.pcs_encontrados.connect(func(_l): _al_cambiar_recepcion())
+	_aplicar_proyecto(_proyecto_inicial())
 	_construir()
 	get_viewport().size_changed.connect(_construir)
 	if not proyecto.errores.is_empty():
@@ -46,6 +51,10 @@ func _ready() -> void:
 		_modo_captura()
 		return
 	if OS.has_feature("mobile"):
+		# Si ya estaba emparejado con un editor, se vuelve a enlazar solo para recibir cambios.
+		var pc := receptor.ultimo_pc()
+		if not pc.is_empty() and not receptor.bloqueado and receptor.tiene_token(pc):
+			receptor.conectar(pc)
 		var ultimo := str(config.get_value("conexion", "direccion", ""))
 		if ultimo == "simulador":
 			conectar_simulador()
@@ -72,7 +81,7 @@ func _construir() -> void:
 	s = tam.x / proyecto.ancho_dp()
 	# Se redibuja solo la interfaz: el comunicador y la conexión activa se conservan.
 	for h in get_children():
-		if h != comunicador and h != enlace and not (h is Enlace):
+		if h != comunicador and h != enlace and h != receptor and not (h is Enlace):
 			h.queue_free()
 	capa = null
 	var fondo := FondoDegradado.new()
@@ -83,7 +92,7 @@ func _construir() -> void:
 		margen_sup = maxf(0.0, DisplayServer.get_display_safe_area().position.y - (DisplayServer.screen_get_size().y - tam.y))
 	barra = BarraSuperior.new()
 	barra.s = s
-	barra.subtitulo = "Proyecto: " + proyecto.nombre()
+	barra.subtitulo = _subtitulo()
 	barra.position = Vector2(0, margen_sup)
 	barra.size = Vector2(tam.x, ALTO_BARRA_DP * s)
 	barra.pulsado_estado.connect(mostrar_conexion)
@@ -115,6 +124,90 @@ func _construir() -> void:
 	for p in comunicador.valores:
 		vista.recibir(p, comunicador.valores[p])
 	_actualizar_estado()
+
+
+func _subtitulo() -> String:
+	var t := "Proyecto: " + proyecto.nombre()
+	if receptor.conectado():
+		t += "  ·  enlazado con el PC"
+	return t
+
+
+# ------------------------------------------------------------------ proyecto (incluido o recibido del editor)
+func _proyecto_inicial() -> Proyecto:
+	if args.has("proyecto"):
+		return Proyecto.desde_archivo(str(args.proyecto))
+	if FileAccess.file_exists(PROYECTO_RECIBIDO):
+		var p := Proyecto.desde_archivo(PROYECTO_RECIBIDO)
+		if p.errores.is_empty():
+			return p
+	return Proyecto.desde_archivo(PROYECTO_DEFECTO)
+
+
+func _aplicar_proyecto(p: Proyecto) -> void:
+	proyecto = p
+	comunicador.intervalo_ronda_ms = proyecto.intervalo_ms()
+	comunicador.fijar_pines(proyecto.todos_los_pines())
+	if OS.has_feature("mobile") and proyecto.errores.is_empty():
+		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_LANDSCAPE if proyecto.ancho_dp() > proyecto.alto_dp() else DisplayServer.SCREEN_PORTRAIT)
+
+
+func _al_recibir_proyecto(datos: Dictionary, revision: int) -> void:
+	var p := Proyecto.new()
+	if not p.cargar_texto(JSON.stringify(datos)):
+		_aviso_breve("Interfaz recibida con errores: no se aplica", Estilo.ROJO)
+		return
+	var f := FileAccess.open(PROYECTO_RECIBIDO, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(datos))
+		f.close()
+	var estaba := _pantalla
+	_aplicar_proyecto(p)
+	_construir()
+	if estaba == "recepcion":
+		mostrar_recepcion()
+	_aviso_breve("Interfaz actualizada desde el PC (versión %d)" % revision, Estilo.VERDE)
+
+
+func volver_a_original() -> void:
+	receptor.desconectar()
+	if FileAccess.file_exists(PROYECTO_RECIBIDO):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(PROYECTO_RECIBIDO))
+	_aplicar_proyecto(Proyecto.desde_archivo(PROYECTO_DEFECTO))
+	_construir()
+	_aviso_breve("Vuelta a la interfaz original del acuario", Estilo.AGUA)
+
+
+func _al_cambiar_recepcion() -> void:
+	if barra:
+		barra.subtitulo = _subtitulo()
+		barra.queue_redraw()
+	if _pantalla == "recepcion":
+		mostrar_recepcion()
+
+
+func _aviso_breve(texto: String, color: Color) -> void:
+	var l := Label.new()
+	l.text = texto
+	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.add_theme_font_override("font", Estilo.fuente(true))
+	l.add_theme_font_size_override("font_size", roundi(14 * s))
+	l.add_theme_color_override("font_color", Estilo.FONDO_ABAJO)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = color
+	sb.set_corner_radius_all(roundi(14 * s))
+	sb.content_margin_left = 16 * s
+	sb.content_margin_right = 16 * s
+	sb.content_margin_top = 10 * s
+	sb.content_margin_bottom = 10 * s
+	l.add_theme_stylebox_override("normal", sb)
+	var tam := get_viewport_rect().size
+	l.size = Vector2(tam.x - 32 * s, 0)
+	l.position = Vector2(16 * s, tam.y - 110 * s)
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(l)
+	get_tree().create_timer(3.5).timeout.connect(func(): if is_instance_valid(l): l.queue_free())
 
 
 func _al_valor(pin: String, v: float) -> void:
@@ -245,6 +338,7 @@ func _etiqueta(t: String, tam_dp: float, color: Color, negrita := false) -> Labe
 
 
 func cerrar_capa() -> void:
+	_pantalla = ""
 	if capa:
 		capa.queue_free()
 		capa = null
@@ -252,6 +346,7 @@ func cerrar_capa() -> void:
 
 func mostrar_conexion() -> void:
 	var caja := _nueva_capa("Conexión")
+	_pantalla = "conexion"
 	caja.add_child(_etiqueta("Elige con qué controlador quieres trabajar.", 13, Estilo.TEXTO_SEC))
 	caja.add_child(_etiqueta("SIN HARDWARE", 12, Estilo.TEXTO_TENUE, true))
 	var b_sim := BotonUi.new().preparar(s, "Simulador del acuario", "Arduino virtual que reproduce tu sketch", Estilo.AGUA)
@@ -282,6 +377,18 @@ func mostrar_conexion() -> void:
 				var b := BotonUi.new().preparar(s, nombre, dir, Estilo.VERDE if nombre.to_upper().begins_with("HC-") else Estilo.TEXTO_TENUE)
 				b.pulsado.connect(func(): cerrar_capa(); conectar_bluetooth(dir, nombre))
 				caja.add_child(b)
+	caja.add_child(_etiqueta("INTERFAZ · EDITOR DEL PC", 12, Estilo.TEXTO_TENUE, true))
+	var det := "Enlazado con %s: los cambios llegan solos" % receptor.pc_actual.get("pc", "el PC") if receptor.conectado() else "Recibe por WiFi lo que diseñas en el PC"
+	var b_rec := BotonUi.new().preparar(s, "Recibir del editor del PC", det, Estilo.VERDE if receptor.conectado() else Estilo.AGUA)
+	b_rec.pulsado.connect(mostrar_recepcion)
+	caja.add_child(b_rec)
+	var b_blq := BotonUi.new().preparar(s, "Cambios del PC: " + ("BLOQUEADOS" if receptor.bloqueado else "permitidos"), "Pulsa para " + ("permitirlos" if receptor.bloqueado else "bloquearlos (interfaz terminada)"), Estilo.AMBAR if receptor.bloqueado else Estilo.TEXTO_TENUE)
+	b_blq.pulsado.connect(func(): receptor.fijar_bloqueado(not receptor.bloqueado); mostrar_conexion())
+	caja.add_child(b_blq)
+	if FileAccess.file_exists(PROYECTO_RECIBIDO):
+		var b_orig := BotonUi.new().preparar(s, "Volver a la interfaz original", "La del acuario incluida en la app", Estilo.TEXTO_TENUE)
+		b_orig.pulsado.connect(func(): volver_a_original(); mostrar_conexion())
+		caja.add_child(b_orig)
 	caja.add_child(_etiqueta("HERRAMIENTAS", 12, Estilo.TEXTO_TENUE, true))
 	var b_medir := BotonUi.new().preparar(s, "Medir este móvil", "Tamaño, densidad y márgenes reales", Estilo.LUZ)
 	b_medir.pulsado.connect(mostrar_medicion)
@@ -291,6 +398,88 @@ func mostrar_conexion() -> void:
 		b_volver.destacado = true
 		b_volver.pulsado.connect(cerrar_capa)
 		caja.add_child(b_volver)
+
+
+func _campo(texto: String, marcador: String, numerico: bool, al_cambiar: Callable) -> LineEdit:
+	var le := LineEdit.new()
+	le.text = texto
+	le.placeholder_text = marcador
+	le.add_theme_font_size_override("font_size", roundi(17 * s))
+	le.add_theme_color_override("font_color", Estilo.TEXTO)
+	le.add_theme_color_override("font_placeholder_color", Estilo.TEXTO_TENUE)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color("#0a1c28")
+	sb.border_color = Estilo.TARJETA_BORDE
+	sb.set_border_width_all(maxi(1, roundi(s)))
+	sb.set_corner_radius_all(roundi(10 * s))
+	sb.content_margin_left = 14 * s
+	sb.content_margin_right = 14 * s
+	sb.content_margin_top = 10 * s
+	sb.content_margin_bottom = 10 * s
+	le.add_theme_stylebox_override("normal", sb)
+	var sbf: StyleBoxFlat = sb.duplicate()
+	sbf.border_color = Estilo.AGUA
+	le.add_theme_stylebox_override("focus", sbf)
+	if numerico:
+		le.virtual_keyboard_type = LineEdit.KEYBOARD_TYPE_NUMBER_DECIMAL
+	le.text_changed.connect(al_cambiar)
+	return le
+
+
+func mostrar_recepcion() -> void:
+	var caja := _nueva_capa("Recibir del editor del PC")
+	_pantalla = "recepcion"
+	var e := receptor.estado
+	var textos := {
+		"parado": "Abre el editor en el PC y pulsa «Enviar al móvil». Después elige el PC aquí.",
+		"buscando": "Buscando editores en la red WiFi…",
+		"conectando": "Conectando con %s…" % receptor.detalle,
+		"esperando": "Esperando respuesta del PC…",
+		"necesita_codigo": "Escribe el código de 6 cifras que muestra el editor. %s" % receptor.detalle,
+		"conectado": "Enlazado con %s. Cada cambio que hagas en el editor aparecerá aquí solo." % receptor.detalle,
+		"desconectado": "Se perdió la conexión con el PC. %s" % receptor.detalle,
+		"error": receptor.detalle,
+	}
+	var col := Estilo.VERDE if e == "conectado" else (Estilo.ROJO if e == "error" else Estilo.TEXTO_SEC)
+	caja.add_child(_etiqueta(str(textos.get(e, "")), 14, col))
+	if receptor.bloqueado:
+		caja.add_child(_etiqueta("Los cambios del PC están BLOQUEADOS en esta app (Conexión → Cambios del PC).", 13, Estilo.AMBAR))
+	if e == "necesita_codigo":
+		caja.add_child(_campo(_codigo_escrito, "Código (6 cifras)", true, func(t): _codigo_escrito = t))
+		var b_ok := BotonUi.new().preparar(s, "Aceptar código")
+		b_ok.destacado = true
+		b_ok.pulsado.connect(func(): receptor.conectar(receptor.pc_actual, _codigo_escrito.replace(" ", "")); _codigo_escrito = "")
+		caja.add_child(b_ok)
+	if e == "conectado" or e == "desconectado":
+		var b_des := BotonUi.new().preparar(s, "Desconectar del PC", "La interfaz recibida se queda en la app", Estilo.TEXTO_TENUE)
+		b_des.pulsado.connect(func(): receptor.desconectar())
+		caja.add_child(b_des)
+	else:
+		caja.add_child(_etiqueta("EDITORES ENCONTRADOS", 12, Estilo.TEXTO_TENUE, true))
+		if receptor.pcs.is_empty():
+			caja.add_child(_etiqueta("…" if e == "buscando" else "Ninguno de momento.", 13, Estilo.TEXTO_SEC))
+		for pc in receptor.pcs:
+			var emp := receptor.tiene_token(pc)
+			var b := BotonUi.new().preparar(s, str(pc.pc), "%s · %s" % [pc.ip, "emparejado" if emp else "pedirá el código"], Estilo.VERDE if emp else Estilo.AGUA)
+			b.pulsado.connect(func(): receptor.conectar(pc))
+			caja.add_child(b)
+		var b_bus := BotonUi.new().preparar(s, "Buscar de nuevo", "En la misma red WiFi que el PC", Estilo.AGUA)
+		b_bus.pulsado.connect(func(): receptor.buscar())
+		caja.add_child(b_bus)
+		caja.add_child(_etiqueta("O ESCRIBE LA DIRECCIÓN QUE MUESTRA EL EDITOR", 12, Estilo.TEXTO_TENUE, true))
+		caja.add_child(_campo(_ip_escrita, "Ejemplo: 192.168.1.20", true, func(t): _ip_escrita = t))
+		var b_ip := BotonUi.new().preparar(s, "Conectar a esta dirección")
+		b_ip.pulsado.connect(func():
+			var ip := _ip_escrita.strip_edges()
+			if ip.is_valid_ip_address():
+				receptor.conectar({"pc": ip, "ip": ip, "puerto": EnvioProtocolo.PUERTO_TCP})
+			else:
+				_aviso_breve("Dirección no válida", Estilo.ROJO))
+		caja.add_child(b_ip)
+	var b_volver := BotonUi.new().preparar(s, "Volver")
+	b_volver.destacado = true
+	b_volver.pulsado.connect(mostrar_conexion)
+	caja.add_child(b_volver)
 
 
 func mostrar_medicion() -> void:
@@ -354,6 +543,10 @@ func _modo_captura() -> void:
 			mostrar_conexion()
 		"medir":
 			mostrar_medicion()
+		"recepcion":
+			# Solo para la captura de ejemplo: un PC "encontrado".
+			receptor.pcs.append({"pc": "PC-OFICINA", "ip": "192.168.1.20", "puerto": EnvioProtocolo.PUERTO_TCP})
+			mostrar_recepcion()
 	_actualizar_estado()
 	for i in 4:
 		await get_tree().process_frame

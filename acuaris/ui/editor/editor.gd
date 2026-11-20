@@ -26,6 +26,10 @@ var dialogo_nuevo: ConfirmationDialog
 var dialogo_confirmar: ConfirmationDialog
 var _accion_pendiente: Callable
 
+var servidor := ServidorEnvio.new()
+var panel_envio: PanelEnvio
+var b_enviar: Button
+var _temporizador_envio := Timer.new()
 var enlace := EnlaceSimulado.new()
 var comunicador := Comunicador.new()
 
@@ -63,6 +67,8 @@ func _ready() -> void:
 	resized.connect(_actualizar_zoom)
 	await get_tree().process_frame
 	_actualizar_zoom()
+	if args.has("envio"):
+		_abrir_envio()
 	if args.has("captura"):
 		# Simula unos minutos para que los valores sean realistas.
 		var t := 0
@@ -119,6 +125,9 @@ func _construir_interfaz() -> void:
 	me.add_child(estado)
 	raiz.add_child(me)
 	_dialogos()
+	# Las ventanas emergentes no heredan el tema del editor: se les asigna expresamente.
+	for d in [dialogo_archivo, dialogo_confirmar, dialogo_nuevo, panel_envio]:
+		d.theme = theme
 
 
 func _barra_herramientas() -> Control:
@@ -178,6 +187,8 @@ func _barra_herramientas() -> Control:
 	boton_probar = _boton("▶ Probar", _alternar_prueba, "Usar la interfaz con el simulador (los interruptores funcionan)")
 	boton_probar.toggle_mode = true
 	h.add_child(boton_probar)
+	b_enviar = _boton("Enviar al móvil", _abrir_envio, "Enviar la interfaz a la app del móvil o la tablet por WiFi")
+	h.add_child(b_enviar)
 	return panel
 
 
@@ -287,7 +298,41 @@ func _panel_inspector() -> Control:
 	return panel
 
 
+func _abrir_envio() -> void:
+	if not servidor.activo:
+		var e := servidor.iniciar()
+		if e != "":
+			_aviso(e)
+			return
+		servidor.publicar(modelo.datos)
+	panel_envio.actualizar()
+	panel_envio.popup_centered(Vector2i(Vector2(600, 560) * u))
+
+
+func _publicar() -> void:
+	if servidor.activo:
+		var n := servidor.publicar(modelo.datos)
+		if n > 0:
+			_estado("Interfaz enviada a %d dispositivo(s)" % n)
+
+
+func _actualizar_boton_envio() -> void:
+	if b_enviar:
+		var n := servidor.clientes().size()
+		b_enviar.text = "Enviar al móvil (%d)" % n if servidor.activo else "Enviar al móvil"
+
+
 func _dialogos() -> void:
+	add_child(servidor)
+	servidor.aviso.connect(_estado)
+	servidor.clientes_cambiados.connect(_actualizar_boton_envio)
+	_temporizador_envio.one_shot = true
+	_temporizador_envio.wait_time = 0.7
+	_temporizador_envio.timeout.connect(_publicar)
+	add_child(_temporizador_envio)
+	panel_envio = PanelEnvio.new().preparar(servidor, u)
+	panel_envio.enviar_ahora.connect(_publicar)
+	add_child(panel_envio)
 	dialogo_archivo = FileDialog.new()
 	dialogo_archivo.access = FileDialog.ACCESS_FILESYSTEM
 	dialogo_archivo.use_native_dialog = true
@@ -443,6 +488,8 @@ func _actualizar_zoom() -> void:
 
 
 func _al_cambiar() -> void:
+	if servidor.activo and panel_envio.auto:
+		_temporizador_envio.start()
 	comunicador.fijar_pines(_pines_proyecto())
 	_actualizar_barra()
 
@@ -479,6 +526,7 @@ func _estado(t: String) -> void:
 
 func _aviso(t: String) -> void:
 	var a := AcceptDialog.new()
+	a.theme = theme
 	a.title = "Acuaris"
 	a.dialog_text = t
 	add_child(a)
