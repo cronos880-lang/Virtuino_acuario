@@ -7,6 +7,11 @@ on:
   push:
     branches: ["**"]
   workflow_dispatch:
+    inputs:
+      entrega:
+        description: "Nombre de la entrega (por ejemplo V0_3_0). Si se indica, el APK se guarda en entregas/ con enlace directo."
+        required: false
+        default: ""
 
 env:
   GODOT_VERSION: "4.7.2"
@@ -40,6 +45,8 @@ jobs:
   android:
     runs-on: ubuntu-24.04
     needs: pruebas
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -109,3 +116,19 @@ jobs:
           name: Acuaris-Android
           path: build/Acuaris.apk
           retention-days: 30
+
+      - name: Publicar APK en entregas/ (solo si se pide una entrega)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.entrega != '' }}
+        env:
+          ENTREGA: ${{ inputs.entrega }}
+          RAMA: ${{ github.ref_name }}
+        run: |
+          case "$ENTREGA" in (*[!A-Za-z0-9_.-]*|'') echo "Nombre de entrega no válido"; exit 1;; esac
+          mkdir -p entregas
+          cp build/Acuaris.apk "entregas/Acuaris_${ENTREGA}.apk"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "entregas/Acuaris_${ENTREGA}.apk"
+          git commit -m "Entrega APK Acuaris ${ENTREGA} [skip ci]"
+          git push origin "HEAD:${RAMA}"
+          echo "Enlace: https://github.com/${GITHUB_REPOSITORY}/blob/${RAMA}/entregas/Acuaris_${ENTREGA}.apk?raw=true"
