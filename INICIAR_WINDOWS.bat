@@ -1,7 +1,7 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-rem Acuaris V0.2.0 - lanzador para Windows (codigo fuente + motor Godot portatil)
+rem Acuaris V0.3.0 - lanzador para Windows (codigo fuente + motor Godot portatil)
 rem Uso: INICIAR_WINDOWS.bat            -> editor
 rem      INICIAR_WINDOWS.bat app        -> app del movil en el PC (simulador)
 rem      INICIAR_WINDOWS.bat consola    -> editor mostrando mensajes de error

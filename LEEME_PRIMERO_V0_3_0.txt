@@ -1,0 +1,55 @@
+ACUARIS V0.3.0 — VERSIÓN EXPERIMENTAL DE PRUEBA
+================================================
+NO es una versión oficial. Sirve para probar el editor, el envío al móvil y
+los nuevos elementos. Entrega COMPLETA (código fuente) para el PC y APK para
+el móvil o la tablet.
+
+ORIGEN
+- Versión anterior: V0.2.0 experimental (se puede seguir usando en su carpeta).
+- Rama claude/inspiring-bell-j28igo del repositorio Virtuino_acuario.
+
+INSTALACIÓN EN EL PC (en una carpeta aparte, sin tocar la V0.2.0)
+1. Descomprime el ZIP en una carpeta NUEVA, por ejemplo:
+      Documentos\Acuaris_V0_3_0
+2. Si ya tienes la V0.2.0, copia su carpeta "motor" dentro de la nueva carpeta
+   para no volver a descargar Godot (opcional).
+3. Ejecuta INICIAR_WINDOWS.bat (si falta el motor, pregunta [S/N] para
+   descargar Godot 4.7.2 oficial, unos 82 MB, solo en esta carpeta).
+4. Comprueba que el título de la ventana indica «Acuaris V0.3.0 Editor».
+Tus proyectos .acuaris.json de la V0.2.0 se abren igual en la V0.3.0.
+
+INSTALACIÓN EN EL MÓVIL (Acuaris_V0_3_0.apk)
+1. Descarga el APK con su enlace directo y ábrelo.
+2. Se instala ENCIMA de la versión anterior (es una actualización):
+   se conservan el HC-05 recordado y la configuración.
+3. Si Android avisa de "orígenes desconocidos" o Play Protect: permitir /
+   "Instalar de todas formas" (es tu propia app, no está en la tienda).
+
+PROBAR "ENVIAR AL MÓVIL" (PC y móvil en la MISMA WiFi)
+1. En el editor pulsa «Enviar al móvil». Apunta el código de 6 cifras.
+   Si Windows pregunta por el cortafuegos: permitir en «redes privadas».
+2. En el móvil: Conexión → «Recibir del editor del PC» → elige tu PC
+   (o escribe la dirección que muestra el editor) → escribe el código.
+3. Cambia algo en el editor: en un segundo aparece en el móvil.
+4. Conexión → «Volver a la interfaz original» recupera la del acuario.
+   «Cambios del PC: bloqueados» impide que el PC cambie la interfaz.
+
+ELEMENTOS NUEVOS (57 en total, en 4 grupos con buscador)
+- Ejemplos para abrir con «Abrir»: carpeta acuaris\proyectos\ejemplos
+  (todos_los_elementos y circuito_hidraulico).
+- Reglas, programador e historial funcionan mientras la app está abierta.
+
+LANZADORES
+- INICIAR_WINDOWS.bat ....... editor
+- PROBAR_APP_MOVIL.bat ...... la app del móvil en el PC, con el simulador
+- INICIAR_CON_CONSOLA.bat ... editor con ventana de mensajes (si algo falla)
+
+LÍMITES CONOCIDOS
+- Envío PC → móvil probado en red simulada; primera prueba real ahora.
+- Mapa sin calles; depósito con 5 formas.
+- Bluetooth solo en la app de Android.
+
+VOLVER ATRÁS
+- PC: usa la carpeta de la V0.2.0.
+- Móvil: desinstala e instala el APK anterior (se pierde la configuración
+  guardada en el móvil; tus proyectos del PC no se ven afectados).

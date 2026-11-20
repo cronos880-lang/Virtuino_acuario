@@ -1,6 +1,18 @@
 ACUARIS — CAMBIOS
 =================
 
+V0.3.0 (experimental, 20-11-2026)
+- Enviar al móvil (opción C): el editor envía la interfaz por WiFi a la app;
+  emparejamiento con código de 6 cifras; cada cambio llega solo; bloqueo de
+  cambios y vuelta a la interfaz original en la app.
+- 57 elementos en 4 grupos (visualización, control, gráficas y especiales,
+  hidráulica animada) con buscador en la paleta.
+- Colores de alarma, interruptor/pulsador seguros (confirmación y PIN),
+  valor editable al tocar, historial de valores, regla automática,
+  programador horario, imagen propia.
+- Barra superior del editor adaptable (no se sale con escalado de Windows).
+- Proyectos de ejemplo. 244 pruebas automáticas.
+
 V0.2.0 (experimental, 19-11-2026)
 - Editor de interfaces para PC: abrir el acuario original (protegido), crear
   interfaces nuevas para móvil, tablet o PC, vertical u horizontal.
