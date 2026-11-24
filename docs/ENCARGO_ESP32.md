@@ -1,6 +1,6 @@
 # Encargo: Acuaris para la placa Controlador de Acuario V1.0 (ESP32)
 
-Estado: **pendiente de empezar** (decisiones tomadas el 20-11-2026; se retoma cuando el propietario diga).
+Estado: **fase 1 hecha (24-11-2026)**: sketch `arduino/Control_Acuario_ESP32` sin compilar para ESP32 ni probar en placa. Pendiente: WiFi, página «Fuente de luz» en la app y simulador.
 
 ## Alcance
 - **Sketch** nuevo para el Arduino IDE en `arduino/Control_Acuario_ESP32`. No se tocan ni el original
