@@ -5,7 +5,8 @@ extends RefCounted
 ## ARCHIVO GENERADO: se edita herramientas/generar_esquema.py y se ejecuta
 ##   python3 herramientas/generar_esquema.py acuaris/widgets/esquema.gd
 ##
-## Tipos de propiedad: "texto", "numero", "entero", "color", "bool", "opcion", "pin", "imagen".
+## Tipos de propiedad: "texto", "numero", "entero", "color", "bool", "opcion", "pin", "imagen" y "lista"
+## (varias líneas con casillas; se guarda como texto con los separadores de "opciones").
 
 const GRUPOS := [
 	[
@@ -429,9 +430,27 @@ const TIPOS := {
 			},
 			{
 				"clave": "reglas",
-				"nombre": "Reglas (cond|texto|color; ...)",
-				"tipo": "texto",
-				"defecto": "==0|Apagado|#5d8299; ==1|En marcha|#3ddc84; >1|Alarma|#ff5a5f"
+				"nombre": "Reglas",
+				"tipo": "lista",
+				"defecto": "==0|Apagado|#5d8299; ==1|En marcha|#3ddc84; >1|Alarma|#ff5a5f",
+				"opciones": {
+					"filas": ";",
+					"campos": "|",
+					"columnas": [
+						[
+							"Condición",
+							"texto"
+						],
+						[
+							"Texto",
+							"texto"
+						],
+						[
+							"Color",
+							"color"
+						]
+					]
+				}
 			},
 			{
 				"clave": "defecto",
@@ -1477,9 +1496,23 @@ const TIPOS := {
 		"props": [
 			{
 				"clave": "opciones",
-				"nombre": "Opciones (texto:valor, ...)",
-				"tipo": "texto",
-				"defecto": "Apagado:0, Auto:1, Manual:2"
+				"nombre": "Opciones",
+				"tipo": "lista",
+				"defecto": "Apagado:0, Auto:1, Manual:2",
+				"opciones": {
+					"filas": ",",
+					"campos": ":",
+					"columnas": [
+						[
+							"Texto",
+							"texto"
+						],
+						[
+							"Valor",
+							"numero"
+						]
+					]
+				}
 			},
 			{
 				"clave": "color",
@@ -1510,9 +1543,23 @@ const TIPOS := {
 		"props": [
 			{
 				"clave": "opciones",
-				"nombre": "Opciones (texto:valor, ...)",
-				"tipo": "texto",
-				"defecto": "Off:0, Auto:1, Manual:2"
+				"nombre": "Opciones",
+				"tipo": "lista",
+				"defecto": "Off:0, Auto:1, Manual:2",
+				"opciones": {
+					"filas": ",",
+					"campos": ":",
+					"columnas": [
+						[
+							"Texto",
+							"texto"
+						],
+						[
+							"Valor",
+							"numero"
+						]
+					]
+				}
 			},
 			{
 				"clave": "color",
@@ -1549,9 +1596,23 @@ const TIPOS := {
 			},
 			{
 				"clave": "opciones",
-				"nombre": "Posiciones (texto:valor, ...)",
-				"tipo": "texto",
-				"defecto": "Off:0, 1:1, 2:2, 3:3"
+				"nombre": "Posiciones",
+				"tipo": "lista",
+				"defecto": "Off:0, 1:1, 2:2, 3:3",
+				"opciones": {
+					"filas": ",",
+					"campos": ":",
+					"columnas": [
+						[
+							"Texto",
+							"texto"
+						],
+						[
+							"Valor",
+							"numero"
+						]
+					]
+				}
 			},
 			{
 				"clave": "color",
@@ -2080,9 +2141,31 @@ const TIPOS := {
 			},
 			{
 				"clave": "filas",
-				"nombre": "Filas (texto|pin|unidad|decimales; ...)",
-				"tipo": "texto",
-				"defecto": "Temperatura|V35|°C|1; Consigna|V27|°C|1; Bomba|V8||0"
+				"nombre": "Filas",
+				"tipo": "lista",
+				"defecto": "Temperatura|V35|°C|1; Consigna|V27|°C|1; Bomba|V8||0",
+				"opciones": {
+					"filas": ";",
+					"campos": "|",
+					"columnas": [
+						[
+							"Texto",
+							"texto"
+						],
+						[
+							"Pin",
+							"pin"
+						],
+						[
+							"Unidad",
+							"texto"
+						],
+						[
+							"Dec.",
+							"numero"
+						]
+					]
+				}
 			}
 		],
 		"script": "w_tabla"
@@ -2167,9 +2250,27 @@ const TIPOS := {
 			},
 			{
 				"clave": "eventos",
-				"nombre": "Eventos (HH:MM|días|valor; ...)",
-				"tipo": "texto",
-				"defecto": "08:00|LMXJV|1; 22:00|*|0"
+				"nombre": "Eventos",
+				"tipo": "lista",
+				"defecto": "08:00|LMXJV|1; 22:00|*|0",
+				"opciones": {
+					"filas": ";",
+					"campos": "|",
+					"columnas": [
+						[
+							"Hora",
+							"texto"
+						],
+						[
+							"Días",
+							"texto"
+						],
+						[
+							"Valor",
+							"numero"
+						]
+					]
+				}
 			}
 		],
 		"script": "w_programador"

@@ -194,6 +194,9 @@ func _elemento(w: Dictionary) -> void:
 					l.add_theme_color_override("font_color", Estilo.TEXTO_TENUE)
 					hb.add_child(l)
 				control = hb
+			"lista":
+				_lista(id, clave, p.nombre, str(actual), p.opciones)
+				continue
 			"opcion":
 				var ob := OptionButton.new()
 				for o in p.opciones:
@@ -212,6 +215,133 @@ func _elemento(w: Dictionary) -> void:
 	b_borrar.add_theme_color_override("font_color", Estilo.ROJO)
 	h.add_child(b_borrar)
 	add_child(h)
+
+
+# ------------------------------------------------------------------ listas
+## Separa el texto guardado en líneas y casillas (las que falten quedan vacías).
+static func lista_a_filas(texto: String, formato: Dictionary) -> Array:
+	var n: int = formato.columnas.size()
+	var r := []
+	for f in texto.split(str(formato.filas), false):
+		if f.strip_edges() == "":
+			continue
+		var c := f.split(str(formato.campos))
+		var fila := []
+		for i in n:
+			# La última casilla se queda con el resto (por si el texto lleva el separador)
+			var v := str(formato.campos).join(c.slice(i)) if i == n - 1 and c.size() > n else (c[i] if i < c.size() else "")
+			fila.append(v.strip_edges())
+		r.append(fila)
+	return r
+
+
+static func filas_a_lista(filas: Array, formato: Dictionary) -> String:
+	var partes := PackedStringArray()
+	for f in filas:
+		var campos := PackedStringArray()
+		for v in f:
+			campos.append(str(v).strip_edges())
+		# Sin campos vacíos al final (tabla: "Bomba|V8||0" sí conserva los del medio)
+		while campos.size() > 1 and campos[campos.size() - 1] == "":
+			campos.resize(campos.size() - 1)
+		partes.append(str(formato.campos).join(campos))
+	return (str(formato.filas) + " ").join(partes)
+
+
+func _lista(id: String, clave: String, nombre: String, texto: String, formato: Dictionary) -> void:
+	var filas := lista_a_filas(texto, formato)
+	var cols: Array = formato.columnas
+	var l := Label.new()
+	l.text = nombre
+	l.add_theme_color_override("font_color", Estilo.TEXTO_SEC)
+	add_child(l)
+	var guardar := func():
+		_cambiar(func(): modelo.fijar_prop(id, clave, filas_a_lista(filas, formato)))
+	# Cabecera
+	var cab := HBoxContainer.new()
+	for c in cols:
+		var lc := Label.new()
+		lc.text = c[0]
+		lc.add_theme_font_size_override("font_size", roundi(11 * u))
+		lc.add_theme_color_override("font_color", Estilo.TEXTO_TENUE)
+		_ancho_columna(lc, str(c[1]))
+		cab.add_child(lc)
+	var hueco := Control.new()
+	hueco.custom_minimum_size.x = 30 * u
+	cab.add_child(hueco)
+	add_child(cab)
+	for i in filas.size():
+		var fila: Array = filas[i]
+		var h := HBoxContainer.new()
+		for j in cols.size():
+			var tipo := str(cols[j][1])
+			var col := j
+			var control: Control
+			if tipo == "color":
+				var cp := ColorPickerButton.new()
+				cp.color = Color.from_string(str(fila[j]), Estilo.TEXTO)
+				cp.custom_minimum_size.y = 28 * u
+				cp.popup_closed.connect(func():
+					fila[col] = "#" + cp.color.to_html(false)
+					guardar.call())
+				control = cp
+			else:
+				var le := LineEdit.new()
+				le.text = str(fila[j])
+				le.select_all_on_focus = true
+				le.placeholder_text = str(cols[j][0])
+				var confirmar := func():
+					var t := le.text.strip_edges()
+					if tipo == "pin":
+						t = t.to_upper()
+						if t != "" and ProtocoloVCM.separar_pin(t).is_empty():
+							mensaje.emit("Pin no válido: '%s'" % t)
+							le.text = str(fila[col])
+							return
+					elif tipo == "numero" and t != "" and not t.replace(",", ".").is_valid_float():
+						mensaje.emit("Número no válido: '%s'" % t)
+						le.text = str(fila[col])
+						return
+					if t != str(fila[col]):
+						fila[col] = t.replace(",", ".") if tipo == "numero" else t
+						guardar.call()
+				le.text_submitted.connect(func(_t): confirmar.call())
+				le.focus_exited.connect(confirmar)
+				control = le
+			_ancho_columna(control, tipo)
+			h.add_child(control)
+		var b_x := Button.new()
+		b_x.text = "✕"
+		b_x.tooltip_text = "Borrar esta línea"
+		b_x.custom_minimum_size.x = 30 * u
+		var fi := i
+		b_x.pressed.connect(func():
+			filas.remove_at(fi)
+			guardar.call()
+			reconstruir.call_deferred())
+		h.add_child(b_x)
+		add_child(h)
+	var b_mas := _boton("+ Añadir línea", func():
+		var nueva := []
+		for c in cols:
+			nueva.append({"numero": str(filas.size()), "color": "#" + Estilo.TEXTO.to_html(false)}.get(str(c[1]), ""))
+		filas.append(nueva)
+		guardar.call()
+		reconstruir.call_deferred())
+	add_child(b_mas)
+
+
+func _ancho_columna(c: Control, tipo: String) -> void:
+	match tipo:
+		"numero", "pin":
+			c.custom_minimum_size.x = 52 * u
+			c.size_flags_horizontal = Control.SIZE_FILL
+		"color":
+			c.custom_minimum_size.x = 40 * u
+			c.size_flags_horizontal = Control.SIZE_FILL
+		_:
+			c.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			c.custom_minimum_size.x = 40 * u
 
 
 const MAX_IMAGEN_KB := 600

@@ -13,6 +13,11 @@ ALARMA = [P("limite_alto", "Límite alto", "texto", ""), P("limite_bajo", "Lími
           P("color_alto", "Color si alto", "color", "#ff5a5f"), P("color_bajo", "Color si bajo", "color", "#2ec4d6")]
 SEGURO = [P("confirmar", "Pedir confirmación", "bool", False), P("clave", "PIN (vacío = sin PIN)", "texto", "")]
 RANGOS = ["15 min", "1 h", "6 h", "24 h", "7 d"]
+# Listas: se editan en el inspector con casillas por línea, pero se guardan como texto (compatible).
+L_OPCIONES = {"filas": ",", "campos": ":", "columnas": [["Texto", "texto"], ["Valor", "numero"]]}
+L_REGLAS = {"filas": ";", "campos": "|", "columnas": [["Condición", "texto"], ["Texto", "texto"], ["Color", "color"]]}
+L_FILAS = {"filas": ";", "campos": "|", "columnas": [["Texto", "texto"], ["Pin", "pin"], ["Unidad", "texto"], ["Dec.", "numero"]]}
+L_EVENTOS = {"filas": ";", "campos": "|", "columnas": [["Hora", "texto"], ["Días", "texto"], ["Valor", "numero"]]}
 
 T = {}
 def tipo(id_, nombre, w, h, pin, props, script):
@@ -40,7 +45,7 @@ tipo("led", "LED", 200, 40, "V1", [
     P("con_fondo", "Con fondo", "bool", False)], "w_led")
 tipo("estado", "Texto de estado", 200, 56, "V1", [
     P("titulo", "Título", "texto", "Estado"),
-    P("reglas", "Reglas (cond|texto|color; ...)", "texto", "==0|Apagado|#5d8299; ==1|En marcha|#3ddc84; >1|Alarma|#ff5a5f"),
+    P("reglas", "Reglas", "lista", "==0|Apagado|#5d8299; ==1|En marcha|#3ddc84; >1|Alarma|#ff5a5f", L_REGLAS),
     P("defecto", "Texto si no se cumple", "texto", "?"), P("tam", "Tamaño texto", "numero", 18),
     P("alineacion", "Alineación", "opcion", "centro", ALINEACION), P("con_fondo", "Con fondo", "bool", True)], "w_estado")
 tipo("indicador", "Indicador", 200, 200, "V1", [
@@ -116,13 +121,13 @@ tipo("casilla", "Casilla", 200, 36, "V1", [
     P("texto", "Texto", "texto", "Activar"), P("valor_on", "Valor marcada", "numero", 1),
     P("valor_off", "Valor desmarcada", "numero", 0), P("color", "Color", "color", "#2ec4d6")] + SEGURO, "w_casilla")
 tipo("opciones", "Opciones", 180, 108, "V1", [
-    P("opciones", "Opciones (texto:valor, ...)", "texto", "Apagado:0, Auto:1, Manual:2"),
+    P("opciones", "Opciones", "lista", "Apagado:0, Auto:1, Manual:2", L_OPCIONES),
     P("color", "Color", "color", "#2ec4d6")] + SEGURO, "w_opciones")
 tipo("grupo_botones", "Grupo de botones", 300, 44, "V1", [
-    P("opciones", "Opciones (texto:valor, ...)", "texto", "Off:0, Auto:1, Manual:2"),
+    P("opciones", "Opciones", "lista", "Off:0, Auto:1, Manual:2", L_OPCIONES),
     P("color", "Color", "color", "#2ec4d6")] + SEGURO, "w_opciones")
 tipo("selector", "Selector giratorio", 150, 160, "V1", [
-    P("titulo", "Título", "texto", "Velocidad"), P("opciones", "Posiciones (texto:valor, ...)", "texto", "Off:0, 1:1, 2:2, 3:3"),
+    P("titulo", "Título", "texto", "Velocidad"), P("opciones", "Posiciones", "lista", "Off:0, 1:1, 2:2, 3:3", L_OPCIONES),
     P("color", "Color", "color", "#2ec4d6")] + SEGURO, "w_selector")
 tipo("potenciometro", "Potenciómetro", 150, 166, "V1", [
     P("titulo", "Título", "texto", "Intensidad"), P("min", "Mínimo", "numero", 0), P("max", "Máximo", "numero", 255),
@@ -161,7 +166,7 @@ tipo("historial_tabla", "Historial (tabla)", 220, 56, "V1", [
     P("unidad", "Unidad", "texto", ""), P("decimales", "Decimales", "entero", 1), P("color", "Color", "color", "#2ec4d6")], "w_historial_tabla")
 tipo("tabla", "Tabla de valores", 300, 140, "", [
     P("titulo", "Título", "texto", "Resumen"),
-    P("filas", "Filas (texto|pin|unidad|decimales; ...)", "texto", "Temperatura|V35|°C|1; Consigna|V27|°C|1; Bomba|V8||0")], "w_tabla")
+    P("filas", "Filas", "lista", "Temperatura|V35|°C|1; Consigna|V27|°C|1; Bomba|V8||0", L_FILAS)], "w_tabla")
 tipo("estado_dispositivo", "Estado del controlador", 240, 52, "", [
     P("titulo", "Título", "texto", "Controlador"), P("segundos", "Sin respuesta tras (s)", "numero", 10)], "w_estado_dispositivo")
 tipo("regla", "Regla automática", 300, 52, "V1", [
@@ -169,7 +174,7 @@ tipo("regla", "Regla automática", 300, 52, "V1", [
     P("pin_destino", "Pin destino", "pin", "V16"), P("valor", "Valor si se cumple", "numero", 0),
     P("valor_si_no", "Valor si deja de cumplirse (vacío = nada)", "texto", ""), P("al_iniciar", "Actuar también al abrir", "bool", False)], "w_regla")
 tipo("programador", "Programador horario", 300, 110, "V16", [
-    P("titulo", "Título", "texto", "Horario"), P("eventos", "Eventos (HH:MM|días|valor; ...)", "texto", "08:00|LMXJV|1; 22:00|*|0")], "w_programador")
+    P("titulo", "Título", "texto", "Horario"), P("eventos", "Eventos", "lista", "08:00|LMXJV|1; 22:00|*|0", L_EVENTOS)], "w_programador")
 tipo("mapa", "Mapa (posición)", 300, 200, "", [
     P("pin_lat", "Pin latitud", "pin", "V50"), P("pin_lon", "Pin longitud", "pin", "V51"), P("radio_m", "Radio visible (m)", "numero", 200)], "w_mapa")
 
@@ -232,7 +237,8 @@ extends RefCounted
 ## ARCHIVO GENERADO: se edita herramientas/generar_esquema.py y se ejecuta
 ##   python3 herramientas/generar_esquema.py acuaris/widgets/esquema.gd
 ##
-## Tipos de propiedad: "texto", "numero", "entero", "color", "bool", "opcion", "pin", "imagen".
+## Tipos de propiedad: "texto", "numero", "entero", "color", "bool", "opcion", "pin", "imagen" y "lista"
+## (varias líneas con casillas; se guarda como texto con los separadores de "opciones").
 
 const GRUPOS := %s
 

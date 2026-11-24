@@ -62,8 +62,6 @@ func _ready() -> void:
 	if not errores.is_empty():
 		modelo.nuevo("Nuevo proyecto", "samsung_galaxy_a56")
 		_aviso("No se pudo abrir %s:\n%s" % [inicial, "\n".join(errores)])
-	if args.has("seleccionar"):
-		modelo.seleccionar(str(args.seleccionar))
 	resized.connect(_actualizar_zoom)
 	await get_tree().process_frame
 	_actualizar_zoom()
@@ -71,6 +69,8 @@ func _ready() -> void:
 		_abrir_envio()
 	if args.has("pagina"):
 		modelo.ir_a_pagina(int(args.pagina))
+	if args.has("seleccionar"):
+		modelo.seleccionar(str(args.seleccionar))
 	if args.has("captura"):
 		# Simula unos minutos para que los valores (y las gráficas) sean realistas.
 		var t := 0

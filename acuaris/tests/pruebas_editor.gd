@@ -11,6 +11,20 @@ func _init(ejecutor) -> void:
 func ejecutar() -> void:
 	var m := ModeloEditor.new()
 	m.nuevo("Prueba", "samsung_galaxy_a56")
+	# Listas con casillas: ida y vuelta al texto guardado, sin cambiar el formato
+	for tp in [["selector", "opciones", "Off:0, 1:1, 2:2, 3:3"], ["tabla", "filas", "Temperatura|V35|°C|1; Bomba|V8||0"],
+			["estado", "reglas", "==0|Apagado|#5d8299; >1|Alarma|#ff5a5f"], ["programador", "eventos", "08:00|LMXJV|1; 22:00|*|0"]]:
+		var fmt: Dictionary = {}
+		for pp in Esquema.info(tp[0]).props:
+			if pp.clave == tp[1]:
+				fmt = pp.opciones
+		var filas := Inspector.lista_a_filas(tp[2], fmt)
+		t.comprobar(not fmt.is_empty() and Inspector.filas_a_lista(filas, fmt) == tp[2], "editor: lista %s ida y vuelta" % tp[0])
+	var fo: Dictionary = Esquema.info("selector").props[1].opciones
+	var fl := Inspector.lista_a_filas("Off:0, Rápido:5", fo)
+	fl.append(["Turbo", "9"])
+	fl.remove_at(0)
+	t.comprobar(Inspector.filas_a_lista(fl, fo) == "Rápido:5, Turbo:9", "editor: lista añadir y borrar líneas")
 	t.comprobar(m.lienzo() == Vector2(384, 832), "editor: lienzo del A56")
 	t.comprobar(m.area_pagina() == Vector2(384, 772), "editor: área bajo la cabecera")
 	t.comprobar(not m.puede_deshacer(), "editor: historial vacío al empezar")
