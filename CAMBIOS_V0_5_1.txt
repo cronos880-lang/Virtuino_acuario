@@ -1,3 +1,8 @@
+ACUARIS V0.5.1 (PC, prueba, no oficial)
+- Editor: las pestañas de página van en su propia fila; antes se cortaban con el
+  escalado de Windows y no se veían «Horarios» ni «Estado».
+- Editor: al pulsar «Probar», el zoom se ajusta solo y se ve la pantalla entera.
+
 ACUARIS V0.5.0 (prueba, no oficial)
 
 Incluye todo lo de la V0.4.1 (proyecto «Acuario V2» con intensidad temporal, resumen
