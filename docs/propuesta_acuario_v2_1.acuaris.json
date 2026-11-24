@@ -1,0 +1,843 @@
+{
+ "formato": "acuaris-proyecto",
+ "version": 1.0,
+ "nombre": "Acuario V2",
+ "perfil": "samsung_galaxy_a56",
+ "lienzo_dp": [
+  384.0,
+  832.0
+ ],
+ "conexion": {
+  "tipo": "bluetooth_spp",
+  "nombre_dispositivo": "HC-05",
+  "intervalo_ms": 400.0
+ },
+ "paginas": [
+  {
+   "id": "principal",
+   "nombre": "Acuario",
+   "widgets": [
+    {
+     "id": "reloj",
+     "tipo": "reloj",
+     "x": 16.0,
+     "y": 8.0,
+     "w": 352.0,
+     "h": 60.0,
+     "props": {
+      "titulo": "Hora del controlador",
+      "pin_h": "V2",
+      "pin_m": "V3",
+      "pin_s": "V4",
+      "tam": 28.0
+     }
+    },
+    {
+     "id": "panel_temp",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 80.0,
+     "w": 352.0,
+     "h": 252.0,
+     "props": {
+      "titulo": "Temperatura del agua",
+      "subtitulo": "Sonda DS18B20 · histéresis ±0,2 °C · relé mín. 3 min"
+     }
+    },
+    {
+     "id": "temp",
+     "tipo": "indicador",
+     "x": 24.0,
+     "y": 124.0,
+     "w": 204.0,
+     "h": 204.0,
+     "pin": "V35",
+     "props": {
+      "min": 18.0,
+      "max": 32.0,
+      "unidad": "°C",
+      "decimales": 1.0,
+      "titulo": "Agua",
+      "pin_consigna": "V27",
+      "tolerancia": 0.5
+     }
+    },
+    {
+     "id": "calentador",
+     "tipo": "led",
+     "x": 232.0,
+     "y": 134.0,
+     "w": 128.0,
+     "h": 56.0,
+     "pin": "V6",
+     "props": {
+      "texto": "Calentador",
+      "texto_on": "ENCENDIDO",
+      "texto_off": "APAGADO",
+      "color_on": "#ff8a3d",
+      "vertical": true,
+      "con_fondo": true,
+      "radio": 10.0
+     }
+    },
+    {
+     "id": "consigna",
+     "tipo": "valor",
+     "x": 232.0,
+     "y": 200.0,
+     "w": 128.0,
+     "h": 58.0,
+     "pin": "V27",
+     "props": {
+      "titulo": "Consigna",
+      "unidad": "°C",
+      "decimales": 1.0,
+      "tam": 20.0,
+      "color": "#ffc145"
+     }
+    },
+    {
+     "id": "panel_bomba",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 344.0,
+     "w": 352.0,
+     "h": 170.0,
+     "props": {
+      "titulo": "Bomba / aireador",
+      "subtitulo": "Automático de 15:00 a 22:00"
+     }
+    },
+    {
+     "id": "bomba",
+     "tipo": "led",
+     "x": 28.0,
+     "y": 394.0,
+     "w": 328.0,
+     "h": 40.0,
+     "pin": "V8",
+     "props": {
+      "texto": "Bomba",
+      "texto_on": "EN MARCHA",
+      "texto_off": "PARADA",
+      "color_on": "#2ec4d6"
+     }
+    },
+    {
+     "id": "bomba_manual",
+     "tipo": "interruptor",
+     "x": 28.0,
+     "y": 436.0,
+     "w": 328.0,
+     "h": 36.0,
+     "pin": "V29",
+     "props": {
+      "texto": "Modo manual",
+      "texto_on": "Manual: manda el interruptor de abajo",
+      "texto_off": "Automático por horario"
+     }
+    },
+    {
+     "id": "bomba_on",
+     "tipo": "interruptor",
+     "x": 28.0,
+     "y": 474.0,
+     "w": 328.0,
+     "h": 36.0,
+     "pin": "V15",
+     "props": {
+      "texto": "Bomba ON (en manual)"
+     }
+    },
+    {
+     "id": "panel_luces",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 526.0,
+     "w": 352.0,
+     "h": 164.0,
+     "props": {
+      "titulo": "Iluminación",
+      "subtitulo": "Amanecer 16:00 · apagado 22:00 · la barra no se guarda"
+     }
+    },
+    {
+     "id": "luces_manual",
+     "tipo": "interruptor",
+     "x": 28.0,
+     "y": 574.0,
+     "w": 328.0,
+     "h": 36.0,
+     "pin": "V16",
+     "props": {
+      "texto": "Luces al máximo (manual)",
+      "color_on": "#ffd166"
+     }
+    },
+    {
+     "id": "intensidad_temp",
+     "tipo": "deslizador",
+     "x": 28.0,
+     "y": 614.0,
+     "w": 232.0,
+     "h": 60.0,
+     "pin": "V12",
+     "props": {
+      "titulo": "Intensidad ahora",
+      "min": 0,
+      "max": 255,
+      "paso": 1,
+      "unidad": "",
+      "decimales": 0,
+      "color": "#ffd166",
+      "vertical": false,
+      "confirmar": false,
+      "clave": ""
+     }
+    },
+    {
+     "id": "volver_referencia",
+     "tipo": "pulsador",
+     "x": 268.0,
+     "y": 620.0,
+     "w": 88.0,
+     "h": 48.0,
+     "pin": "V13",
+     "props": {
+      "texto": "Referencia",
+      "modo": "valor",
+      "valor": 1
+     }
+    },
+    {
+     "id": "pie",
+     "tipo": "etiqueta",
+     "x": 16.0,
+     "y": 702.0,
+     "w": 352.0,
+     "h": 22.0,
+     "props": {
+      "texto": "Acuaris · protocolo VirtuinoCM · Arduino Mega 2560",
+      "tam": 11.0,
+      "color": "#5d8299",
+      "alineacion": "centro"
+     }
+    },
+    {
+     "id": "estado_general",
+     "tipo": "estado",
+     "x": 232.0,
+     "y": 266.0,
+     "w": 128.0,
+     "h": 52.0,
+     "props": {
+      "titulo": "Estado",
+      "reglas": "==0|Todo correcto|#3ddc84; ==1|Temp. ALTA|#ff5a5f; ==2|Temp. BAJA|#2ec4d6; ==3|FALLO SONDA|#ff5a5f; ==4|Reloj sin hora|#ffc145; ==5|Calentador sin efecto|#ff8a3d",
+      "defecto": "--",
+      "tam": 13,
+      "alineacion": "centro",
+      "con_fondo": true
+     },
+     "pin": "V63"
+    }
+   ]
+  },
+  {
+   "id": "pagina_2",
+   "nombre": "Consignas",
+   "widgets": [
+    {
+     "id": "panel_1",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 8.0,
+     "w": 352.0,
+     "h": 248.0,
+     "props": {
+      "titulo": "Temperatura",
+      "subtitulo": "Toca un valor para cambiarlo · el Arduino lo valida",
+      "fondo": "#10314a",
+      "borde": "#1d4a68",
+      "radio": 16
+     }
+    },
+    {
+     "id": "valor_editable_1",
+     "tipo": "valor_editable",
+     "x": 28.0,
+     "y": 52.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Consigna",
+      "unidad": "°C",
+      "decimales": 1,
+      "tam": 22,
+      "color": "#ffc145",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "numero",
+      "confirmar": true,
+      "clave": ""
+     },
+     "pin": "V27"
+    },
+    {
+     "id": "histeresis",
+     "tipo": "valor_editable",
+     "x": 196.0,
+     "y": 52.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Histéresis ±",
+      "unidad": "°C",
+      "decimales": 1,
+      "tam": 22,
+      "color": "#e8f3fa",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "numero",
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V55"
+    },
+    {
+     "id": "alarma_alta",
+     "tipo": "valor_editable",
+     "x": 28.0,
+     "y": 124.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Alarma alta",
+      "unidad": "°C",
+      "decimales": 1,
+      "tam": 22,
+      "color": "#ff5a5f",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "numero",
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V57"
+    },
+    {
+     "id": "alarma_baja",
+     "tipo": "valor_editable",
+     "x": 196.0,
+     "y": 124.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Alarma baja",
+      "unidad": "°C",
+      "decimales": 1,
+      "tam": 22,
+      "color": "#2ec4d6",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "numero",
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V58"
+    },
+    {
+     "id": "etiqueta_1",
+     "tipo": "etiqueta",
+     "x": 28.0,
+     "y": 196.0,
+     "w": 328.0,
+     "h": 48.0,
+     "props": {
+      "texto": "Consigna 18–32 °C · histéresis 0,1–2 °C\nEl relé del calentador cambia como mucho cada 3 min",
+      "tam": 11,
+      "color": "#8db3ca",
+      "alineacion": "izquierda",
+      "negrita": false
+     }
+    },
+    {
+     "id": "panel_2",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 268.0,
+     "w": 352.0,
+     "h": 168.0,
+     "props": {
+      "titulo": "Iluminación",
+      "subtitulo": "Intensidad máxima (se aplica también a la rampa)",
+      "fondo": "#10314a",
+      "borde": "#1d4a68",
+      "radio": 16
+     }
+    },
+    {
+     "id": "deslizador_1",
+     "tipo": "deslizador",
+     "x": 28.0,
+     "y": 312.0,
+     "w": 328.0,
+     "h": 60.0,
+     "props": {
+      "titulo": "Intensidad",
+      "min": 0,
+      "max": 255,
+      "paso": 1,
+      "unidad": "",
+      "decimales": 0,
+      "color": "#ffd166",
+      "vertical": false,
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V28"
+    },
+    {
+     "id": "luz_ahora",
+     "tipo": "barra",
+     "x": 28.0,
+     "y": 380.0,
+     "w": 328.0,
+     "h": 44.0,
+     "props": {
+      "titulo": "Luz ahora mismo",
+      "min": 0,
+      "max": 255,
+      "mostrar": "porcentaje",
+      "unidad": "",
+      "decimales": 0,
+      "color": "#ffd166",
+      "escala": false,
+      "limite_alto": "",
+      "limite_bajo": "",
+      "color_alto": "#ff5a5f",
+      "color_bajo": "#2ec4d6"
+     },
+     "pin": "V11"
+    },
+    {
+     "id": "panel_3",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 448.0,
+     "w": 352.0,
+     "h": 120.0,
+     "props": {
+      "titulo": "Hora del controlador",
+      "subtitulo": "Escribe la hora exacta para ponerlo en hora",
+      "fondo": "#10314a",
+      "borde": "#1d4a68",
+      "radio": 16
+     }
+    },
+    {
+     "id": "reloj_1",
+     "tipo": "reloj",
+     "x": 20.0,
+     "y": 492.0,
+     "w": 200.0,
+     "h": 60.0,
+     "props": {
+      "titulo": "",
+      "pin_h": "V2",
+      "pin_m": "V3",
+      "pin_s": "V4",
+      "tam": 26,
+      "con_fondo": false
+     }
+    },
+    {
+     "id": "poner_hora",
+     "tipo": "valor_editable",
+     "x": 228.0,
+     "y": 488.0,
+     "w": 128.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Poner en hora",
+      "unidad": "",
+      "decimales": 1,
+      "tam": 18,
+      "color": "#2ec4d6",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "hora",
+      "confirmar": true,
+      "clave": "",
+      "texto_cero": "Tocar"
+     },
+     "pin": "V44"
+    }
+   ]
+  },
+  {
+   "id": "pagina_3",
+   "nombre": "Horarios",
+   "widgets": [
+    {
+     "id": "panel_4",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 8.0,
+     "w": 352.0,
+     "h": 210.0,
+     "props": {
+      "titulo": "Luces",
+      "subtitulo": "Amanecer y atardecer suaves",
+      "fondo": "#10314a",
+      "borde": "#1d4a68",
+      "radio": 16
+     }
+    },
+    {
+     "id": "luz_on",
+     "tipo": "valor_editable",
+     "x": 28.0,
+     "y": 52.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Encendido",
+      "unidad": "",
+      "decimales": 1,
+      "tam": 22,
+      "color": "#ffd166",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "hora",
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V50"
+    },
+    {
+     "id": "luz_off",
+     "tipo": "valor_editable",
+     "x": 196.0,
+     "y": 52.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Apagado",
+      "unidad": "",
+      "decimales": 1,
+      "tam": 22,
+      "color": "#ffd166",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "hora",
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V51"
+    },
+    {
+     "id": "rampa",
+     "tipo": "valor_editable",
+     "x": 28.0,
+     "y": 124.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Amanecer",
+      "unidad": "min",
+      "decimales": 0,
+      "tam": 22,
+      "color": "#ffd166",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "numero",
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V52"
+    },
+    {
+     "id": "etiqueta_2",
+     "tipo": "etiqueta",
+     "x": 196.0,
+     "y": 124.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "texto": "El atardecer dura\nlo mismo (0–60 min)",
+      "tam": 11,
+      "color": "#8db3ca",
+      "alineacion": "centro",
+      "negrita": false
+     }
+    },
+    {
+     "id": "panel_5",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 230.0,
+     "w": 352.0,
+     "h": 134.0,
+     "props": {
+      "titulo": "Bomba / aireador",
+      "subtitulo": "En automático sigue este horario",
+      "fondo": "#10314a",
+      "borde": "#1d4a68",
+      "radio": 16
+     }
+    },
+    {
+     "id": "valor_editable_2",
+     "tipo": "valor_editable",
+     "x": 28.0,
+     "y": 274.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Encendido",
+      "unidad": "",
+      "decimales": 1,
+      "tam": 22,
+      "color": "#2ec4d6",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "hora",
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V53"
+    },
+    {
+     "id": "bomba_off",
+     "tipo": "valor_editable",
+     "x": 196.0,
+     "y": 274.0,
+     "w": 160.0,
+     "h": 64.0,
+     "props": {
+      "titulo": "Apagado",
+      "unidad": "",
+      "decimales": 1,
+      "tam": 22,
+      "color": "#2ec4d6",
+      "alineacion": "centro",
+      "con_fondo": true,
+      "editable": true,
+      "formato": "hora",
+      "confirmar": false,
+      "clave": ""
+     },
+     "pin": "V54"
+    },
+    {
+     "id": "etiqueta_3",
+     "tipo": "etiqueta",
+     "x": 16.0,
+     "y": 376.0,
+     "w": 352.0,
+     "h": 60.0,
+     "props": {
+      "texto": "Un horario puede cruzar la medianoche\n(por ejemplo 22:00 → 06:00).",
+      "tam": 11.5,
+      "color": "#8db3ca",
+      "alineacion": "centro",
+      "negrita": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "pagina_4",
+   "nombre": "Estado",
+   "widgets": [
+    {
+     "id": "panel_6",
+     "tipo": "panel",
+     "x": 16.0,
+     "y": 8.0,
+     "w": 352.0,
+     "h": 238.0,
+     "props": {
+      "titulo": "Alarmas",
+      "subtitulo": "",
+      "fondo": "#10314a",
+      "borde": "#1d4a68",
+      "radio": 16
+     }
+    },
+    {
+     "id": "al_sonda",
+     "tipo": "led",
+     "x": 28.0,
+     "y": 44.0,
+     "w": 328.0,
+     "h": 36.0,
+     "props": {
+      "texto": "Sonda de temperatura",
+      "texto_on": "FALLO",
+      "texto_off": "OK",
+      "color_on": "#ff5a5f",
+      "color_off": "#2f6b4f",
+      "umbral": 0.5,
+      "radio": 11,
+      "vertical": false,
+      "con_fondo": false
+     },
+     "pin": "V60"
+    },
+    {
+     "id": "al_alta",
+     "tipo": "led",
+     "x": 28.0,
+     "y": 82.0,
+     "w": 328.0,
+     "h": 36.0,
+     "props": {
+      "texto": "Temperatura alta",
+      "texto_on": "ALARMA",
+      "texto_off": "OK",
+      "color_on": "#ff5a5f",
+      "color_off": "#2f6b4f",
+      "umbral": 0.5,
+      "radio": 11,
+      "vertical": false,
+      "con_fondo": false
+     },
+     "pin": "V61"
+    },
+    {
+     "id": "al_baja",
+     "tipo": "led",
+     "x": 28.0,
+     "y": 120.0,
+     "w": 328.0,
+     "h": 36.0,
+     "props": {
+      "texto": "Temperatura baja",
+      "texto_on": "ALARMA",
+      "texto_off": "OK",
+      "color_on": "#2ec4d6",
+      "color_off": "#2f6b4f",
+      "umbral": 0.5,
+      "radio": 11,
+      "vertical": false,
+      "con_fondo": false
+     },
+     "pin": "V65"
+    },
+    {
+     "id": "al_hora",
+     "tipo": "led",
+     "x": 28.0,
+     "y": 158.0,
+     "w": 328.0,
+     "h": 36.0,
+     "props": {
+      "texto": "Reloj sin hora",
+      "texto_on": "PONER EN HORA",
+      "texto_off": "OK",
+      "color_on": "#ffc145",
+      "color_off": "#2f6b4f",
+      "umbral": 0.5,
+      "radio": 11,
+      "vertical": false,
+      "con_fondo": false
+     },
+     "pin": "V62"
+    },
+    {
+     "id": "al_calentador",
+     "tipo": "led",
+     "x": 28.0,
+     "y": 196.0,
+     "w": 328.0,
+     "h": 36.0,
+     "pin": "V64",
+     "props": {
+      "texto": "Calentador (60 min sin calentar)",
+      "texto_on": "REVISAR",
+      "texto_off": "OK",
+      "color_on": "#ff8a3d",
+      "color_off": "#2f6b4f",
+      "umbral": 0.5,
+      "radio": 11,
+      "vertical": false,
+      "con_fondo": false
+     }
+    },
+    {
+     "id": "grafica",
+     "tipo": "grafica_avanzada",
+     "x": 16.0,
+     "y": 256.0,
+     "w": 352.0,
+     "h": 196.0,
+     "props": {
+      "titulo": "Agua y consigna",
+      "rango": "6 h",
+      "min": "",
+      "max": "",
+      "decimales": 1,
+      "color": "#2ec4d6",
+      "color_2": "#ffc145",
+      "color_3": "#3ddc84",
+      "pin_2": "V27"
+     },
+     "pin": "V35"
+    },
+    {
+     "id": "resumen",
+     "tipo": "tabla",
+     "x": 16.0,
+     "y": 464.0,
+     "w": 352.0,
+     "h": 232.0,
+     "props": {
+      "titulo": "Resumen de hoy",
+      "filas": "Temperatura mínima|V76|°C|1; · a las|V77|hora|0; Temperatura máxima|V78|°C|1; · a las|V79|hora|0; Calentador encendido|V73|min|0; Arranques del calentador|V90||0; Luz encendida|V91|min|0; Bomba en marcha|V92|min|0"
+     }
+    },
+    {
+     "id": "reinicio",
+     "tipo": "estado",
+     "x": 16.0,
+     "y": 708.0,
+     "w": 352.0,
+     "h": 48.0,
+     "props": {
+      "titulo": "Último reinicio",
+      "reglas": "==1|Encendido normal|#3ddc84; ==2|Botón de reset|#8db3ca; ==3|Caída de tensión|#ffc145; ==4|Watchdog: se recuperó de un cuelgue|#ff8a3d; ==5|Fallo del programa|#ff5a5f; ==6|Reinicio por software|#8db3ca",
+      "defecto": "Desconocido",
+      "tam": 13,
+      "alineacion": "izquierda",
+      "con_fondo": true
+     },
+     "pin": "V72"
+    },
+    {
+     "id": "controlador",
+     "tipo": "estado_dispositivo",
+     "x": 16.0,
+     "y": 764.0,
+     "w": 352.0,
+     "h": 48.0,
+     "props": {
+      "titulo": "Controlador",
+      "segundos": 10
+     }
+    }
+   ]
+  }
+ ],
+ "orientacion": "vertical",
+ "simulador": "acuario_v2"
+}

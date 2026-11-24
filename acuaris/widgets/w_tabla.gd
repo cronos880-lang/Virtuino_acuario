@@ -1,6 +1,7 @@
 class_name WTabla
 extends AcWidget
 ## Tabla compacta de varios valores. props.filas = "Temperatura|V35|°C|1; Bomba|V8||0"
+## Con la unidad "hora" el valor HHMM se muestra como HH:MM.
 
 static func filas_de(texto: String) -> Array:
 	var r := []
@@ -39,5 +40,8 @@ func _draw() -> void:
 			draw_line(Vector2(r.position.x, r.position.y), Vector2(r.end.x, r.position.y), Color(1, 1, 1, 0.06), px(1))
 		texto(f[0], r, 13, Estilo.TEXTO_SEC, "izquierda")
 		var p := AcWidget.normalizar(f[1])
-		var txt: String = (formatear(valores[p], f[3]) + " " + f[2]).strip_edges() if valores.has(p) else "--"
+		var txt := "--"
+		if valores.has(p):
+			# Unidad "hora": el valor es HHMM (por ejemplo 710) y se muestra 07:10
+			txt = WValor.texto_hora(valores[p]) if f[2] == "hora" else (formatear(valores[p], f[3]) + " " + f[2]).strip_edges()
 		texto(txt, r, 14, Estilo.TEXTO, "derecha", true)
