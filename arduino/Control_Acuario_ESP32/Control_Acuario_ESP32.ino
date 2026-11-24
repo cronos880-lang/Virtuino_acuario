@@ -1,5 +1,5 @@
 // ============================================================================
-//  CONTROL ACUARIO ESP32  (versión 3.0.0 de prueba)
+//  CONTROL ACUARIO ESP32  (versión 3.0.1 de prueba)
 //  Placa «Controlador de Acuario V1.0» · ESP32-DevKitC-32E · núcleo «esp32 by Espressif» 3.x
 //  Bluetooth del ESP32 (nombre «Acuario», sin PIN) · DS18B20 (GPIO32) · DS3231 + MCP4725 (I²C)
 //  SSR externos: bomba (GPIO16) y calentador (GPIO17), activos en alto
@@ -31,7 +31,7 @@
 #include "Fuente.h"
 
 // ----------------------------------------------------------------------------- versión
-const int VERSION_FIRMWARE = 300;   // 3.0.0  (se publica en V70)
+const int VERSION_FIRMWARE = 301;   // 3.0.1  (se publica en V70)
 
 // ----------------------------------------------------------------------------- pines de la placa
 const uint8_t PIN_BOMBA = 16;        // SSR_PUMP_GPIO

@@ -1,4 +1,6 @@
-# Control Acuario ESP32 (3.0.0 de prueba)
+# Control Acuario ESP32 (3.0.1 de prueba)
+
+**3.0.1:** añade lo mismo que el V2 2.1.0: resumen del día (V76–V79, V90–V92) y aviso de calentador sin efecto (V64, estado 5).
 
 Programa para la placa **Controlador de Acuario V1.0** (ESP32-DevKitC-32E). Es el **Control_Acuario_V2**
 del Mega pasado al ESP32: la misma lógica probada (`Logica.h`, idéntico) y las **mismas variables V**,

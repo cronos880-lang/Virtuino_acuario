@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
     hora(23, 0);
     setup(); correr(100);
     COMPROBAR(V[27] == 25.0f && V[28] == 125 && V[80] == 10.0f && V[87] == 0 && V[88] == 490, "NVS vacía: valores por defecto");
-    COMPROBAR(V[70] == 300 && V[71] == 1 && V[72] == 1, "versión, arranques y causa");
+    COMPROBAR(V[70] == 301 && V[71] == 1 && V[72] == 1, "versión, arranques y causa");
     COMPROBAR(g_dac_eeprom == 4095 && g_dac_grabaciones == 1, "EEPROM del DAC grabada a 4095 una vez");
     COMPROBAR(todo_apagado() && V[84] == 0, "de noche: fuente apagada");
     COMPROBAR(g_pin[16] == LOW && g_pin[17] == LOW, "relés apagados");
@@ -165,7 +165,7 @@ int main(int argc, char** argv) {
     COMPROBAR(g_pin[16] == HIGH && V[8] == 1, "bomba (GPIO16) por horario");
   } else if (e == "bluetooth") {
     setup(); correr(100);
-    COMPROBAR(pedir("!V70=?$") == "!V70=300.00$", "lectura por Bluetooth");
+    COMPROBAR(pedir("!V70=?$") == "!V70=301.00$", "lectura por Bluetooth");
     COMPROBAR(pedir("!C00=?$").rfind("!C=VirtuinoCM", 0) == 0, "saludo VirtuinoCM");
     COMPROBAR(g_wdt_reinicios > 0, "watchdog atendido");
   } else {
