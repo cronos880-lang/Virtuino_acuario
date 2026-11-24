@@ -1,0 +1,18 @@
+ACUARIS V0.4.1 (prueba, no oficial)
+
+Proyecto «Acuario V2» (necesita el sketch Control_Acuario_V2 2.1.0 en el Arduino):
+- Página Acuario: deslizador «Intensidad ahora» para jugar (V12). No se guarda en la EEPROM
+  y vuelve a la intensidad de referencia al empezar el amanecer. Botón «Referencia» (V13).
+- Estado general: aviso nuevo «Calentador sin efecto».
+- Página Estado:
+  - alarma «Calentador (60 min sin calentar)»;
+  - «Resumen de hoy» con la temperatura mínima y máxima y su hora, el calentador (minutos
+    y arranques), la luz y la bomba.
+- Gráfica «Agua y consigna» viva:
+  - franja de confort (consigna ± histéresis);
+  - zonas en naranja cuando está el calentador encendido;
+  - líneas de alarma, curva suave y punto que late con el valor actual;
+  - al tocarla se ven la hora y los valores.
+
+Elementos: la gráfica avanzada tiene opciones nuevas, y la tabla admite la unidad «hora» (HHMM se
+muestra como HH:MM).

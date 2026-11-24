@@ -85,5 +85,5 @@ func ejecutar() -> void:
 	# Proyecto Acuario V2
 	var p := Proyecto.desde_archivo("res://proyectos/acuario_v2.acuaris.json")
 	t.comprobar(p.errores.is_empty() and p.paginas().size() == 4 and p.datos.get("simulador") == "acuario_v2", "proyecto Acuario V2 válido con 4 páginas")
-	for pin in ["V27", "V28", "V44", "V50", "V51", "V52", "V53", "V54", "V55", "V57", "V58", "V60", "V63", "V70"]:
+	for pin in ["V27", "V28", "V44", "V50", "V51", "V52", "V53", "V54", "V55", "V57", "V58", "V60", "V63", "V12", "V13", "V64", "V76", "V90", "V6"]:
 		t.comprobar(p.todos_los_pines().has(pin), "Acuario V2 usa " + pin)
