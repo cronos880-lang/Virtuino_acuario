@@ -504,25 +504,6 @@
             "max": 255
           },
           "pin": "V10"
-        },
-        {
-          "id": "d19",
-          "tipo": "indicador_dibujo",
-          "x": 304.0,
-          "y": 612.0,
-          "w": 70.0,
-          "h": 124.0,
-          "props": {
-            "dibujo": "bombilla",
-            "texto": "Bombilla",
-            "texto_on": "ON",
-            "texto_off": "OFF",
-            "condicion": ">= 0",
-            "color_on": "#ffc145",
-            "min": 0,
-            "max": 255
-          },
-          "pin": "V10"
         }
       ]
     },
