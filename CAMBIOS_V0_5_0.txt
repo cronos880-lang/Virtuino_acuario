@@ -1,0 +1,34 @@
+ACUARIS V0.5.0 (prueba, no oficial)
+
+Incluye todo lo de la V0.4.1 (proyecto «Acuario V2» con intensidad temporal, resumen
+de hoy, aviso del calentador y gráfica viva).
+
+EDITOR
+- Listas con casillas por línea, con «+ Añadir línea» y «✕» para borrar. Sirven para
+  las posiciones del selector, las opciones, el grupo de botones, las reglas del texto
+  de estado, las filas de la tabla y los eventos del programador. Se guardan en el mismo
+  formato que antes.
+- 24 dispositivos (antes 7):
+  - Tablets: genéricas de 7" y 12", Amazon Fire 7 y Fire HD 10, Samsung Galaxy Tab A9,
+    Tab A9+ y Tab S9 FE, Lenovo Tab M9 y M11, Xiaomi Redmi Pad SE.
+  - Móviles: Samsung Galaxy S24, A16 y A36, Google Pixel 8 y 9, Xiaomi Redmi Note 13.
+  - PC: portátil de 1366 x 768.
+  - Las resoluciones y diagonales están sin comprobar. La densidad es estimada y se
+    confirma con «Medir este móvil».
+
+ELEMENTOS NUEVOS (72 en total, en 5 grupos)
+- Interruptor con luz: la luz lee el estado real por otro pin. Sin ese pin, sigue
+  al propio interruptor.
+- Botón personalizable:
+  - forma (rectángulo, redondeado, píldora o círculo);
+  - colores normal y activo, y borde;
+  - letra, 19 iconos e imagen propia de fondo.
+- Indicador con dibujo: 19 dibujos vectoriales (bombilla, ventilador, bomba, calentador,
+  válvula, motor, depósito, termómetro, gota, campana, enchufe, candado, compresor…).
+  Algunos están animados.
+- Grupo Neumática:
+  - cilindros de doble y simple efecto, con movimiento suave y detectores de final
+    de carrera;
+  - electroválvulas 5/2 y 3/2;
+  - compresor, unidad FRL, silenciador, ventosa, pinza, detector magnético y líneas
+    (normal y de pilotaje).
