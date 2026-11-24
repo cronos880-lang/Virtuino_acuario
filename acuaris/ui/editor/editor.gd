@@ -71,6 +71,9 @@ func _ready() -> void:
 		modelo.ir_a_pagina(int(args.pagina))
 	if args.has("seleccionar"):
 		modelo.seleccionar(str(args.seleccionar))
+	if args.has("probar"):
+		boton_probar.button_pressed = true
+		_alternar_prueba()
 	if args.has("captura"):
 		# Simula unos minutos para que los valores (y las gráficas) sean realistas.
 		var t := 0

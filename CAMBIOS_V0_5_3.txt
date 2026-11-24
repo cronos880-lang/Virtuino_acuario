@@ -1,3 +1,9 @@
+ACUARIS V0.5.3 (PC, prueba, no oficial)
+- Editor: la página se ve como en el móvil. Si no cabe de alto, se reduce igual que en la
+  app, tanto al editar como al «Probar». Se pueden seleccionar y mover también los elementos
+  de abajo, que antes quedaban cortados.
+- Editor: en las listas con casillas, la primera columna (texto) es más ancha.
+
 ACUARIS V0.5.2 (prueba, no oficial)
 - App: cada página se reduce lo justo para verse entera en la pantalla, sin deslizar
   (como mucho al 60 %), centrada.

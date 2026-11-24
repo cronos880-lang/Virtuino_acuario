@@ -265,6 +265,8 @@ func _lista(id: String, clave: String, nombre: String, texto: String, formato: D
 		lc.add_theme_font_size_override("font_size", roundi(11 * u))
 		lc.add_theme_color_override("font_color", Estilo.TEXTO_TENUE)
 		_ancho_columna(lc, str(c[1]))
+		if c == cols[0]:
+			lc.size_flags_stretch_ratio = 2.5
 		cab.add_child(lc)
 	var hueco := Control.new()
 	hueco.custom_minimum_size.x = 30 * u
@@ -290,6 +292,7 @@ func _lista(id: String, clave: String, nombre: String, texto: String, formato: D
 				le.text = str(fila[j])
 				le.select_all_on_focus = true
 				le.placeholder_text = str(cols[j][0])
+				le.add_theme_constant_override("minimum_character_width", 2)   # deja el ancho a las columnas
 				var confirmar := func():
 					var t := le.text.strip_edges()
 					if tipo == "pin":
@@ -309,6 +312,8 @@ func _lista(id: String, clave: String, nombre: String, texto: String, formato: D
 				le.focus_exited.connect(confirmar)
 				control = le
 			_ancho_columna(control, tipo)
+			if j == 0:
+				control.size_flags_stretch_ratio = 2.5   # el texto principal, más ancho
 			h.add_child(control)
 		var b_x := Button.new()
 		b_x.text = "✕"
@@ -334,7 +339,7 @@ func _lista(id: String, clave: String, nombre: String, texto: String, formato: D
 func _ancho_columna(c: Control, tipo: String) -> void:
 	match tipo:
 		"numero", "pin":
-			c.custom_minimum_size.x = 52 * u
+			c.custom_minimum_size.x = 44 * u
 			c.size_flags_horizontal = Control.SIZE_FILL
 		"color":
 			c.custom_minimum_size.x = 40 * u

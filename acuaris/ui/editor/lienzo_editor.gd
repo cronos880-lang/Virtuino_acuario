@@ -13,6 +13,8 @@ var modelo: ModeloEditor
 var zoom := 1.0           # px por dp
 var u := 1.0              # escala de la interfaz del propio editor
 var modo_prueba := false
+var _alto_contenido_dp := 0.0
+var _esc := 1.0           # px por dp de la página (puede ser menor que zoom si no cabe)
 var valores: Dictionary = {}
 
 var pantalla := Rect2()   # zona de pantalla del dispositivo (px, en este control)
@@ -126,9 +128,18 @@ func reconstruir() -> void:
 	_vista.modo_editor = not modo_prueba
 	_vista.rejilla_dp = 0.0 if modo_prueba else modelo.rejilla * 2.0
 	var area := modelo.area_pagina()
-	_vista.construir(modelo.pagina(), zoom, area.x, area.y)
+	# Igual que la app: si la página no cabe de alto, se reduce lo justo (como mucho al 60 %),
+	# tanto al editar como al probar, para ver lo mismo que en el móvil.
+	_alto_contenido_dp = 0.0
+	for d in modelo.pagina().get("widgets", []):
+		_alto_contenido_dp = maxf(_alto_contenido_dp, float(d.get("y", 0)) + float(d.get("h", 0)))
+	_esc = zoom
+	if _alto_contenido_dp + 16.0 > area.y:
+		_esc = zoom * maxf(area.y / (_alto_contenido_dp + 16.0), 0.6)
+	_vista.construir(modelo.pagina(), _esc, area.x, area.y)
 	_vista.clip_contents = true
-	_vista.size = area * zoom
+	_vista.position.x += (area.x * zoom - area.x * _esc) * 0.5
+	_vista.size = Vector2(area.x * _esc, area.y * zoom)
 	for p in valores:
 		_vista.recibir(p, valores[p])
 	_capa.position = _vista.position
@@ -179,7 +190,7 @@ func _draw() -> void:
 
 # ------------------------------------------------------------------ selección y edición
 func _a_dp(p: Vector2) -> Vector2:
-	return p / zoom
+	return p / _esc
 
 
 func _tiradores(r: Rect2) -> Array[Vector2]:
@@ -191,7 +202,7 @@ func _tiradores(r: Rect2) -> Array[Vector2]:
 func _tirador_en(p: Vector2) -> int:
 	if modelo.seleccion == "":
 		return -1
-	var r := Rect2(modelo.rect_de(modelo.seleccion).position * zoom, modelo.rect_de(modelo.seleccion).size * zoom)
+	var r := Rect2(modelo.rect_de(modelo.seleccion).position * _esc, modelo.rect_de(modelo.seleccion).size * _esc)
 	var t := _tiradores(r)
 	for i in t.size():
 		if p.distance_to(t[i]) <= TIRADOR * u:
@@ -231,7 +242,7 @@ func _entrada(e: InputEvent) -> void:
 			if antes != _sobre:
 				_capa.queue_redraw()
 			return
-		var d: Vector2 = (e.position - _inicio_raton) / zoom
+		var d: Vector2 = (e.position - _inicio_raton) / _esc
 		var r := _rect_inicial
 		if _accion == "mover":
 			r.position += d
@@ -273,11 +284,11 @@ func _dibujar_capa() -> void:
 		return
 	if _sobre != "" and _sobre != modelo.seleccion:
 		var rs := modelo.rect_de(_sobre)
-		_capa.draw_rect(Rect2(rs.position * zoom, rs.size * zoom), Color(Estilo.AGUA, 0.55), false, maxf(1.0, u))
+		_capa.draw_rect(Rect2(rs.position * _esc, rs.size * _esc), Color(Estilo.AGUA, 0.55), false, maxf(1.0, u))
 	if modelo.seleccion == "":
 		return
 	var rd := modelo.rect_de(modelo.seleccion)
-	var r := Rect2(rd.position * zoom, rd.size * zoom)
+	var r := Rect2(rd.position * _esc, rd.size * _esc)
 	_capa.draw_rect(r, Color(Estilo.AMBAR, 0.07))
 	_capa.draw_rect(r, Estilo.AMBAR, false, maxf(1.5, 2.0 * u))
 	var lado := 8.0 * u
