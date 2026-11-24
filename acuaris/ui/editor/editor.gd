@@ -292,11 +292,11 @@ func _zona_central() -> Control:
 	var h := HBoxContainer.new()
 	pestanas = TabBar.new()
 	pestanas.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	pestanas.size_flags_stretch_ratio = 2.0
-	pestanas.clip_tabs = true
+	pestanas.clip_tabs = false   # fila propia: todas las páginas a la vista (antes se cortaban)
 	pestanas.tab_clicked.connect(func(i): modelo.ir_a_pagina(i))
-	h.add_child(pestanas)
-	h.add_child(_barra_titulo())
+	var t := _barra_titulo()
+	t.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	h.add_child(t)
 	h.add_child(_boton("+ Página", func(): modelo.anadir_pagina(), "Añadir una página"))
 	h.add_child(_boton("Borrar página", func():
 		if modelo.paginas().size() <= 1:
@@ -304,6 +304,7 @@ func _zona_central() -> Control:
 			return
 		_con_confirmacion(func(): modelo.borrar_pagina(), "¿Borrar la página '%s' y sus elementos?" % modelo.pagina().get("nombre", ""))))
 	v.add_child(h)
+	v.add_child(pestanas)
 	scroll_lienzo = ScrollContainer.new()
 	scroll_lienzo.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_lienzo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -500,6 +501,9 @@ func _alternar_prueba() -> void:
 	lienzo.modo_prueba = boton_probar.button_pressed
 	if lienzo.modo_prueba:
 		modelo.seleccionar("")
+		# En prueba la rueda del ratón la usan los elementos: se ajusta el zoom para ver la pantalla entera
+		zoom_modo = "ajustar"
+		_actualizar_zoom()
 		_estado("Modo prueba: la interfaz funciona con el simulador del acuario. Pulsa de nuevo para volver a editar.")
 	else:
 		_estado("Modo edición")
