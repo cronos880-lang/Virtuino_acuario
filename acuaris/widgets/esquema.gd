@@ -1899,6 +1899,72 @@ const TIPOS := {
 				"nombre": "Color 3",
 				"tipo": "color",
 				"defecto": "#3ddc84"
+			},
+			{
+				"clave": "nombre",
+				"nombre": "Nombre 1 (leyenda)",
+				"tipo": "texto",
+				"defecto": ""
+			},
+			{
+				"clave": "nombre_2",
+				"nombre": "Nombre 2",
+				"tipo": "texto",
+				"defecto": ""
+			},
+			{
+				"clave": "nombre_3",
+				"nombre": "Nombre 3",
+				"tipo": "texto",
+				"defecto": ""
+			},
+			{
+				"clave": "unidad",
+				"nombre": "Unidad",
+				"tipo": "texto",
+				"defecto": ""
+			},
+			{
+				"clave": "viva",
+				"nombre": "Curva suave, relleno y punto vivo",
+				"tipo": "bool",
+				"defecto": false
+			},
+			{
+				"clave": "pin_franja",
+				"nombre": "Franja: centro (p. ej. consigna)",
+				"tipo": "pin",
+				"defecto": ""
+			},
+			{
+				"clave": "pin_franja_ancho",
+				"nombre": "Franja: ± ancho (p. ej. histéresis)",
+				"tipo": "pin",
+				"defecto": ""
+			},
+			{
+				"clave": "pin_actividad",
+				"nombre": "Zonas de actividad (p. ej. calentador)",
+				"tipo": "pin",
+				"defecto": ""
+			},
+			{
+				"clave": "color_actividad",
+				"nombre": "Color de actividad",
+				"tipo": "color",
+				"defecto": "#ff8a3d"
+			},
+			{
+				"clave": "pin_limite_alto",
+				"nombre": "Línea de alarma alta",
+				"tipo": "pin",
+				"defecto": ""
+			},
+			{
+				"clave": "pin_limite_bajo",
+				"nombre": "Línea de alarma baja",
+				"tipo": "pin",
+				"defecto": ""
 			}
 		],
 		"script": "w_grafica"

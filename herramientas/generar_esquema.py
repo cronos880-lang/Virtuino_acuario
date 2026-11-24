@@ -146,7 +146,12 @@ tipo("grafica_avanzada", "Gráfica avanzada", 352, 220, "V1", [
     P("titulo", "Título", "texto", "Comparativa"), P("pin_2", "Pin 2", "pin", ""), P("pin_3", "Pin 3", "pin", ""),
     P("rango", "Rango inicial", "opcion", "6 h", RANGOS), P("min", "Mínimo (vacío = auto)", "texto", ""),
     P("max", "Máximo (vacío = auto)", "texto", ""), P("decimales", "Decimales", "entero", 1),
-    P("color", "Color 1", "color", "#2ec4d6"), P("color_2", "Color 2", "color", "#ffc145"), P("color_3", "Color 3", "color", "#3ddc84")], "w_grafica")
+    P("color", "Color 1", "color", "#2ec4d6"), P("color_2", "Color 2", "color", "#ffc145"), P("color_3", "Color 3", "color", "#3ddc84"),
+    P("nombre", "Nombre 1 (leyenda)", "texto", ""), P("nombre_2", "Nombre 2", "texto", ""), P("nombre_3", "Nombre 3", "texto", ""),
+    P("unidad", "Unidad", "texto", ""), P("viva", "Curva suave, relleno y punto vivo", "bool", False),
+    P("pin_franja", "Franja: centro (p. ej. consigna)", "pin", ""), P("pin_franja_ancho", "Franja: ± ancho (p. ej. histéresis)", "pin", ""),
+    P("pin_actividad", "Zonas de actividad (p. ej. calentador)", "pin", ""), P("color_actividad", "Color de actividad", "color", "#ff8a3d"),
+    P("pin_limite_alto", "Línea de alarma alta", "pin", ""), P("pin_limite_bajo", "Línea de alarma baja", "pin", "")], "w_grafica")
 tipo("grafica_emergente", "Gráfica emergente", 220, 56, "V1", [
     P("titulo", "Título", "texto", "Historial"), P("pin_2", "Pin 2", "pin", ""), P("pin_3", "Pin 3", "pin", ""),
     P("unidad", "Unidad", "texto", ""), P("decimales", "Decimales", "entero", 1), P("rango", "Rango inicial", "opcion", "6 h", RANGOS),

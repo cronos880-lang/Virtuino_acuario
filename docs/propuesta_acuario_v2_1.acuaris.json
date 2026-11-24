@@ -790,7 +790,16 @@
       "color": "#2ec4d6",
       "color_2": "#ffc145",
       "color_3": "#3ddc84",
-      "pin_2": "V27"
+      "pin_2": "V27",
+      "nombre": "Agua",
+      "nombre_2": "Consigna",
+      "unidad": "°C",
+      "viva": true,
+      "pin_franja": "V27",
+      "pin_franja_ancho": "V55",
+      "pin_actividad": "V6",
+      "pin_limite_alto": "V57",
+      "pin_limite_bajo": "V58"
      },
      "pin": "V35"
     },

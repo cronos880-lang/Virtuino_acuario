@@ -549,10 +549,14 @@ func _modo_captura() -> void:
 	var segundos := float(args.get("segundos", 20))
 	var t := 0
 	var pasos := int(segundos * 10.0)
+	# El historial avanza con el tiempo simulado (si no, las horas simuladas caerían en un instante)
+	var t0 := Time.get_unix_time_from_system() - segundos
 	for i in pasos:
 		t += 100
+		Historial.reloj_externo = t0 + t / 1000.0
 		e.paso(0.1)
 		comunicador.tick(t)
+	Historial.reloj_externo = -1.0
 	match str(args.get("pantalla", "panel")):
 		"conexion":
 			mostrar_conexion()
