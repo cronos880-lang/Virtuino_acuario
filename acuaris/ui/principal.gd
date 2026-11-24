@@ -122,11 +122,25 @@ func _construir() -> void:
 	scroll.size = Vector2(tam.x, tam.y - scroll.position.y)
 	add_child(scroll)
 	vista = VistaPagina.new()
-	scroll.add_child(vista)
+	# La página se reduce lo justo para caber entera en la pantalla (sin tener que deslizar),
+	# centrada en horizontal. La barra y las pestañas conservan su tamaño.
+	var marco := Control.new()
+	scroll.add_child(marco)
+	marco.add_child(vista)
 	vista.escritura_solicitada.connect(comunicador.escribir)
 	if not proyecto.paginas().is_empty():
 		_pagina = clampi(_pagina, 0, proyecto.paginas().size() - 1)
-		vista.construir(proyecto.paginas()[_pagina], s, proyecto.ancho_dp(), proyecto.alto_dp())
+		var pag: Dictionary = proyecto.paginas()[_pagina]
+		var alto_dp := 0.0
+		for d in pag.get("widgets", []):
+			alto_dp = maxf(alto_dp, float(d.get("y", 0)) + float(d.get("h", 0)))
+		alto_dp += 16.0
+		var s_pag := s
+		if alto_dp * s > scroll.size.y and alto_dp > 0.0:
+			s_pag = maxf(scroll.size.y / alto_dp, s * 0.6)   # como mucho al 60 %; si aún no cabe, se desliza
+		vista.construir(pag, s_pag, proyecto.ancho_dp(), proyecto.alto_dp())
+		vista.position.x = maxf(0.0, (tam.x - proyecto.ancho_dp() * s_pag) * 0.5)
+		marco.custom_minimum_size = Vector2(tam.x, vista.size.y)
 	for p in comunicador.valores:
 		vista.recibir(p, comunicador.valores[p])
 	_actualizar_estado()

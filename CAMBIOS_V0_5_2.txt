@@ -1,3 +1,9 @@
+ACUARIS V0.5.2 (prueba, no oficial)
+- App: cada página se reduce lo justo para verse entera en la pantalla, sin deslizar
+  (como mucho al 60 %), centrada.
+- Editor: «Abrir» empieza en la carpeta del proyecto abierto. Al arrancar, es la carpeta
+  de proyectos que trae el programa.
+
 ACUARIS V0.5.1 (PC, prueba, no oficial)
 - Editor: las pestañas de página van en su propia fila; antes se cortaban con el
   escalado de Windows y no se veían «Horarios» ni «Estado».

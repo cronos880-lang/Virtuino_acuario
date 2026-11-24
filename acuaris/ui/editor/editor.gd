@@ -449,6 +449,10 @@ func _abrir() -> void:
 	_con_confirmacion(func():
 		dialogo_archivo.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 		dialogo_archivo.title = "Abrir proyecto"
+		# Empieza en la carpeta del proyecto abierto (al arrancar, los proyectos que trae el programa)
+		var carpeta := ProjectSettings.globalize_path(modelo.ruta).get_base_dir() if modelo.ruta != "" else ProjectSettings.globalize_path("res://proyectos")
+		if DirAccess.dir_exists_absolute(carpeta):
+			dialogo_archivo.current_dir = carpeta
 		_conectar_archivo(func(ruta):
 			var e := modelo.abrir(ruta)
 			if e.is_empty():
