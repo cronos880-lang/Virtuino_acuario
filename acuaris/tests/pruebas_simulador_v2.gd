@@ -23,7 +23,7 @@ func ejecutar() -> void:
 	t.comprobar(SimuladorArduino.en_horario(3 * 3600, 2200, 600) and not SimuladorArduino.en_horario(12 * 3600, 2200, 600), "sim v2: horario que cruza la medianoche")
 	var sim := SimuladorArduino.new()
 	sim.configurar_modelo("acuario_v2")
-	t.comprobar(sim.V[27] == 25.0 and sim.V[50] == 1600 and sim.V[70] == 200, "sim v2: valores iniciales del sketch V2")
+	t.comprobar(sim.V[27] == 25.0 and sim.V[50] == 1600 and sim.V[70] == 210, "sim v2: valores iniciales del sketch V2")
 	sim.fijar_hora(15, 30)
 	sim.temperatura_agua = 24.5
 	sim.temperatura_ambiente = 24.5
@@ -52,6 +52,32 @@ func ejecutar() -> void:
 	sim.sonda_conectada = true
 	_correr(sim, 2.0)
 	t.comprobar(sim.V[60] == 0.0, "sim v2: la alarma se quita al volver la sonda")
+	# 2.1.0: intensidad temporal, resumen y calentador sin efecto
+	var s2 := SimuladorArduino.new()
+	s2.configurar_modelo("acuario_v2")
+	s2.fijar_hora(18, 0)
+	_correr(s2, 1.0)
+	s2.recibir("!V12=40$")
+	_correr(s2, 0.3)
+	t.comprobar(s2.luz_pwm == 40 and s2.V[28] == 125.0, "sim v2: intensidad temporal sin tocar la referencia")
+	s2.recibir("!V13=1$")
+	_correr(s2, 0.3)
+	t.comprobar(s2.luz_pwm == 125 and s2.V[12] == 125.0, "sim v2: volver a la referencia")
+	s2.recibir("!V12=60$")
+	_correr(s2, 0.3)
+	s2.fijar_hora(23, 0)
+	_correr(s2, 1.0)
+	s2.fijar_hora(15, 59, 58)
+	_correr(s2, 4.0)
+	t.comprobar(s2.V[12] == 125.0, "sim v2: al amanecer vuelve a la referencia")
+	t.comprobar(s2.V[76] > 0.0 and s2.V[78] >= s2.V[76] and s2.V[77] == 1559, "sim v2: resumen de hoy (empieza de cero al cambiar de día)")
+	s2.temperatura_ambiente = 15.0
+	s2.temperatura_agua = 24.0
+	s2.recibir("!V27=30$")
+	for i in 4000:
+		s2.temperatura_agua = 24.0
+		s2.avanzar(1.0)
+	t.comprobar(s2.V[64] == 1.0 and s2.V[63] == 5.0, "sim v2: calentador sin efecto a los 60 min")
 	# Formato hora del elemento Valor
 	t.comprobar(WValor.leer_hora("16:30") == 1630 and WValor.leer_hora("930") == 930 and WValor.leer_hora("9.05") == 905, "valor hora: lectura de 16:30, 930 y 9.05")
 	t.comprobar(WValor.leer_hora("25:00") == null and WValor.leer_hora("12:60") == null and WValor.leer_hora("abc") == null, "valor hora: horas no válidas")

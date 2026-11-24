@@ -55,6 +55,18 @@ var _rele_libre := true
 var _temperatura_v2 := NAN
 var _ms_calentador_hoy := 0.0
 var _dia_v2 := 0
+# V2 2.1.0: intensidad temporal, resumen del día y vigilancia del calentador
+var _intensidad_actual := 125
+var _estaba_en_horario := false
+var _primera_vez_luces := true
+var _seg_anterior := -1.0
+var _ms_luz_hoy := 0.0
+var _ms_bomba_hoy := 0.0
+var _encendidos_hoy := 0
+var _t_calentador_on := 0.0
+var _temp_al_encender := NAN
+var _min_hoy := NAN
+var _max_hoy := NAN
 
 const TIEMPO_MINIMO_RELE_MS := 180000.0
 const CONSTANTE_PERDIDA_S := 3600.0      # el agua tiende al ambiente con tau = 1 h
@@ -82,7 +94,12 @@ func configurar_modelo(m: String) -> void:
 		_publicar(par[0], aj[par[1]])
 	_publicar(44, 0)
 	V[10] = aj.intensidad
-	V[70] = 200
+	V[70] = 210
+	_intensidad_actual = aj.intensidad
+	_publicar(12, _intensidad_actual)
+	_primera_vez_luces = true
+	_min_hoy = NAN
+	_max_hoy = NAN
 	V[71] = 1
 	V[72] = 1
 	_t_ultima_valida = millis_sim
@@ -375,6 +392,7 @@ func _ajustes_v2() -> void:
 		var n := roundi(V[28])
 		if n >= 0 and n <= 255:
 			aj.intensidad = n
+			_volver_a_referencia()
 		_publicar(28, aj.intensidad)
 	if _escrito(52):
 		var n := roundi(V[52])
@@ -393,8 +411,42 @@ func _ajustes_v2() -> void:
 		_publicar(44, 0)
 
 
+func _volver_a_referencia() -> void:
+	_intensidad_actual = aj.intensidad
+	_publicar(12, _intensidad_actual)
+
+
+func _hhmm_ahora() -> int:
+	return hora() * 100 + minuto()
+
+
+func _resumen_temperatura(t: float) -> void:
+	if is_nan(_min_hoy) or t < _min_hoy:
+		_min_hoy = t
+		V[76] = t
+		V[77] = _hhmm_ahora()
+	if is_nan(_max_hoy) or t > _max_hoy:
+		_max_hoy = t
+		V[78] = t
+		V[79] = _hhmm_ahora()
+
+
+func _nuevo_dia_v2() -> void:
+	_ms_calentador_hoy = 0.0
+	_ms_luz_hoy = 0.0
+	_ms_bomba_hoy = 0.0
+	_encendidos_hoy = 0
+	_min_hoy = NAN
+	_max_hoy = NAN
+	if not is_nan(_temperatura_v2):
+		_resumen_temperatura(_temperatura_v2)
+
+
 func _avanzar_v2(delta_s: float) -> String:
 	segundos_del_dia = fmod(segundos_del_dia + delta_s, 86400.0)
+	if _seg_anterior >= 0.0 and segundos_del_dia < _seg_anterior:
+		_nuevo_dia_v2()
+	_seg_anterior = segundos_del_dia
 	millis_sim += delta_s * 1000.0
 	_fisica(delta_s)
 	var salida := _virtuino_run()
@@ -407,6 +459,9 @@ func _avanzar_v2(delta_s: float) -> String:
 			_t_ultima_valida = millis_sim
 			V[5] = _temperatura_v2
 			V[35] = _temperatura_v2
+			_resumen_temperatura(_temperatura_v2)
+			if rele_calentador and is_nan(_temp_al_encender):
+				_temp_al_encender = _temperatura_v2
 	var fallo := millis_sim - _t_ultima_valida > 15000.0
 	if (fallo or is_nan(_temperatura_v2)) and rele_calentador:
 		rele_calentador = false
@@ -420,6 +475,10 @@ func _avanzar_v2(delta_s: float) -> String:
 			elif not rele_calentador and _temperatura_v2 <= aj.consigna - aj.histeresis:
 				nuevo = true
 			if nuevo != rele_calentador:
+				if nuevo:
+					_t_calentador_on = millis_sim
+					_temp_al_encender = _temperatura_v2
+					_encendidos_hoy += 1
 				rele_calentador = nuevo
 				_ultimo_cambio_rele = millis_sim
 				_rele_libre = false
@@ -430,7 +489,10 @@ func _avanzar_v2(delta_s: float) -> String:
 	V[60] = 1.0 if fallo else 0.0
 	V[61] = 1.0 if alta else 0.0
 	V[65] = 1.0 if baja else 0.0
-	V[63] = 3.0 if fallo else (1.0 if alta else (2.0 if baja else (4.0 if V[62] == 1.0 else 0.0)))
+	var sin_efecto: bool = rele_calentador and not is_nan(_temp_al_encender) and not is_nan(_temperatura_v2) \
+			and millis_sim - _t_calentador_on >= 3600000.0 and _temperatura_v2 - _temp_al_encender < 0.2
+	V[64] = 1.0 if sin_efecto else 0.0
+	V[63] = 3.0 if fallo else (1.0 if alta else (2.0 if baja else (5.0 if sin_efecto else (4.0 if V[62] == 1.0 else 0.0))))
 	# Reloj
 	V[2] = hora()
 	V[3] = minuto()
@@ -440,12 +502,32 @@ func _avanzar_v2(delta_s: float) -> String:
 	var seg := int(segundos_del_dia)
 	rele_bomba = (V[15] == 1.0) if V[29] == 1.0 else en_horario(seg, aj.bomba_on, aj.bomba_off)
 	V[8] = 1.0 if rele_bomba else 0.0
-	luz_pwm = aj.intensidad if V[16] == 1.0 else nivel_luz(seg, aj.luz_on, aj.luz_off, aj.rampa, aj.intensidad)
+	if _escrito(12):
+		var n := roundi(V[12])
+		if n >= 0 and n <= 255:
+			_intensidad_actual = n
+		_publicar(12, _intensidad_actual)
+	if V[13] == 1.0:
+		_volver_a_referencia()
+		V[13] = 0.0
+	var en_h := en_horario(seg, aj.luz_on, aj.luz_off)
+	if en_h and not _estaba_en_horario and not _primera_vez_luces:
+		_volver_a_referencia()
+	_estaba_en_horario = en_h
+	_primera_vez_luces = false
+	luz_pwm = _intensidad_actual if V[16] == 1.0 else nivel_luz(seg, aj.luz_on, aj.luz_off, aj.rampa, _intensidad_actual)
 	V[11] = luz_pwm
 	# Diagnóstico
 	if rele_calentador:
 		_ms_calentador_hoy += delta_s * 1000.0
+	if luz_pwm > 0:
+		_ms_luz_hoy += delta_s * 1000.0
+	if rele_bomba:
+		_ms_bomba_hoy += delta_s * 1000.0
 	V[73] = floorf(_ms_calentador_hoy / 60000.0)
+	V[90] = _encendidos_hoy
+	V[91] = floorf(_ms_luz_hoy / 60000.0)
+	V[92] = floorf(_ms_bomba_hoy / 60000.0)
 	V[74] = 5480
 	V[75] = floorf(millis_sim / 60000.0)
 	return salida
