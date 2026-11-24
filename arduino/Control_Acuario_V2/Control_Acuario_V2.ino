@@ -1,5 +1,5 @@
 // ============================================================================
-//  CONTROL ACUARIO V2  (versión 2.0.0 de prueba)
+//  CONTROL ACUARIO V2  (versión 2.1.0 de prueba)
 //  Arduino Mega 2560 · HC-05 (Serial1) · DS18B20 (pin 8) · DS3231 (I2C)
 //  Relés de estado sólido: calentador (pin 2) y bomba (pin 4)
 //  MOSFET IRLZ44N de las luces: PWM en pines 3 y 6
@@ -14,6 +14,8 @@
 //   - Amanecer y atardecer suaves (por segundos), horarios configurables.
 //   - Watchdog desactivado al arrancar (avr-libc, sección .init3) y causa del reinicio.
 //   - Alarmas y diagnóstico visibles en la app.
+//  2.1.0: intensidad temporal V12 (no se guarda; vuelve a la referencia al amanecer), resumen del
+//         día (mín./máx. de temperatura, calentador, luz y bomba) y aviso de calentador sin efecto.
 //
 //  Librerías: VirtuinoCM 1.0.02, OneWire, DallasTemperature, RTClib (Adafruit), EEPROM.
 // ============================================================================
@@ -28,7 +30,7 @@
 #include "Logica.h"
 
 // ----------------------------------------------------------------------------- versión
-const int VERSION_FIRMWARE = 200;   // 2.0.0  (se publica en V70)
+const int VERSION_FIRMWARE = 210;   // 2.1.0  (se publica en V70)
 
 // ----------------------------------------------------------------------------- pines
 const uint8_t PIN_CALENTADOR = 2;
@@ -56,11 +58,14 @@ const uint8_t V_CALENTADOR_ON = 6, V_CALENTADOR_OFF = 7;
 const uint8_t V_BOMBA = 8;
 const uint8_t V_INTENSIDAD_VER = 10;   // intensidad configurada (0..255)
 const uint8_t V_LUZ_ACTUAL = 11;       // PWM que se aplica ahora mismo (0..255)
+// Intensidad temporal ("para jugar"): NO se guarda; vuelve a la referencia al empezar el amanecer
+const uint8_t V_INTENSIDAD_TEMP = 12;  // escribir 0..255: cambia la luz al momento
+const uint8_t V_VOLVER_REFERENCIA = 13; // escribir 1: vuelve a la referencia (V28)
 // Mandos manuales (igual que antes)
 const uint8_t V_BOMBA_MANUAL_ON = 15, V_LUCES_MAX = 16, V_BOMBA_MODO_MANUAL = 29;
 // Ajustes que la app puede ESCRIBIR (se validan; si no son válidos se restaura el anterior)
 const uint8_t V_CONSIGNA = 27;         // ºC (18..32)
-const uint8_t V_INTENSIDAD = 28;       // 0..255
+const uint8_t V_INTENSIDAD = 28;       // referencia 0..255 (la única que se guarda)
 const uint8_t V_PONER_HORA = 44;       // HHMM: escribir 1630 pone el reloj a las 16:30:00
 const uint8_t V_LUZ_ON = 50, V_LUZ_OFF = 51, V_RAMPA = 52;      // HHMM, HHMM, minutos
 const uint8_t V_BOMBA_ON = 53, V_BOMBA_OFF = 54;                // HHMM, HHMM
@@ -68,9 +73,13 @@ const uint8_t V_HISTERESIS = 55;       // ºC (0,1..2)
 const uint8_t V_ALARMA_ALTA = 57, V_ALARMA_BAJA = 58;           // ºC
 // Alarmas (1 = activa)
 const uint8_t V_FALLO_SONDA = 60, V_TEMP_ALTA = 61, V_HORA_PERDIDA = 62, V_ESTADO = 63, V_TEMP_BAJA = 65;
+const uint8_t V_SIN_EFECTO = 64;       // calentador 60 min encendido sin que suba el agua (solo aviso)
 // Diagnóstico
 const uint8_t V_VERSION = 70, V_REINICIOS = 71, V_CAUSA_REINICIO = 72;
 const uint8_t V_MIN_CALENTADOR_HOY = 73, V_MEMORIA_LIBRE = 74, V_MIN_ENCENDIDO = 75;
+// Resumen de hoy (se pone a cero al cambiar de día)
+const uint8_t V_TEMP_MIN_HOY = 76, V_HORA_MIN_HOY = 77, V_TEMP_MAX_HOY = 78, V_HORA_MAX_HOY = 79;   // ºC y HHMM
+const uint8_t V_ENCENDIDOS_HOY = 90, V_MIN_LUZ_HOY = 91, V_MIN_BOMBA_HOY = 92;
 
 // ----------------------------------------------------------------------------- objetos
 RTC_DS3231 rtc;
@@ -89,6 +98,7 @@ bool fallo_sonda = false;
 bool calentador = false;
 bool hora_perdida = false;
 long segundos_del_dia = 0;
+uint8_t intensidad_actual = 0;    // la que se aplica: temporal (V12) o la referencia
 uint8_t causa_reinicio = 0;       // 0 desconocida, 1 encendido, 2 reset externo, 3 caída de tensión, 4 watchdog
 
 // ----------------------------------------------------------------------------- watchdog al arrancar

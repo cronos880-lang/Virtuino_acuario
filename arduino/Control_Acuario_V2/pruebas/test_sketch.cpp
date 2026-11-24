@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
   if (e == "eeprom_vacia") {
     arrancar();
     COMPROBAR(V[27] == 25.0f && V[28] == 125 && V[50] == 1600 && V[53] == 1500, "EEPROM vacía: valores por defecto seguros");
-    COMPROBAR(V[71] == 1 && V[70] == 200, "contador de reinicios y versión");
+    COMPROBAR(V[71] == 1 && V[70] == 210, "contador de reinicios y versión");
     Ajustes a; EEPROM.get(32, a);
     COMPROBAR(a.magia == Logica::MAGIA_AJUSTES && a.suma == Logica::calcular_suma(a), "bloque de ajustes guardado con comprobación");
     COMPROBAR(g_pin[2] == LOW && g_pin[4] == LOW, "relés apagados al arrancar");
@@ -145,6 +145,41 @@ int main(int argc, char** argv) {
     COMPROBAR(V[61] == 1 && V[63] == 1, "temperatura alta");
     g_temp_agua = 20.0f; correr(2200);
     COMPROBAR(V[65] == 1 && V[61] == 0 && V[63] == 2, "temperatura baja");
+  } else if (e == "temporal") {
+    arrancar(); hora(18, 0); correr(600);
+    int antes = EEPROM.escrituras;
+    pedir("!V12=40$"); correr(3000);
+    COMPROBAR(g_pwm[3] == 40 && V[11] == 40 && V[10] == 125 && V[28] == 125, "temporal aplicada; referencia intacta");
+    COMPROBAR(EEPROM.escrituras == antes, "la temporal NO escribe en la EEPROM");
+    pedir("!V13=1$"); correr(100);
+    COMPROBAR(g_pwm[3] == 125 && V[12] == 125, "V13: vuelve a la referencia");
+    pedir("!V12=60$"); hora(23, 0); correr(600);
+    hora(15, 59, 58); correr(4000);
+    COMPROBAR(V[12] == 125, "al empezar el amanecer vuelve a la referencia");
+    pedir("!V28=200$"); correr(3000);
+    Ajustes a; EEPROM.get(32, a);
+    COMPROBAR(V[12] == 200 && a.intensidad == 200, "nueva referencia: se guarda y se aplica");
+    pedir("!V12=30$"); setup(); correr(100);
+    COMPROBAR(V[12] == 200, "tras reiniciar: la referencia");
+  } else if (e == "resumen") {
+    g_temp_agua = 24.0f; arrancar(); hora(7, 10); correr(3000);
+    g_temp_agua = 25.5f; hora(18, 30); correr(2500);
+    g_temp_agua = 24.8f; correr(2500);
+    COMPROBAR(V[76] == 24.0f && V[77] == 710 && V[78] == 25.5f && V[79] == 1830, "mínima y máxima de hoy con su hora");
+    COMPROBAR(V[90] == 1, "un encendido del calentador");
+    correr(120000);
+    COMPROBAR(V[91] == 2 && V[92] == 2, "minutos de luz y bomba de hoy");
+    hora(23, 59, 58); correr(4000);
+    COMPROBAR(V[91] == 0 && V[90] == 0 && V[76] == 24.8f && V[78] == 24.8f, "a medianoche el resumen empieza de cero");
+  } else if (e == "sin_efecto") {
+    g_temp_agua = 24.0f; arrancar(); correr(2000);
+    COMPROBAR(g_pin[2] == HIGH && V[64] == 0, "calentador encendido, sin aviso");
+    correr(59UL * 60000UL);
+    COMPROBAR(V[64] == 0, "a los 59 min aún no avisa");
+    correr(2UL * 60000UL);
+    COMPROBAR(V[64] == 1 && V[63] == 5 && g_pin[2] == HIGH, "60 min sin subir: aviso y estado 5 (no apaga)");
+    g_temp_agua = 24.3f; correr(3000);
+    COMPROBAR(V[64] == 0, "al subir el agua se quita el aviso");
   } else if (e == "watchdog") {
     copia_mcusr = _BV(WDRF); arrancar();
     COMPROBAR(V[72] == 4 && g_wdt_activo == 1, "causa del reinicio: watchdog; watchdog activo");

@@ -15,6 +15,25 @@ unsigned long t_ultima_valida = 0;
 unsigned long t_ultimo_cambio_rele = 0;
 bool rele_libre = true;              // aún no se ha conmutado nunca desde el arranque
 bool salto_pendiente = false;
+// Vigilancia del calentador y resumen de hoy
+unsigned long t_calentador_on = 0;
+float temp_al_encender = NAN;
+bool sin_efecto = false;
+float temp_min_hoy = NAN, temp_max_hoy = NAN;
+uint16_t encendidos_hoy = 0;
+
+void resumenTemperatura(float t) {
+  long hhmm = (segundos_del_dia / 3600) * 100 + (segundos_del_dia / 60) % 60;
+  if (isnan(temp_min_hoy) || t < temp_min_hoy) { temp_min_hoy = t; V[V_TEMP_MIN_HOY] = t; V[V_HORA_MIN_HOY] = hhmm; }
+  if (isnan(temp_max_hoy) || t > temp_max_hoy) { temp_max_hoy = t; V[V_TEMP_MAX_HOY] = t; V[V_HORA_MAX_HOY] = hhmm; }
+}
+
+void resumenTemperaturaNuevoDia() {
+  temp_min_hoy = temp_max_hoy = NAN;
+  encendidos_hoy = 0;
+  V[V_ENCENDIDOS_HOY] = 0;
+  if (!isnan(temperatura)) resumenTemperatura(temperatura);
+}
 
 void temperaturaIniciar() {
   sonda.begin();
@@ -28,6 +47,12 @@ void temperaturaIniciar() {
 }
 
 void ponerCalentador(bool encender) {
+  if (encender && !calentador) {
+    t_calentador_on = millis();
+    temp_al_encender = temperatura;
+    encendidos_hoy++;
+    V[V_ENCENDIDOS_HOY] = encendidos_hoy;
+  }
   calentador = encender;
   digitalWrite(PIN_CALENTADOR, encender ? RELE_ON : RELE_OFF);
   V[V_CALENTADOR_ON] = encender ? 1 : 0;
@@ -49,6 +74,8 @@ void temperaturaActualizar() {
         t_ultima_valida = ahora;
         V[V_TEMP] = t;
         V[V_TEMP_DEC] = t;
+        resumenTemperatura(t);
+        if (calentador && isnan(temp_al_encender)) temp_al_encender = t;
       }
     }
   }
@@ -82,5 +109,7 @@ void temperaturaActualizar() {
   V[V_FALLO_SONDA] = fallo_sonda ? 1 : 0;
   V[V_TEMP_ALTA] = alta ? 1 : 0;
   V[V_TEMP_BAJA] = baja ? 1 : 0;
-  V[V_ESTADO] = Logica::codigo_estado(fallo_sonda, alta, baja, hora_perdida);
+  sin_efecto = Logica::calentador_sin_efecto(calentador, ahora - t_calentador_on, temp_al_encender, temperatura);
+  V[V_SIN_EFECTO] = sin_efecto ? 1 : 0;
+  V[V_ESTADO] = Logica::codigo_estado(fallo_sonda, alta, baja, hora_perdida, sin_efecto);
 }

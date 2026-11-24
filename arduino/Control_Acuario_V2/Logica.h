@@ -147,12 +147,22 @@ inline bool sanear(Ajustes& a) {
   return ok;
 }
 
+// Vigilancia del calentador: ¿lleva encendido 60 min seguidos sin que el agua suba al menos
+// 0,2 ºC? (calentador roto, desenchufado o cortado por su propio termostato). Solo avisa.
+const uint32_t SIN_EFECTO_MS = 3600000UL;
+const float SUBIDA_MINIMA = 0.2f;
+inline bool calentador_sin_efecto(bool encendido, uint32_t ms_encendido, float t_al_encender, float t_ahora) {
+  if (!encendido || isnan(t_al_encender) || isnan(t_ahora)) return false;
+  return ms_encendido >= SIN_EFECTO_MS && (t_ahora - t_al_encender) < SUBIDA_MINIMA;
+}
+
 // Estado general para la app: 0 OK, 1 temperatura alta, 2 temperatura baja, 3 fallo de sonda,
-// 4 hora perdida (la sonda tiene prioridad: es lo más peligroso).
-inline uint8_t codigo_estado(bool fallo_sonda, bool alta, bool baja, bool hora_perdida) {
+// 4 hora perdida, 5 calentador sin efecto (la sonda tiene prioridad: es lo más peligroso).
+inline uint8_t codigo_estado(bool fallo_sonda, bool alta, bool baja, bool hora_perdida, bool sin_efecto = false) {
   if (fallo_sonda) return 3;
   if (alta) return 1;
   if (baja) return 2;
+  if (sin_efecto) return 5;
   if (hora_perdida) return 4;
   return 0;
 }

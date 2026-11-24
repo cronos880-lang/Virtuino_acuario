@@ -12,6 +12,7 @@
 //   - Intensidad de referencia (se guarda) e intensidad temporal (no se guarda; vuelve a la
 //     referencia al empezar el amanecer y al reiniciar).
 //   - Ajustes en la memoria NVS del ESP32 (Preferences).
+//   - Igual que el V2 2.1.0: resumen del día y aviso de calentador sin efecto.
 //
 //  Librerías: VirtuinoCM 1.0.02, OneWire (2.3.8 o posterior), DallasTemperature,
 //  RTClib (Adafruit). BluetoothSerial, Preferences y Wire vienen con el núcleo del ESP32.
@@ -77,9 +78,13 @@ const uint8_t V_ALARMA_ALTA = 57, V_ALARMA_BAJA = 58;
 // Alarmas (1 = activa)
 const uint8_t V_FALLO_SONDA = 60, V_TEMP_ALTA = 61, V_HORA_PERDIDA = 62, V_ESTADO = 63, V_TEMP_BAJA = 65;
 const uint8_t V_ALARMA_LUZ = 66;       // nuevo: fallo de la fuente de luz
+const uint8_t V_SIN_EFECTO = 64;       // calentador 60 min encendido sin que suba el agua (solo aviso)
 // Diagnóstico
 const uint8_t V_VERSION = 70, V_REINICIOS = 71, V_CAUSA_REINICIO = 72;
 const uint8_t V_MIN_CALENTADOR_HOY = 73, V_MEMORIA_LIBRE = 74, V_MIN_ENCENDIDO = 75;
+// Resumen de hoy (se pone a cero al cambiar de día)
+const uint8_t V_TEMP_MIN_HOY = 76, V_HORA_MIN_HOY = 77, V_TEMP_MAX_HOY = 78, V_HORA_MAX_HOY = 79;   // ºC y HHMM
+const uint8_t V_ENCENDIDOS_HOY = 90, V_MIN_LUZ_HOY = 91, V_MIN_BOMBA_HOY = 92;
 // Fuente de luz (nuevas)
 const uint8_t V_TENSION_LUZ = 80;      // ajuste: tensión de las luces (5..21 V, se guarda)
 const uint8_t V_TENSION_MEDIDA = 81;   // V medidos en la salida

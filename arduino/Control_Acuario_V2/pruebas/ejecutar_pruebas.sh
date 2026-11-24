@@ -14,7 +14,7 @@ g++ -std=c++17 -Wall -Wextra -O1 test_logica.cpp -o "$TMP/test_logica" && "$TMP/
 python3 construir_sketch.py .. "$TMP/sketch_combinado.cpp"
 g++ -std=c++17 -O1 -w -Isimulado -I"$TMP/vcm" -I"$TMP" -I.. test_sketch.cpp "$TMP/vcm/VirtuinoCM.cpp" -o "$TMP/test_sketch"
 fallo=0
-for e in eeprom_vacia migracion termostato sonda salto bluetooth ajustes luces bomba reloj alarmas watchdog; do
+for e in eeprom_vacia migracion termostato sonda salto bluetooth ajustes luces bomba reloj alarmas watchdog temporal resumen sin_efecto; do
   "$TMP/test_sketch" "$e" || fallo=1
 done
 exit $fallo

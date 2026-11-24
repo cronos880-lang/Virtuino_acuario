@@ -1,4 +1,4 @@
-# Control Acuario V2 (2.0.0 de prueba)
+# Control Acuario V2 (2.1.0 de prueba)
 
 Versión mejorada del sketch del acuario. **No sustituye a `Control_Acuario_01_09_2026_Final`**, que
 sigue siendo la versión que funciona y la de vuelta atrás. Esta versión no es oficial hasta que la
@@ -20,6 +20,21 @@ apruebes tras probarla.
 
 La intensidad y la consigna que tenías guardadas con el sketch anterior **se recuperan** la primera vez
 que arranca la V2.
+
+## Novedades de la 2.1.0
+- **Intensidad temporal (V12), para jugar:**
+  - Cambia la luz al momento y **no escribe nunca en la EEPROM**.
+  - Vuelve a la referencia (V28) al empezar el siguiente amanecer, al escribir V13 = 1 o al reiniciar.
+  - La referencia solo se cambia desde la página Consignas y es lo único que se guarda (2 s después del último cambio).
+- **Resumen de hoy**, que se pone a cero a medianoche:
+  - V76 / V77: temperatura mínima y su hora (HHMM).
+  - V78 / V79: temperatura máxima y su hora.
+  - V90: veces que ha arrancado el calentador.
+  - V91 / V92: minutos de luz y de bomba (los minutos de calentador siguen en V73).
+- **Aviso de calentador sin efecto (V64):**
+  - Salta si el calentador lleva **60 min encendido** y el agua **no ha subido 0,2 °C**: calentador roto, desenchufado o cortado por su propio termostato.
+  - **Solo avisa; no apaga nada.**
+  - Estado general V63 = 5.
 
 ## Variables V (protocolo VirtuinoCM)
 
@@ -50,9 +65,10 @@ que arranca la V2.
 | V57 / V58 | Alarma de temperatura alta / baja (°C) | 5–40, baja < alta | 29 / 21 |
 
 **Alarmas** (1 = activa): V60 fallo de sonda · V61 temperatura alta · V65 temperatura baja · V62 hora perdida
-· V63 estado general (0 OK, 1 alta, 2 baja, 3 sonda, 4 hora perdida)
+· V64 calentador sin efecto
+· V63 estado general (0 OK, 1 alta, 2 baja, 3 sonda, 4 hora perdida, 5 calentador sin efecto)
 
-**Diagnóstico:** V70 versión (200 = 2.0.0) · V71 número de arranques · V72 causa del último reinicio
+**Diagnóstico:** V70 versión (210 = 2.1.0) · V71 número de arranques · V72 causa del último reinicio
 (0 desconocida, 1 encendido, 2 botón de reset, 3 caída de tensión, 4 watchdog) · V73 minutos de
 calentador hoy · V74 memoria libre (bytes) · V75 minutos desde el arranque
 
@@ -82,8 +98,8 @@ calentador hoy · V74 memoria libre (bytes) · V75 minutos desde el arranque
 
 ## Cómo se ha comprobado (y qué falta)
 
-- `pruebas/test_logica.cpp`: 30 pruebas de la lógica (horarios, rampas, termostato, validaciones, desbordamiento de `millis`).
-- `pruebas/test_sketch.cpp`: **el sketch completo se ejecuta en el PC** con imitaciones de las librerías (sonda, reloj, EEPROM, puerto serie) y la librería VirtuinoCM original. Son 41 comprobaciones en 12 escenarios: EEPROM vacía, recuperación de los ajustes anteriores, termostato, fallo de sonda, saltos de lectura, tiempos de respuesta del Bluetooth, ajustes, luces, bomba, reloj, alarmas y watchdog.
+- `pruebas/test_logica.cpp`: 33 pruebas de la lógica (horarios, rampas, termostato, validaciones, desbordamiento de `millis`).
+- `pruebas/test_sketch.cpp`: **el sketch completo se ejecuta en el PC** con imitaciones de las librerías (sonda, reloj, EEPROM, puerto serie) y la librería VirtuinoCM original. Son 57 comprobaciones en 15 escenarios: EEPROM vacía, recuperación de los ajustes anteriores, termostato, fallo de sonda, saltos de lectura, tiempos de respuesta del Bluetooth, ajustes, luces, bomba, reloj, alarmas, watchdog, intensidad temporal, resumen del día y calentador sin efecto.
 - Para ejecutarlas: `pruebas/ejecutar_pruebas.sh` (necesita g++ e Internet para descargar VirtuinoCM).
 - **Falta:**
   - **Compilar con el compilador de AVR** (Arduino IDE o arduino-cli): en esta sesión no se ha podido instalar.

@@ -63,6 +63,8 @@ void ajustesIniciar() {
   EEPROM.put(DIR_AJUSTES, ajustes);   // put = solo escribe los bytes que cambian
   publicarAjustes();
   publicar(V_PONER_HORA, 0);
+  intensidad_actual = ajustes.intensidad;   // al arrancar, siempre la referencia
+  publicar(V_INTENSIDAD_TEMP, intensidad_actual);
 }
 
 // Comprueba un ajuste HHMM escrito por la app
@@ -104,7 +106,11 @@ void ajustesRevisar() {
   }
   if (escrito_por_app(V_INTENSIDAD)) {
     long n = lround(V[V_INTENSIDAD]);
-    if (n >= 0 && n <= 255) { ajustes.intensidad = (uint8_t)n; cambio = true; }
+    if (n >= 0 && n <= 255) {
+      ajustes.intensidad = (uint8_t)n;
+      cambio = true;
+      volverAReferencia();          // cambiar la referencia también cambia la luz actual
+    }
     publicar(V_INTENSIDAD, ajustes.intensidad);
     V[V_INTENSIDAD_VER] = ajustes.intensidad;
   }

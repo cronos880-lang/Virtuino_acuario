@@ -53,6 +53,9 @@ int main() {
   COMPROBAR(s0 != calcular_suma(d), "la suma detecta cambios");
   // Estado
   COMPROBAR(codigo_estado(true, true, false, true) == 3 && codigo_estado(false, true, false, true) == 1 && codigo_estado(false, false, false, false) == 0, "codigo de estado y prioridad");
+  COMPROBAR(codigo_estado(false, false, false, true, true) == 5 && codigo_estado(false, false, true, false, true) == 2, "estado 5: calentador sin efecto");
+  COMPROBAR(!calentador_sin_efecto(true, 3599000UL, 24.0f, 24.0f) && calentador_sin_efecto(true, 3600000UL, 24.0f, 24.1f), "sin efecto a los 60 min sin subir 0,2");
+  COMPROBAR(!calentador_sin_efecto(true, 4000000UL, 24.0f, 24.3f) && !calentador_sin_efecto(false, 4000000UL, 24.0f, 24.0f) && !calentador_sin_efecto(true, 4000000UL, NAN, 24.0f), "sin aviso si sube, si está apagado o sin dato");
   std::printf("Pruebas de Logica.h: %d correctas, %d fallos\n", ok, fallos);
   return fallos ? 1 : 0;
 }
