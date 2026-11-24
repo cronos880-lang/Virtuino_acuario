@@ -15,6 +15,7 @@ const GRUPOS := [
 			"valor",
 			"valor_editable",
 			"led",
+			"indicador_dibujo",
 			"estado",
 			"indicador",
 			"manometro",
@@ -33,9 +34,11 @@ const GRUPOS := [
 		"Control",
 		[
 			"interruptor",
+			"interruptor_luz",
 			"interruptor_seguro",
 			"pulsador",
 			"pulsador_seguro",
+			"boton",
 			"casilla",
 			"opciones",
 			"grupo_botones",
@@ -85,6 +88,23 @@ const GRUPOS := [
 			"agitador",
 			"chorro"
 		]
+	],
+	[
+		"Neumática",
+		[
+			"cilindro_de",
+			"cilindro_se",
+			"valvula_52",
+			"valvula_32",
+			"compresor_n",
+			"frl",
+			"silenciador",
+			"ventosa",
+			"pinza",
+			"detector",
+			"linea_h",
+			"linea_v"
+		]
 	]
 ]
 
@@ -92,6 +112,7 @@ const ORDEN := [
 	"valor",
 	"valor_editable",
 	"led",
+	"indicador_dibujo",
 	"estado",
 	"indicador",
 	"manometro",
@@ -105,9 +126,11 @@ const ORDEN := [
 	"etiqueta",
 	"panel",
 	"interruptor",
+	"interruptor_luz",
 	"interruptor_seguro",
 	"pulsador",
 	"pulsador_seguro",
+	"boton",
 	"casilla",
 	"opciones",
 	"grupo_botones",
@@ -145,7 +168,19 @@ const ORDEN := [
 	"manometro_peq",
 	"sensor",
 	"agitador",
-	"chorro"
+	"chorro",
+	"cilindro_de",
+	"cilindro_se",
+	"valvula_52",
+	"valvula_32",
+	"compresor_n",
+	"frl",
+	"silenciador",
+	"ventosa",
+	"pinza",
+	"detector",
+	"linea_h",
+	"linea_v"
 ]
 
 const TIPOS := {
@@ -415,6 +450,102 @@ const TIPOS := {
 			}
 		],
 		"script": "w_led"
+	},
+	"indicador_dibujo": {
+		"nombre": "Indicador con dibujo",
+		"w": 96,
+		"h": 120,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "dibujo",
+				"nombre": "Dibujo",
+				"tipo": "opcion",
+				"defecto": "bombilla",
+				"opciones": [
+					"bombilla",
+					"ventilador",
+					"bomba",
+					"calentador",
+					"valvula",
+					"motor",
+					"deposito",
+					"termometro",
+					"gota",
+					"campana",
+					"enchufe",
+					"candado",
+					"compresor",
+					"power",
+					"play",
+					"stop",
+					"reset",
+					"flecha_arriba",
+					"flecha_abajo"
+				]
+			},
+			{
+				"clave": "texto",
+				"nombre": "Texto",
+				"tipo": "texto",
+				"defecto": "Luz"
+			},
+			{
+				"clave": "texto_on",
+				"nombre": "Texto activo",
+				"tipo": "texto",
+				"defecto": "ON"
+			},
+			{
+				"clave": "texto_off",
+				"nombre": "Texto inactivo",
+				"tipo": "texto",
+				"defecto": "OFF"
+			},
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color_on",
+				"nombre": "Color activo",
+				"tipo": "color",
+				"defecto": "#ffc145"
+			},
+			{
+				"clave": "color_off",
+				"nombre": "Color inactivo",
+				"tipo": "color",
+				"defecto": "#4a6a80"
+			},
+			{
+				"clave": "min",
+				"nombre": "Mínimo (depósito/termómetro)",
+				"tipo": "numero",
+				"defecto": 0
+			},
+			{
+				"clave": "max",
+				"nombre": "Máximo (depósito/termómetro)",
+				"tipo": "numero",
+				"defecto": 100
+			},
+			{
+				"clave": "velocidad",
+				"nombre": "Velocidad de giro",
+				"tipo": "numero",
+				"defecto": 1
+			},
+			{
+				"clave": "con_fondo",
+				"nombre": "Con fondo",
+				"tipo": "bool",
+				"defecto": false
+			}
+		],
+		"script": "w_dibujo"
 	},
 	"estado": {
 		"nombre": "Texto de estado",
@@ -1274,6 +1405,63 @@ const TIPOS := {
 		],
 		"script": "w_interruptor"
 	},
+	"interruptor_luz": {
+		"nombre": "Interruptor con luz",
+		"w": 260,
+		"h": 44,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "texto",
+				"nombre": "Texto",
+				"tipo": "texto",
+				"defecto": "Bomba"
+			},
+			{
+				"clave": "texto_on",
+				"nombre": "Detalle activado",
+				"tipo": "texto",
+				"defecto": ""
+			},
+			{
+				"clave": "texto_off",
+				"nombre": "Detalle desactivado",
+				"tipo": "texto",
+				"defecto": ""
+			},
+			{
+				"clave": "color_on",
+				"nombre": "Color activado",
+				"tipo": "color",
+				"defecto": "#2ec4d6"
+			},
+			{
+				"clave": "pin_luz",
+				"nombre": "Pin de la luz (estado real; vacío = el propio)",
+				"tipo": "pin",
+				"defecto": ""
+			},
+			{
+				"clave": "color_luz",
+				"nombre": "Color de la luz",
+				"tipo": "color",
+				"defecto": "#3ddc84"
+			},
+			{
+				"clave": "confirmar",
+				"nombre": "Pedir confirmación",
+				"tipo": "bool",
+				"defecto": false
+			},
+			{
+				"clave": "clave",
+				"nombre": "PIN (vacío = sin PIN)",
+				"tipo": "texto",
+				"defecto": ""
+			}
+		],
+		"script": "w_interruptor"
+	},
 	"interruptor_seguro": {
 		"nombre": "Interruptor seguro",
 		"w": 240,
@@ -1439,6 +1627,150 @@ const TIPOS := {
 				"nombre": "PIN (vacío = sin PIN)",
 				"tipo": "texto",
 				"defecto": "1234"
+			}
+		],
+		"script": "w_pulsador"
+	},
+	"boton": {
+		"nombre": "Botón personalizable",
+		"w": 140,
+		"h": 52,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "texto",
+				"nombre": "Texto",
+				"tipo": "texto",
+				"defecto": "Marcha"
+			},
+			{
+				"clave": "modo",
+				"nombre": "Modo",
+				"tipo": "opcion",
+				"defecto": "conmutado",
+				"opciones": [
+					"conmutado",
+					"momentaneo",
+					"valor"
+				]
+			},
+			{
+				"clave": "valor",
+				"nombre": "Valor a enviar",
+				"tipo": "numero",
+				"defecto": 1
+			},
+			{
+				"clave": "forma",
+				"nombre": "Forma",
+				"tipo": "opcion",
+				"defecto": "redondeado",
+				"opciones": [
+					"rectangulo",
+					"redondeado",
+					"pildora",
+					"circulo"
+				]
+			},
+			{
+				"clave": "radio",
+				"nombre": "Radio esquinas (redondeado)",
+				"tipo": "numero",
+				"defecto": 14
+			},
+			{
+				"clave": "color_fondo",
+				"nombre": "Color de fondo",
+				"tipo": "color",
+				"defecto": "#10314a"
+			},
+			{
+				"clave": "color_texto",
+				"nombre": "Color de la letra",
+				"tipo": "color",
+				"defecto": "#e8f4fa"
+			},
+			{
+				"clave": "color_borde",
+				"nombre": "Color del borde",
+				"tipo": "color",
+				"defecto": "#2ec4d6"
+			},
+			{
+				"clave": "ancho_borde",
+				"nombre": "Grosor del borde (0 = sin)",
+				"tipo": "numero",
+				"defecto": 1.5
+			},
+			{
+				"clave": "color_activo",
+				"nombre": "Fondo activo / pulsado",
+				"tipo": "color",
+				"defecto": "#2ec4d6"
+			},
+			{
+				"clave": "color_texto_activo",
+				"nombre": "Letra activa / pulsada",
+				"tipo": "color",
+				"defecto": "#06131d"
+			},
+			{
+				"clave": "tam",
+				"nombre": "Tamaño texto",
+				"tipo": "numero",
+				"defecto": 15
+			},
+			{
+				"clave": "negrita",
+				"nombre": "Negrita",
+				"tipo": "bool",
+				"defecto": true
+			},
+			{
+				"clave": "icono",
+				"nombre": "Icono",
+				"tipo": "opcion",
+				"defecto": "ninguno",
+				"opciones": [
+					"ninguno",
+					"bombilla",
+					"ventilador",
+					"bomba",
+					"calentador",
+					"valvula",
+					"motor",
+					"deposito",
+					"termometro",
+					"gota",
+					"campana",
+					"enchufe",
+					"candado",
+					"compresor",
+					"power",
+					"play",
+					"stop",
+					"reset",
+					"flecha_arriba",
+					"flecha_abajo"
+				]
+			},
+			{
+				"clave": "imagen",
+				"nombre": "Imagen de fondo (opcional)",
+				"tipo": "imagen",
+				"defecto": ""
+			},
+			{
+				"clave": "confirmar",
+				"nombre": "Pedir confirmación",
+				"tipo": "bool",
+				"defecto": false
+			},
+			{
+				"clave": "clave",
+				"nombre": "PIN (vacío = sin PIN)",
+				"tipo": "texto",
+				"defecto": ""
 			}
 		],
 		"script": "w_pulsador"
@@ -3254,6 +3586,360 @@ const TIPOS := {
 			}
 		],
 		"script": "w_hidraulica"
+	},
+	"cilindro_de": {
+		"nombre": "Cilindro doble efecto",
+		"w": 200,
+		"h": 80,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "etiqueta",
+				"nombre": "Etiqueta",
+				"tipo": "texto",
+				"defecto": "1A"
+			},
+			{
+				"clave": "min",
+				"nombre": "Valor recogido",
+				"tipo": "numero",
+				"defecto": 0
+			},
+			{
+				"clave": "max",
+				"nombre": "Valor extendido",
+				"tipo": "numero",
+				"defecto": 1
+			},
+			{
+				"clave": "tiempo",
+				"nombre": "Tiempo de carrera (s)",
+				"tipo": "numero",
+				"defecto": 0.6
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			},
+			{
+				"clave": "pin_fin_a",
+				"nombre": "Detector recogido",
+				"tipo": "pin",
+				"defecto": ""
+			},
+			{
+				"clave": "pin_fin_b",
+				"nombre": "Detector extendido",
+				"tipo": "pin",
+				"defecto": ""
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"cilindro_se": {
+		"nombre": "Cilindro simple efecto",
+		"w": 200,
+		"h": 80,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "etiqueta",
+				"nombre": "Etiqueta",
+				"tipo": "texto",
+				"defecto": "1A"
+			},
+			{
+				"clave": "min",
+				"nombre": "Valor recogido",
+				"tipo": "numero",
+				"defecto": 0
+			},
+			{
+				"clave": "max",
+				"nombre": "Valor extendido",
+				"tipo": "numero",
+				"defecto": 1
+			},
+			{
+				"clave": "tiempo",
+				"nombre": "Tiempo de carrera (s)",
+				"tipo": "numero",
+				"defecto": 0.6
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			},
+			{
+				"clave": "pin_fin_a",
+				"nombre": "Detector recogido",
+				"tipo": "pin",
+				"defecto": ""
+			},
+			{
+				"clave": "pin_fin_b",
+				"nombre": "Detector extendido",
+				"tipo": "pin",
+				"defecto": ""
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"valvula_52": {
+		"nombre": "Electroválvula 5/2",
+		"w": 150,
+		"h": 90,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			},
+			{
+				"clave": "etiqueta",
+				"nombre": "Etiqueta",
+				"tipo": "texto",
+				"defecto": "1V1"
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"valvula_32": {
+		"nombre": "Electroválvula 3/2",
+		"w": 150,
+		"h": 90,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			},
+			{
+				"clave": "etiqueta",
+				"nombre": "Etiqueta",
+				"tipo": "texto",
+				"defecto": "1V2"
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"compresor_n": {
+		"nombre": "Compresor",
+		"w": 70,
+		"h": 70,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"frl": {
+		"nombre": "Unidad FRL",
+		"w": 180,
+		"h": 70,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"silenciador": {
+		"nombre": "Silenciador",
+		"w": 30,
+		"h": 44,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"ventosa": {
+		"nombre": "Ventosa de vacío",
+		"w": 70,
+		"h": 80,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"pinza": {
+		"nombre": "Pinza neumática",
+		"w": 80,
+		"h": 90,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"detector": {
+		"nombre": "Detector magnético",
+		"w": 70,
+		"h": 44,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			},
+			{
+				"clave": "etiqueta",
+				"nombre": "Etiqueta",
+				"tipo": "texto",
+				"defecto": "1S1"
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"linea_h": {
+		"nombre": "Línea neumática horizontal",
+		"w": 120,
+		"h": 20,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			},
+			{
+				"clave": "grosor",
+				"nombre": "Grosor (dp)",
+				"tipo": "numero",
+				"defecto": 3
+			},
+			{
+				"clave": "pilotaje",
+				"nombre": "Línea de pilotaje (discontinua)",
+				"tipo": "bool",
+				"defecto": false
+			}
+		],
+		"script": "w_neumatica"
+	},
+	"linea_v": {
+		"nombre": "Línea neumática vertical",
+		"w": 20,
+		"h": 120,
+		"pin": "V1",
+		"props": [
+			{
+				"clave": "condicion",
+				"nombre": "Activo si",
+				"tipo": "texto",
+				"defecto": ">= 0.5"
+			},
+			{
+				"clave": "color",
+				"nombre": "Color con aire",
+				"tipo": "color",
+				"defecto": "#4da3ff"
+			},
+			{
+				"clave": "grosor",
+				"nombre": "Grosor (dp)",
+				"tipo": "numero",
+				"defecto": 3
+			},
+			{
+				"clave": "pilotaje",
+				"nombre": "Línea de pilotaje (discontinua)",
+				"tipo": "bool",
+				"defecto": false
+			}
+		],
+		"script": "w_neumatica"
 	}
 }
 

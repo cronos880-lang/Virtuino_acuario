@@ -1,0 +1,704 @@
+{
+  "formato": "acuaris-proyecto",
+  "version": 1,
+  "nombre": "Novedades del editor",
+  "perfil": "samsung_galaxy_a56",
+  "paginas": [
+    {
+      "id": "p1",
+      "nombre": "Controles y dibujos",
+      "widgets": [
+        {
+          "id": "t1",
+          "tipo": "etiqueta",
+          "x": 8.0,
+          "y": 4.0,
+          "w": 368.0,
+          "h": 20.0,
+          "props": {
+            "texto": "Interruptor con luz (la luz lee el estado real)",
+            "tam": 12,
+            "color": "#8db3ca",
+            "alineacion": "izquierda"
+          }
+        },
+        {
+          "id": "sw1",
+          "tipo": "interruptor_luz",
+          "x": 8.0,
+          "y": 26.0,
+          "w": 368.0,
+          "h": 44.0,
+          "props": {
+            "texto": "Bomba",
+            "texto_on": "Mandada",
+            "texto_off": "Parada",
+            "pin_luz": "V8"
+          },
+          "pin": "V15"
+        },
+        {
+          "id": "sw2",
+          "tipo": "interruptor_luz",
+          "x": 8.0,
+          "y": 72.0,
+          "w": 368.0,
+          "h": 44.0,
+          "props": {
+            "texto": "Luces al máximo",
+            "color_luz": "#ffc145"
+          },
+          "pin": "V16"
+        },
+        {
+          "id": "t2",
+          "tipo": "etiqueta",
+          "x": 8.0,
+          "y": 122.0,
+          "w": 368.0,
+          "h": 20.0,
+          "props": {
+            "texto": "Botón personalizable",
+            "tam": 12,
+            "color": "#8db3ca",
+            "alineacion": "izquierda"
+          }
+        },
+        {
+          "id": "b1",
+          "tipo": "boton",
+          "x": 8.0,
+          "y": 146.0,
+          "w": 96.0,
+          "h": 48.0,
+          "props": {
+            "texto": "Marcha",
+            "forma": "rectangulo",
+            "icono": "play",
+            "color_fondo": "#0f3d2a",
+            "color_borde": "#3ddc84",
+            "color_texto": "#3ddc84"
+          },
+          "pin": "V29"
+        },
+        {
+          "id": "b2",
+          "tipo": "boton",
+          "x": 110.0,
+          "y": 146.0,
+          "w": 96.0,
+          "h": 48.0,
+          "props": {
+            "texto": "Paro",
+            "forma": "redondeado",
+            "icono": "stop",
+            "color_fondo": "#3d1418",
+            "color_borde": "#ff5a5f",
+            "color_texto": "#ff8a8f"
+          },
+          "pin": "V40"
+        },
+        {
+          "id": "b3",
+          "tipo": "boton",
+          "x": 212.0,
+          "y": 146.0,
+          "w": 104.0,
+          "h": 48.0,
+          "props": {
+            "texto": "Reset",
+            "forma": "pildora",
+            "icono": "reset",
+            "color_fondo": "#10314a"
+          },
+          "pin": "V41"
+        },
+        {
+          "id": "b4",
+          "tipo": "boton",
+          "x": 322.0,
+          "y": 146.0,
+          "w": 54.0,
+          "h": 54.0,
+          "props": {
+            "texto": "",
+            "forma": "circulo",
+            "icono": "power",
+            "color_fondo": "#2a2410",
+            "color_borde": "#ffc145",
+            "color_texto": "#ffc145"
+          },
+          "pin": "V42"
+        },
+        {
+          "id": "t3",
+          "tipo": "etiqueta",
+          "x": 8.0,
+          "y": 206.0,
+          "w": 368.0,
+          "h": 20.0,
+          "props": {
+            "texto": "Indicadores con dibujo (encendido / apagado)",
+            "tam": 12,
+            "color": "#8db3ca",
+            "alineacion": "izquierda"
+          }
+        },
+        {
+          "id": "d0",
+          "tipo": "indicador_dibujo",
+          "x": 8.0,
+          "y": 228.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "bombilla",
+            "texto": "Bombilla",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#ffc145",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d1",
+          "tipo": "indicador_dibujo",
+          "x": 82.0,
+          "y": 228.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "ventilador",
+            "texto": "Ventilador",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#2ec4d6",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d2",
+          "tipo": "indicador_dibujo",
+          "x": 156.0,
+          "y": 228.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "bomba",
+            "texto": "Bomba",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": "> 1000",
+            "color_on": "#2ec4d6",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d3",
+          "tipo": "indicador_dibujo",
+          "x": 230.0,
+          "y": 228.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "calentador",
+            "texto": "Calentador",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#ff8a3d",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d4",
+          "tipo": "indicador_dibujo",
+          "x": 304.0,
+          "y": 228.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "valvula",
+            "texto": "Valvula",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d5",
+          "tipo": "indicador_dibujo",
+          "x": 8.0,
+          "y": 356.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "motor",
+            "texto": "Motor",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": "> 1000",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d6",
+          "tipo": "indicador_dibujo",
+          "x": 82.0,
+          "y": 356.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "deposito",
+            "texto": "Deposito",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#2ec4d6",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d7",
+          "tipo": "indicador_dibujo",
+          "x": 156.0,
+          "y": 356.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "termometro",
+            "texto": "Termometro",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#ff5a5f",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d8",
+          "tipo": "indicador_dibujo",
+          "x": 230.0,
+          "y": 356.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "gota",
+            "texto": "Gota",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": "> 1000",
+            "color_on": "#2ec4d6",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d9",
+          "tipo": "indicador_dibujo",
+          "x": 304.0,
+          "y": 356.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "campana",
+            "texto": "Campana",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#ff5a5f",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d10",
+          "tipo": "indicador_dibujo",
+          "x": 8.0,
+          "y": 484.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "enchufe",
+            "texto": "Enchufe",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d11",
+          "tipo": "indicador_dibujo",
+          "x": 82.0,
+          "y": 484.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "candado",
+            "texto": "Candado",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": "> 1000",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d12",
+          "tipo": "indicador_dibujo",
+          "x": 156.0,
+          "y": 484.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "compresor",
+            "texto": "Compresor",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#4da3ff",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d13",
+          "tipo": "indicador_dibujo",
+          "x": 230.0,
+          "y": 484.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "power",
+            "texto": "Power",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d14",
+          "tipo": "indicador_dibujo",
+          "x": 304.0,
+          "y": 484.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "play",
+            "texto": "Play",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": "> 1000",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d15",
+          "tipo": "indicador_dibujo",
+          "x": 8.0,
+          "y": 612.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "stop",
+            "texto": "Stop",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d16",
+          "tipo": "indicador_dibujo",
+          "x": 82.0,
+          "y": 612.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "reset",
+            "texto": "Reset",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d17",
+          "tipo": "indicador_dibujo",
+          "x": 156.0,
+          "y": 612.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "flecha_arriba",
+            "texto": "Flecha arr",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": "> 1000",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d18",
+          "tipo": "indicador_dibujo",
+          "x": 230.0,
+          "y": 612.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "flecha_abajo",
+            "texto": "Flecha aba",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#3ddc84",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "d19",
+          "tipo": "indicador_dibujo",
+          "x": 304.0,
+          "y": 612.0,
+          "w": 70.0,
+          "h": 124.0,
+          "props": {
+            "dibujo": "bombilla",
+            "texto": "Bombilla",
+            "texto_on": "ON",
+            "texto_off": "OFF",
+            "condicion": ">= 0",
+            "color_on": "#ffc145",
+            "min": 0,
+            "max": 255
+          },
+          "pin": "V10"
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "nombre": "Neumática",
+      "widgets": [
+        {
+          "id": "n_comp",
+          "tipo": "compresor_n",
+          "x": 10.0,
+          "y": 16.0,
+          "w": 64.0,
+          "h": 64.0,
+          "props": {
+            "condicion": ">= 0"
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "n_l1",
+          "tipo": "linea_h",
+          "x": 74.0,
+          "y": 38.0,
+          "w": 40.0,
+          "h": 20.0,
+          "props": {
+            "condicion": ">= 0"
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "n_frl",
+          "tipo": "frl",
+          "x": 114.0,
+          "y": 12.0,
+          "w": 180.0,
+          "h": 72.0,
+          "props": {
+            "condicion": ">= 0"
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "n_l2",
+          "tipo": "linea_v",
+          "x": 294.0,
+          "y": 46.0,
+          "w": 20.0,
+          "h": 90.0,
+          "props": {
+            "condicion": ">= 0"
+          },
+          "pin": "V10"
+        },
+        {
+          "id": "n_v52",
+          "tipo": "valvula_52",
+          "x": 150.0,
+          "y": 120.0,
+          "w": 170.0,
+          "h": 96.0,
+          "props": {
+            "etiqueta": "1V1 (V8)"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "n_sil",
+          "tipo": "silenciador",
+          "x": 120.0,
+          "y": 150.0,
+          "w": 26.0,
+          "h": 40.0,
+          "props": {},
+          "pin": "V8"
+        },
+        {
+          "id": "n_cil",
+          "tipo": "cilindro_de",
+          "x": 60.0,
+          "y": 236.0,
+          "w": 260.0,
+          "h": 84.0,
+          "props": {
+            "etiqueta": "1A · posición = minutos (V3)",
+            "min": 0,
+            "max": 59,
+            "pin_fin_a": "V7",
+            "pin_fin_b": "V8"
+          },
+          "pin": "V3"
+        },
+        {
+          "id": "n_cse",
+          "tipo": "cilindro_se",
+          "x": 60.0,
+          "y": 330.0,
+          "w": 260.0,
+          "h": 84.0,
+          "props": {
+            "etiqueta": "2A simple efecto (V8)",
+            "min": 0,
+            "max": 1
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "n_v32",
+          "tipo": "valvula_32",
+          "x": 8.0,
+          "y": 430.0,
+          "w": 150.0,
+          "h": 96.0,
+          "props": {
+            "etiqueta": "2V1"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "n_ven",
+          "tipo": "ventosa",
+          "x": 176.0,
+          "y": 436.0,
+          "w": 80.0,
+          "h": 90.0,
+          "props": {},
+          "pin": "V8"
+        },
+        {
+          "id": "n_pin",
+          "tipo": "pinza",
+          "x": 270.0,
+          "y": 436.0,
+          "w": 90.0,
+          "h": 96.0,
+          "props": {},
+          "pin": "V7"
+        },
+        {
+          "id": "n_det",
+          "tipo": "detector",
+          "x": 20.0,
+          "y": 548.0,
+          "w": 90.0,
+          "h": 48.0,
+          "props": {
+            "etiqueta": "1S2"
+          },
+          "pin": "V8"
+        },
+        {
+          "id": "n_det2",
+          "tipo": "detector",
+          "x": 130.0,
+          "y": 548.0,
+          "w": 90.0,
+          "h": 48.0,
+          "props": {
+            "etiqueta": "1S1"
+          },
+          "pin": "V7"
+        },
+        {
+          "id": "n_pil",
+          "tipo": "linea_h",
+          "x": 240.0,
+          "y": 560.0,
+          "w": 130.0,
+          "h": 20.0,
+          "props": {
+            "pilotaje": true
+          },
+          "pin": "V8"
+        }
+      ]
+    }
+  ]
+}

@@ -19,7 +19,7 @@ func ejecutar() -> void:
 	var total := 0
 	for g in Esquema.GRUPOS:
 		total += g[1].size()
-	t.comprobar(total == Esquema.ORDEN.size() and total == 57, "elementos: 57 tipos en 4 grupos")
+	t.comprobar(total == Esquema.ORDEN.size() and total == 72 and Esquema.GRUPOS.size() == 5, "elementos: 72 tipos en 5 grupos")
 	for tipo in Esquema.ORDEN:
 		var d := Esquema.crear(tipo, "e_" + tipo, 0, 0)
 		var w := FabricaWidgets.crear(d, 2.0)

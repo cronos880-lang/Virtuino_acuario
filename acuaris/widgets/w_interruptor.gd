@@ -1,6 +1,9 @@
 class_name WInterruptor
 extends AcWidget
 ## Interruptor deslizante: escribe 1/0 en el pin y muestra el estado que devuelve el controlador.
+## "interruptor_luz": además lleva una luz a la izquierda que muestra el estado REAL leído de
+## pin_luz (por ejemplo, el interruptor manda V15 y la luz lee V8 = bomba en marcha). Sin pin_luz,
+## la luz sigue al propio interruptor.
 
 func _init() -> void:
 	interactivo = true
@@ -24,12 +27,27 @@ func _draw() -> void:
 		draw_circle(Vector2(cx, pista.get_center().y), radio * 1.6, Color(1, 1, 1, 0.12), true, -1, true)
 	draw_circle(Vector2(cx, pista.get_center().y) + Vector2(0, px(1)), radio, Color(0, 0, 0, 0.25), true, -1, true)
 	draw_circle(Vector2(cx, pista.get_center().y), radio, col_bola, true, -1, true)
+	var x0 := px(4)
+	if str(def.get("tipo")) == "interruptor_luz":
+		var p_luz := pin_de("pin_luz")
+		var hay := tiene_valor("pin_luz") if p_luz != "" else tiene_valor()
+		var luz_on: bool = hay and (valores[p_luz] >= 0.5 if p_luz != "" else on)
+		var c_luz := Estilo.color(prop("color_luz"), Estilo.VERDE)
+		var rl := minf(size.y * 0.5 - px(4), px(11))
+		var cl := Vector2(px(6) + rl, size.y * 0.5)
+		if luz_on:
+			draw_circle(cl, rl * 1.9, Color(c_luz, 0.10), true, -1, true)
+			draw_circle(cl, rl * 1.45, Color(c_luz, 0.22), true, -1, true)
+		draw_circle(cl, rl, c_luz if luz_on else Estilo.APAGADO, true, -1, true)
+		draw_circle(cl, rl, Color(1, 1, 1, 0.25 if luz_on else 0.08), false, px(1.2), true)
+		draw_circle(cl + Vector2(-rl * 0.32, -rl * 0.32), rl * 0.32, Color(1, 1, 1, 0.45 if luz_on else 0.10), true, -1, true)
+		x0 = cl.x + rl + px(10)
 	var etiqueta := str(prop("texto", ""))
 	var detalle := ""
 	if prop("texto_on") != null and tiene_valor():
 		detalle = str(prop("texto_on")) if on else str(prop("texto_off", ""))
 	if detalle != "":
-		texto(etiqueta, Rect2(px(4), 0, pista.position.x - px(12), size.y * 0.58), 14, Estilo.TEXTO, "izquierda")
-		texto(detalle, Rect2(px(4), size.y * 0.5, pista.position.x - px(12), size.y * 0.45), 11.5, c_on if on else Estilo.TEXTO_SEC, "izquierda")
+		texto(etiqueta, Rect2(x0, 0, pista.position.x - px(8) - x0, size.y * 0.58), 14, Estilo.TEXTO, "izquierda")
+		texto(detalle, Rect2(x0, size.y * 0.5, pista.position.x - px(8) - x0, size.y * 0.45), 11.5, c_on if on else Estilo.TEXTO_SEC, "izquierda")
 	else:
-		texto(etiqueta, Rect2(px(4), 0, pista.position.x - px(12), size.y), 14, Estilo.TEXTO, "izquierda")
+		texto(etiqueta, Rect2(x0, 0, pista.position.x - px(8) - x0, size.y), 14, Estilo.TEXTO, "izquierda")

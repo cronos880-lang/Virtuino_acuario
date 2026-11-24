@@ -14,6 +14,8 @@ ALARMA = [P("limite_alto", "Límite alto", "texto", ""), P("limite_bajo", "Lími
 SEGURO = [P("confirmar", "Pedir confirmación", "bool", False), P("clave", "PIN (vacío = sin PIN)", "texto", "")]
 RANGOS = ["15 min", "1 h", "6 h", "24 h", "7 d"]
 # Listas: se editan en el inspector con casillas por línea, pero se guardan como texto (compatible).
+PICTOS = ["bombilla", "ventilador", "bomba", "calentador", "valvula", "motor", "deposito", "termometro", "gota", "campana",
+          "enchufe", "candado", "compresor", "power", "play", "stop", "reset", "flecha_arriba", "flecha_abajo"]
 L_OPCIONES = {"filas": ",", "campos": ":", "columnas": [["Texto", "texto"], ["Valor", "numero"]]}
 L_REGLAS = {"filas": ";", "campos": "|", "columnas": [["Condición", "texto"], ["Texto", "texto"], ["Color", "color"]]}
 L_FILAS = {"filas": ";", "campos": "|", "columnas": [["Texto", "texto"], ["Pin", "pin"], ["Unidad", "texto"], ["Dec.", "numero"]]}
@@ -43,6 +45,13 @@ tipo("led", "LED", 200, 40, "V1", [
     P("color_off", "Color apagado", "color", "#26465c"), P("umbral", "Umbral", "numero", 0.5),
     P("radio", "Radio (dp)", "numero", 11), P("vertical", "Texto en dos líneas", "bool", False),
     P("con_fondo", "Con fondo", "bool", False)], "w_led")
+tipo("indicador_dibujo", "Indicador con dibujo", 96, 120, "V1", [
+    P("dibujo", "Dibujo", "opcion", "bombilla", PICTOS), P("texto", "Texto", "texto", "Luz"),
+    P("texto_on", "Texto activo", "texto", "ON"), P("texto_off", "Texto inactivo", "texto", "OFF"),
+    P("condicion", "Activo si", "texto", ">= 0.5"), P("color_on", "Color activo", "color", "#ffc145"),
+    P("color_off", "Color inactivo", "color", "#4a6a80"), P("min", "Mínimo (depósito/termómetro)", "numero", 0),
+    P("max", "Máximo (depósito/termómetro)", "numero", 100), P("velocidad", "Velocidad de giro", "numero", 1),
+    P("con_fondo", "Con fondo", "bool", False)], "w_dibujo")
 tipo("estado", "Texto de estado", 200, 56, "V1", [
     P("titulo", "Título", "texto", "Estado"),
     P("reglas", "Reglas", "lista", "==0|Apagado|#5d8299; ==1|En marcha|#3ddc84; >1|Alarma|#ff5a5f", L_REGLAS),
@@ -104,6 +113,10 @@ tipo("panel", "Panel", 352, 160, "", [
 tipo("interruptor", "Interruptor", 240, 36, "V1", [
     P("texto", "Texto", "texto", "Interruptor"), P("texto_on", "Detalle activado", "texto", ""),
     P("texto_off", "Detalle desactivado", "texto", ""), P("color_on", "Color activado", "color", "#2ec4d6")] + SEGURO, "w_interruptor")
+tipo("interruptor_luz", "Interruptor con luz", 260, 44, "V1", [
+    P("texto", "Texto", "texto", "Bomba"), P("texto_on", "Detalle activado", "texto", ""),
+    P("texto_off", "Detalle desactivado", "texto", ""), P("color_on", "Color activado", "color", "#2ec4d6"),
+    P("pin_luz", "Pin de la luz (estado real; vacío = el propio)", "pin", ""), P("color_luz", "Color de la luz", "color", "#3ddc84")] + SEGURO, "w_interruptor")
 tipo("interruptor_seguro", "Interruptor seguro", 240, 36, "V1", [
     P("texto", "Texto", "texto", "Calentador"), P("texto_on", "Detalle activado", "texto", ""),
     P("texto_off", "Detalle desactivado", "texto", ""), P("color_on", "Color activado", "color", "#ff8a3d"),
@@ -117,6 +130,15 @@ tipo("pulsador_seguro", "Pulsador seguro", 120, 48, "V1", [
     P("valor", "Valor a enviar", "numero", 1), P("color", "Color", "color", "#ff5a5f"),
     P("tam", "Tamaño texto", "numero", 15), P("radio", "Radio esquinas", "numero", 14),
     P("confirmar", "Pedir confirmación", "bool", True), P("clave", "PIN (vacío = sin PIN)", "texto", "1234")], "w_pulsador")
+tipo("boton", "Botón personalizable", 140, 52, "V1", [
+    P("texto", "Texto", "texto", "Marcha"), P("modo", "Modo", "opcion", "conmutado", ["conmutado", "momentaneo", "valor"]),
+    P("valor", "Valor a enviar", "numero", 1), P("forma", "Forma", "opcion", "redondeado", ["rectangulo", "redondeado", "pildora", "circulo"]),
+    P("radio", "Radio esquinas (redondeado)", "numero", 14), P("color_fondo", "Color de fondo", "color", "#10314a"),
+    P("color_texto", "Color de la letra", "color", "#e8f4fa"), P("color_borde", "Color del borde", "color", "#2ec4d6"),
+    P("ancho_borde", "Grosor del borde (0 = sin)", "numero", 1.5), P("color_activo", "Fondo activo / pulsado", "color", "#2ec4d6"),
+    P("color_texto_activo", "Letra activa / pulsada", "color", "#06131d"), P("tam", "Tamaño texto", "numero", 15),
+    P("negrita", "Negrita", "bool", True), P("icono", "Icono", "opcion", "ninguno", ["ninguno"] + PICTOS),
+    P("imagen", "Imagen de fondo (opcional)", "imagen", "")] + SEGURO, "w_pulsador")
 tipo("casilla", "Casilla", 200, 36, "V1", [
     P("texto", "Texto", "texto", "Activar"), P("valor_on", "Valor marcada", "numero", 1),
     P("valor_off", "Valor desmarcada", "numero", 0), P("color", "Color", "color", "#2ec4d6")] + SEGURO, "w_casilla")
@@ -212,16 +234,36 @@ tipo("sensor", "Sensor", 40, 48, "V1", TUBO + [P("etiqueta", "Etiqueta", "texto"
 tipo("agitador", "Agitador", 60, 100, "V1", TUBO + COND, "w_hidraulica")
 tipo("chorro", "Chorro de salida", 30, 80, "V1", TUBO + COND, "w_hidraulica")
 
+# ---------------------------------------------------------------- Neumática
+NC = [P("condicion", "Activo si", "texto", ">= 0.5"), P("color", "Color con aire", "color", "#4da3ff")]
+CIL = [P("etiqueta", "Etiqueta", "texto", "1A"), P("min", "Valor recogido", "numero", 0), P("max", "Valor extendido", "numero", 1),
+       P("tiempo", "Tiempo de carrera (s)", "numero", 0.6), P("color", "Color con aire", "color", "#4da3ff"),
+       P("pin_fin_a", "Detector recogido", "pin", ""), P("pin_fin_b", "Detector extendido", "pin", "")]
+tipo("cilindro_de", "Cilindro doble efecto", 200, 80, "V1", CIL, "w_neumatica")
+tipo("cilindro_se", "Cilindro simple efecto", 200, 80, "V1", CIL, "w_neumatica")
+tipo("valvula_52", "Electroválvula 5/2", 150, 90, "V1", NC + [P("etiqueta", "Etiqueta", "texto", "1V1")], "w_neumatica")
+tipo("valvula_32", "Electroválvula 3/2", 150, 90, "V1", NC + [P("etiqueta", "Etiqueta", "texto", "1V2")], "w_neumatica")
+tipo("compresor_n", "Compresor", 70, 70, "V1", NC, "w_neumatica")
+tipo("frl", "Unidad FRL", 180, 70, "V1", NC, "w_neumatica")
+tipo("silenciador", "Silenciador", 30, 44, "V1", NC, "w_neumatica")
+tipo("ventosa", "Ventosa de vacío", 70, 80, "V1", NC, "w_neumatica")
+tipo("pinza", "Pinza neumática", 80, 90, "V1", NC, "w_neumatica")
+tipo("detector", "Detector magnético", 70, 44, "V1", NC + [P("etiqueta", "Etiqueta", "texto", "1S1")], "w_neumatica")
+tipo("linea_h", "Línea neumática horizontal", 120, 20, "V1", NC + [P("grosor", "Grosor (dp)", "numero", 3), P("pilotaje", "Línea de pilotaje (discontinua)", "bool", False)], "w_neumatica")
+tipo("linea_v", "Línea neumática vertical", 20, 120, "V1", NC + [P("grosor", "Grosor (dp)", "numero", 3), P("pilotaje", "Línea de pilotaje (discontinua)", "bool", False)], "w_neumatica")
+
 GRUPOS = [
-    ["Visualización", ["valor", "valor_editable", "led", "estado", "indicador", "manometro", "barra", "barra_escala",
+    ["Visualización", ["valor", "valor_editable", "led", "indicador_dibujo", "estado", "indicador", "manometro", "barra", "barra_escala",
                        "barra_vertical", "giratorio", "segmentos", "imagen", "reloj", "etiqueta", "panel"]],
-    ["Control", ["interruptor", "interruptor_seguro", "pulsador", "pulsador_seguro", "casilla", "opciones",
+    ["Control", ["interruptor", "interruptor_luz", "interruptor_seguro", "pulsador", "pulsador_seguro", "boton", "casilla", "opciones",
                  "grupo_botones", "selector", "potenciometro", "deslizador", "deslizador_v"]],
     ["Gráficas y especiales", ["grafica", "grafica_avanzada", "grafica_emergente", "historial_tabla", "tabla",
                                "estado_dispositivo", "regla", "programador", "mapa"]],
     ["Hidráulica", ["deposito", "tuberia_h", "tuberia_v", "acoplamiento", "codo", "te", "cruz", "reduccion",
                     "valvula_2v", "valvula_3v", "acoplamiento_eje", "bomba_h", "antirretorno", "caudalimetro",
                     "volante", "maneta", "motor", "solenoide", "manometro_peq", "sensor", "agitador", "chorro"]],
+    ["Neumática", ["cilindro_de", "cilindro_se", "valvula_52", "valvula_32", "compresor_n", "frl", "silenciador",
+                   "ventosa", "pinza", "detector", "linea_h", "linea_v"]],
 ]
 todos = [t for g in GRUPOS for t in g[1]]
 assert sorted(todos) == sorted(T.keys()), set(T.keys()) ^ set(todos)

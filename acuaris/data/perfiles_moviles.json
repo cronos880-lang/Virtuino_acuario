@@ -1,109 +1,389 @@
 {
-  "formato": "acuaris-perfiles",
-  "version": 1,
-  "nota": "Los campos *_verificado indican si el dato procede de una medición real con Acuaris en el teléfono. Los datos no verificados son provisionales. Los perfiles 'genérico' no corresponden a un modelo concreto.",
-  "perfiles": [
-    {
-      "id": "samsung_galaxy_a56",
-      "nombre": "Samsung Galaxy A56 5G",
-      "pantalla_px": [
-        1080,
-        2340
-      ],
-      "diagonal_pulgadas": 6.7,
-      "ppi_fisico": 385,
-      "fuente_ficha": "Ficha técnica pública: 6,7\", 1080 x 2340 px, 385 ppi, Super AMOLED 120 Hz, Android 15",
-      "densidad": 2.8125,
-      "densidad_verificado": false,
-      "nota_densidad": "Estimación (450 dpi lógicos, habitual en Samsung FHD+ con tamaño de pantalla por defecto). Se confirma con 'Medir este móvil'.",
-      "margen_superior_dp": 32,
-      "margen_inferior_dp": 24,
-      "margenes_verificado": false,
-      "tipo": "movil"
-    },
-    {
-      "id": "generico_compacto",
-      "nombre": "Android genérico compacto (360 x 800 dp)",
-      "pantalla_px": [
-        1080,
-        2400
-      ],
-      "densidad": 3.0,
-      "densidad_verificado": false,
-      "margen_superior_dp": 24,
-      "margen_inferior_dp": 24,
-      "margenes_verificado": false,
-      "tipo": "movil"
-    },
-    {
-      "id": "generico_grande",
-      "nombre": "Android genérico grande (412 x 915 dp)",
-      "pantalla_px": [
-        1080,
-        2400
-      ],
-      "densidad": 2.625,
-      "densidad_verificado": false,
-      "margen_superior_dp": 24,
-      "margen_inferior_dp": 24,
-      "margenes_verificado": false,
-      "tipo": "movil"
-    },
-    {
-      "id": "generico_tablet_10",
-      "nombre": "Tablet Android 10\" genérica (800 x 1280 dp)",
-      "tipo": "tablet",
-      "pantalla_px": [
-        1600,
-        2560
-      ],
-      "densidad": 2.0,
-      "densidad_verificado": false,
-      "margen_superior_dp": 24,
-      "margen_inferior_dp": 24,
-      "margenes_verificado": false
-    },
-    {
-      "id": "generico_tablet_8",
-      "nombre": "Tablet Android 8\" genérica (600 x 960 dp)",
-      "tipo": "tablet",
-      "pantalla_px": [
-        1200,
-        1920
-      ],
-      "densidad": 2.0,
-      "densidad_verificado": false,
-      "margen_superior_dp": 24,
-      "margen_inferior_dp": 24,
-      "margenes_verificado": false
-    },
-    {
-      "id": "pc_ventana_1280x800",
-      "nombre": "PC: ventana 1280 x 800",
-      "tipo": "pc",
-      "pantalla_px": [
-        1280,
-        800
-      ],
-      "densidad": 1.0,
-      "densidad_verificado": true,
-      "margen_superior_dp": 0,
-      "margen_inferior_dp": 0,
-      "margenes_verificado": true
-    },
-    {
-      "id": "pc_pantalla_1920x1080",
-      "nombre": "PC: pantalla completa 1920 x 1080",
-      "tipo": "pc",
-      "pantalla_px": [
-        1920,
-        1080
-      ],
-      "densidad": 1.0,
-      "densidad_verificado": true,
-      "margen_superior_dp": 0,
-      "margen_inferior_dp": 0,
-      "margenes_verificado": true
-    }
-  ]
+ "formato": "acuaris-perfiles",
+ "version": 1,
+ "nota": "Los campos *_verificado indican si el dato procede de una medición real con Acuaris en el teléfono. Los datos no verificados son provisionales. Los perfiles 'genérico' no corresponden a un modelo concreto.",
+ "perfiles": [
+  {
+   "id": "samsung_galaxy_a56",
+   "nombre": "Samsung Galaxy A56 5G",
+   "pantalla_px": [
+    1080,
+    2340
+   ],
+   "diagonal_pulgadas": 6.7,
+   "ppi_fisico": 385,
+   "fuente_ficha": "Ficha técnica pública: 6,7\", 1080 x 2340 px, 385 ppi, Super AMOLED 120 Hz, Android 15",
+   "densidad": 2.8125,
+   "densidad_verificado": false,
+   "nota_densidad": "Estimación (450 dpi lógicos, habitual en Samsung FHD+ con tamaño de pantalla por defecto). Se confirma con 'Medir este móvil'.",
+   "margen_superior_dp": 32,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "tipo": "movil"
+  },
+  {
+   "id": "generico_compacto",
+   "nombre": "Android genérico compacto (360 x 800 dp)",
+   "pantalla_px": [
+    1080,
+    2400
+   ],
+   "densidad": 3.0,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "tipo": "movil"
+  },
+  {
+   "id": "generico_grande",
+   "nombre": "Android genérico grande (412 x 915 dp)",
+   "pantalla_px": [
+    1080,
+    2400
+   ],
+   "densidad": 2.625,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "tipo": "movil"
+  },
+  {
+   "id": "samsung_galaxy_s24",
+   "nombre": "Samsung Galaxy S24",
+   "tipo": "movil",
+   "pantalla_px": [
+    1080,
+    2340
+   ],
+   "densidad": 2.8125,
+   "densidad_verificado": false,
+   "margen_superior_dp": 32,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 6.2,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "samsung_galaxy_a16",
+   "nombre": "Samsung Galaxy A16",
+   "tipo": "movil",
+   "pantalla_px": [
+    1080,
+    2340
+   ],
+   "densidad": 2.8125,
+   "densidad_verificado": false,
+   "margen_superior_dp": 32,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 6.7,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "samsung_galaxy_a36",
+   "nombre": "Samsung Galaxy A36 5G",
+   "tipo": "movil",
+   "pantalla_px": [
+    1080,
+    2340
+   ],
+   "densidad": 2.8125,
+   "densidad_verificado": false,
+   "margen_superior_dp": 32,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 6.7,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "google_pixel_8",
+   "nombre": "Google Pixel 8",
+   "tipo": "movil",
+   "pantalla_px": [
+    1080,
+    2400
+   ],
+   "densidad": 2.625,
+   "densidad_verificado": false,
+   "margen_superior_dp": 32,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 6.2,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "google_pixel_9",
+   "nombre": "Google Pixel 9",
+   "tipo": "movil",
+   "pantalla_px": [
+    1080,
+    2424
+   ],
+   "densidad": 2.625,
+   "densidad_verificado": false,
+   "margen_superior_dp": 32,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 6.3,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "xiaomi_redmi_note_13",
+   "nombre": "Xiaomi Redmi Note 13",
+   "tipo": "movil",
+   "pantalla_px": [
+    1080,
+    2400
+   ],
+   "densidad": 2.75,
+   "densidad_verificado": false,
+   "margen_superior_dp": 32,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 6.67,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "generico_tablet_10",
+   "nombre": "Tablet Android 10\" genérica (800 x 1280 dp)",
+   "tipo": "tablet",
+   "pantalla_px": [
+    1600,
+    2560
+   ],
+   "densidad": 2.0,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false
+  },
+  {
+   "id": "generico_tablet_8",
+   "nombre": "Tablet Android 8\" genérica (600 x 960 dp)",
+   "tipo": "tablet",
+   "pantalla_px": [
+    1200,
+    1920
+   ],
+   "densidad": 2.0,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false
+  },
+  {
+   "id": "generico_tablet_7",
+   "nombre": "Tablet Android 7\" genérica (600 x 1024 dp)",
+   "tipo": "tablet",
+   "pantalla_px": [
+    600,
+    1024
+   ],
+   "densidad": 1.0,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false
+  },
+  {
+   "id": "generico_tablet_12",
+   "nombre": "Tablet Android 12\" genérica (900 x 1440 dp)",
+   "tipo": "tablet",
+   "pantalla_px": [
+    1800,
+    2880
+   ],
+   "densidad": 2.0,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false
+  },
+  {
+   "id": "amazon_fire_7",
+   "nombre": "Amazon Fire 7 (7\")",
+   "tipo": "tablet",
+   "pantalla_px": [
+    600,
+    1024
+   ],
+   "densidad": 1.0,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 7.0,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "samsung_galaxy_tab_a9",
+   "nombre": "Samsung Galaxy Tab A9 (8,7\")",
+   "tipo": "tablet",
+   "pantalla_px": [
+    800,
+    1340
+   ],
+   "densidad": 1.3333,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 8.7,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "lenovo_tab_m9",
+   "nombre": "Lenovo Tab M9 (9\")",
+   "tipo": "tablet",
+   "pantalla_px": [
+    800,
+    1340
+   ],
+   "densidad": 1.3333,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 9.0,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "samsung_galaxy_tab_a9_plus",
+   "nombre": "Samsung Galaxy Tab A9+ (11\")",
+   "tipo": "tablet",
+   "pantalla_px": [
+    1200,
+    1920
+   ],
+   "densidad": 1.5,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 11.0,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "lenovo_tab_m11",
+   "nombre": "Lenovo Tab M11 (11\")",
+   "tipo": "tablet",
+   "pantalla_px": [
+    1200,
+    1920
+   ],
+   "densidad": 1.5,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 10.95,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "xiaomi_redmi_pad_se",
+   "nombre": "Xiaomi Redmi Pad SE (11\")",
+   "tipo": "tablet",
+   "pantalla_px": [
+    1200,
+    1920
+   ],
+   "densidad": 1.5,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 11.0,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "amazon_fire_hd_10",
+   "nombre": "Amazon Fire HD 10 (10,1\")",
+   "tipo": "tablet",
+   "pantalla_px": [
+    1200,
+    1920
+   ],
+   "densidad": 1.5,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 10.1,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "samsung_galaxy_tab_s9_fe",
+   "nombre": "Samsung Galaxy Tab S9 FE (10,9\")",
+   "tipo": "tablet",
+   "pantalla_px": [
+    1440,
+    2304
+   ],
+   "densidad": 2.0,
+   "densidad_verificado": false,
+   "margen_superior_dp": 24,
+   "margen_inferior_dp": 24,
+   "margenes_verificado": false,
+   "diagonal_pulgadas": 10.9,
+   "fuente_ficha": "Resolución y diagonal de la ficha del fabricante (dato de memoria, sin comprobar en esta sesión). Densidad estimada: se confirma con 'Medir este móvil'.",
+   "datos_ficha_verificado": false
+  },
+  {
+   "id": "pc_ventana_1280x800",
+   "nombre": "PC: ventana 1280 x 800",
+   "tipo": "pc",
+   "pantalla_px": [
+    1280,
+    800
+   ],
+   "densidad": 1.0,
+   "densidad_verificado": true,
+   "margen_superior_dp": 0,
+   "margen_inferior_dp": 0,
+   "margenes_verificado": true
+  },
+  {
+   "id": "pc_pantalla_1920x1080",
+   "nombre": "PC: pantalla completa 1920 x 1080",
+   "tipo": "pc",
+   "pantalla_px": [
+    1920,
+    1080
+   ],
+   "densidad": 1.0,
+   "densidad_verificado": true,
+   "margen_superior_dp": 0,
+   "margen_inferior_dp": 0,
+   "margenes_verificado": true
+  },
+  {
+   "id": "pc_pantalla_1366x768",
+   "nombre": "PC: portátil 1366 x 768",
+   "tipo": "pc",
+   "pantalla_px": [
+    1366,
+    768
+   ],
+   "densidad": 1.0,
+   "densidad_verificado": true,
+   "margen_superior_dp": 0,
+   "margen_inferior_dp": 0,
+   "margenes_verificado": true
+  }
+ ]
 }

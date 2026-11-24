@@ -5,6 +5,8 @@ extends RefCounted
 const SCRIPTS := {
 	"w_valor": preload("res://widgets/w_valor.gd"),
 	"w_led": preload("res://widgets/w_led.gd"),
+	"w_dibujo": preload("res://widgets/w_dibujo.gd"),
+	"w_neumatica": preload("res://widgets/w_neumatica.gd"),
 	"w_estado": preload("res://widgets/w_estado.gd"),
 	"w_indicador": preload("res://widgets/w_indicador.gd"),
 	"w_manometro": preload("res://widgets/w_manometro.gd"),
