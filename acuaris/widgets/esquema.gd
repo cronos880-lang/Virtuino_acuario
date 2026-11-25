@@ -2085,6 +2085,12 @@ const TIPOS := {
 				"defecto": false
 			},
 			{
+				"clave": "en_vivo",
+				"nombre": "Enviar mientras se arrastra",
+				"tipo": "bool",
+				"defecto": false
+			},
+			{
 				"clave": "confirmar",
 				"nombre": "Pedir confirmación",
 				"tipo": "bool",
@@ -2152,6 +2158,12 @@ const TIPOS := {
 				"nombre": "Vertical",
 				"tipo": "bool",
 				"defecto": true
+			},
+			{
+				"clave": "en_vivo",
+				"nombre": "Enviar mientras se arrastra",
+				"tipo": "bool",
+				"defecto": false
 			},
 			{
 				"clave": "confirmar",

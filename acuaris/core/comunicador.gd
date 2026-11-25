@@ -32,6 +32,12 @@ var _t_envio := 0
 var _indice := 0
 var _t_fin_ronda := -100000
 var _cola_escrituras: Array[Dictionary] = []
+## Pines de la página que se está viendo: se leen en cada ronda; el resto, una de cada RONDAS_COMPLETA.
+var pines_prioritarios: Array[String] = []
+const RONDAS_COMPLETA := 4
+var _ronda: Array[String] = []
+var _n_ronda := 0
+var _ronda_ya := false   # tras escribir, empezar otra ronda en cuanto se pueda (respuesta rápida)
 var _t_ultima_escritura: Dictionary = {}
 var _reloj_externo := -1
 
@@ -43,6 +49,7 @@ func fijar_enlace(nuevo: Enlace) -> void:
 	_buffer = ""
 	_pendiente = ""
 	_indice = 0
+	_ronda = pines_lectura.duplicate()
 	if enlace:
 		enlace.datos_recibidos.connect(_al_recibir)
 
@@ -56,6 +63,7 @@ func fijar_pines(pines: Array) -> void:
 		var nombre := ProtocoloVCM.nombre_pin(sp.tipo, sp.pin)
 		if not pines_lectura.has(nombre):
 			pines_lectura.append(nombre)
+	_ronda = pines_lectura.duplicate()
 	_indice = 0
 
 
@@ -67,7 +75,18 @@ func escribir(pin: String, valor: float) -> void:
 		push_warning("Pin no válido: %s" % pin)
 		return
 	var nombre := ProtocoloVCM.nombre_pin(sp.tipo, sp.pin)
-	_cola_escrituras.append({"texto": ProtocoloVCM.peticion_escritura(sp.tipo, sp.pin, valor), "pin": nombre})
+	var texto := ProtocoloVCM.peticion_escritura(sp.tipo, sp.pin, valor)
+	# Si ya había una escritura pendiente del mismo pin (deslizador en vivo), se sustituye: sin cola
+	var sustituida := false
+	for e in _cola_escrituras:
+		if e.pin == nombre:
+			e.texto = texto
+			sustituida = true
+	if not sustituida:
+		_cola_escrituras.append({"texto": texto, "pin": nombre})
+	# Se corta la ronda en curso y se vuelve a leer ya la página visible, para ver el efecto
+	_ronda_ya = true
+	_indice = _ronda.size()
 	valores[nombre] = valor
 	valor_actualizado.emit(nombre, valor)
 
@@ -100,18 +119,40 @@ func tick(ahora_ms: int = -1) -> void:
 		return
 	if pines_lectura.is_empty():
 		return
-	if _indice >= pines_lectura.size():
-		if ahora - _t_fin_ronda < intervalo_ronda_ms:
+	if _indice >= _ronda.size():
+		if ahora - _t_fin_ronda < intervalo_ronda_ms and not _ronda_ya:
 			return
-		_indice = 0
-	var nombre := pines_lectura[_indice]
+		_nueva_ronda()
+	var nombre := _ronda[_indice]
 	_indice += 1
-	if _indice >= pines_lectura.size():
+	if _indice >= _ronda.size():
 		_t_fin_ronda = ahora
 	var sp := ProtocoloVCM.separar_pin(nombre)
 	_pendiente = nombre
 	_t_envio = ahora
 	enlace.enviar(ProtocoloVCM.peticion_lectura(sp.tipo, sp.pin))
+
+
+## Pines de la página visible (se leen en todas las rondas).
+func fijar_prioritarios(pines: Array) -> void:
+	pines_prioritarios.clear()
+	for p in pines:
+		var sp := ProtocoloVCM.separar_pin(str(p))
+		if not sp.is_empty():
+			var nombre := ProtocoloVCM.nombre_pin(sp.tipo, sp.pin)
+			if not pines_prioritarios.has(nombre):
+				pines_prioritarios.append(nombre)
+	_ronda_ya = true
+
+
+func _nueva_ronda() -> void:
+	_indice = 0
+	_ronda_ya = false
+	_n_ronda += 1
+	if pines_prioritarios.is_empty() or _n_ronda % RONDAS_COMPLETA == 0:
+		_ronda = pines_lectura.duplicate()
+	else:
+		_ronda = pines_prioritarios.duplicate()
 
 
 func _al_recibir(texto: String) -> void:

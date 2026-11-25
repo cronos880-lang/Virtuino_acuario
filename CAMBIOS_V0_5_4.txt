@@ -1,3 +1,11 @@
+ACUARIS V0.5.4 (prueba, no oficial)
+- Respuesta más rápida con el Arduino:
+  - La página que se está viendo se lee en cada ronda; las otras, una de cada cuatro.
+  - Al escribir un valor, se vuelve a leer al momento la página visible.
+  - Las escrituras repetidas del mismo pin no se acumulan.
+- Deslizador: opción nueva «Enviar mientras se arrastra» (unas 6 veces por segundo). En el
+  Acuario V2 está activada en «Intensidad ahora», así que la luz cambia mientras mueves el dedo.
+
 ACUARIS V0.5.3 (PC, prueba, no oficial)
 - Editor: la página se ve como en el móvil. Si no cabe de alto, se reduce igual que en la
   app, tanto al editar como al «Probar». Se pueden seleccionar y mover también los elementos

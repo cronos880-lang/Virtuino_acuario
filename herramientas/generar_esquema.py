@@ -158,11 +158,13 @@ tipo("potenciometro", "Potenciómetro", 150, 166, "V1", [
 tipo("deslizador", "Deslizador", 240, 56, "V1", [
     P("titulo", "Título", "texto", "Ajuste"), P("min", "Mínimo", "numero", 0), P("max", "Máximo", "numero", 100),
     P("paso", "Paso", "numero", 1), P("unidad", "Unidad", "texto", ""), P("decimales", "Decimales", "entero", 0),
-    P("color", "Color", "color", "#2ec4d6"), P("vertical", "Vertical", "bool", False)] + SEGURO, "w_deslizador")
+    P("color", "Color", "color", "#2ec4d6"), P("vertical", "Vertical", "bool", False),
+    P("en_vivo", "Enviar mientras se arrastra", "bool", False)] + SEGURO, "w_deslizador")
 tipo("deslizador_v", "Deslizador vertical", 72, 220, "V1", [
     P("titulo", "Título", "texto", "Nivel"), P("min", "Mínimo", "numero", 0), P("max", "Máximo", "numero", 100),
     P("paso", "Paso", "numero", 1), P("unidad", "Unidad", "texto", ""), P("decimales", "Decimales", "entero", 0),
-    P("color", "Color", "color", "#2ec4d6"), P("vertical", "Vertical", "bool", True)] + SEGURO, "w_deslizador")
+    P("color", "Color", "color", "#2ec4d6"), P("vertical", "Vertical", "bool", True),
+    P("en_vivo", "Enviar mientras se arrastra", "bool", False)] + SEGURO, "w_deslizador")
 
 # ---------------------------------------------------------------- Gráficas y especiales
 tipo("grafica", "Gráfica", 352, 200, "V1", [

@@ -192,7 +192,8 @@
             "color": "#ffd166",
             "vertical": false,
             "confirmar": false,
-            "clave": ""
+            "clave": "",
+            "en_vivo": true
           }
         },
         {

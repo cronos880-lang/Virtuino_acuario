@@ -1,0 +1,20 @@
+ACUARIS V0.5.4 — VERSIÓN DE PRUEBA (NO OFICIAL)
+===============================================
+ORIGEN: V0.5.3 (PC) y V0.5.2 (APK). Rama claude/inspiring-bell-j28igo.
+
+PC (ZIP COMPLETO, en una carpeta nueva; no toca la V0.5.3)
+1. Descomprime en una carpeta NUEVA, por ejemplo Documentos\Acuaris_V0_5_4.
+   Copia dentro la carpeta "motor" de la versión anterior para no descargar
+   Godot otra vez.
+2. INICIAR_WINDOWS.bat. El título debe decir «Acuaris V0.5.4».
+3. Tu interfaz actualizada: Abrir → acuaris\proyectos\acuario_v2.acuaris.json
+   (deslizador de intensidad, resumen de hoy, aviso del calentador y gráfica viva).
+4. Novedades del editor: Abrir → acuaris\proyectos\ejemplos\novedades_editor.acuaris.json
+5. Los proyectos que hayas guardado con la V0.4.0 se abren igual.
+
+MÓVIL: APK V0.5.4, ACTUALIZACIÓN encima de la V0.5.2 (conserva el HC-05, el historial y la
+interfaz recibida). Después hay que reenviar el Acuario V2 desde el editor («Enviar al móvil»),
+porque el deslizador «Intensidad ahora» lleva la opción nueva «Enviar mientras se arrastra».
+
+ARDUINO: sketch Control_Acuario_V2 2.1.0 (ZIP aparte, ya entregado). Sin él, el
+deslizador, el resumen de hoy y el aviso del calentador no tienen datos.

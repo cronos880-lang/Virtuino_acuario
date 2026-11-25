@@ -78,6 +78,48 @@ func ejecutar() -> void:
 		s2.temperatura_agua = 24.0
 		s2.avanzar(1.0)
 	t.comprobar(s2.V[64] == 1.0 and s2.V[63] == 5.0, "sim v2: calentador sin efecto a los 60 min")
+	# Respuesta rápida: la página visible se lee en cada ronda y las escrituras no se acumulan
+	var pr := Proyecto.desde_archivo("res://proyectos/acuario_v2.acuaris.json")
+	var en := EnlaceSimulado.new()
+	var co := Comunicador.new()
+	t.root.add_child(en)
+	t.root.add_child(co)
+	en.set_process(false)
+	co.set_process(false)
+	en.simulador.configurar_modelo("acuario_v2")
+	en.simulador.fijar_hora(18, 0)
+	co.fijar_enlace(en)
+	co.fijar_pines(pr.todos_los_pines())
+	var pp := []
+	for d in pr.paginas()[0].widgets:
+		pp.append_array(Proyecto.pines_de(d))
+	co.fijar_prioritarios(pp)
+	en.conectar()
+	var ms := 0
+	for i in 200:
+		ms += 50
+		en.paso(0.05)
+		co.tick(ms)
+	for v in [10.0, 20.0, 30.0, 40.0]:
+		co.escribir("V12", v)
+	t.comprobar(co._cola_escrituras.size() == 1, "comunicador: escrituras del mismo pin no se acumulan")
+	for i in 100:
+		ms += 50
+		en.paso(0.05)
+		co.tick(ms)
+	t.comprobar(en.simulador.luz_pwm == 40, "comunicador: la luz cambia con el último valor del deslizador")
+	co.escribir("V13", 1.0)   # botón «Referencia»
+	var ms0 := ms
+	var visto := -1
+	for i in 200:
+		ms += 50
+		en.paso(0.05)
+		co.tick(ms)
+		if visto < 0 and co.valores.get("V12", -1.0) == 125.0:
+			visto = ms - ms0
+	t.comprobar(visto >= 0 and visto <= 2500, "comunicador: «Referencia» se ve en el deslizador en < 2,5 s (%d ms)" % visto)
+	en.free()
+	co.free()
 	# Formato hora del elemento Valor
 	t.comprobar(WValor.leer_hora("16:30") == 1630 and WValor.leer_hora("930") == 930 and WValor.leer_hora("9.05") == 905, "valor hora: lectura de 16:30, 930 y 9.05")
 	t.comprobar(WValor.leer_hora("25:00") == null and WValor.leer_hora("12:60") == null and WValor.leer_hora("abc") == null, "valor hora: horas no válidas")

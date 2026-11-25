@@ -1,9 +1,12 @@
 class_name WDeslizador
 extends AcWidget
 ## Deslizador horizontal o vertical ("vertical"): arrastrar para elegir y soltar para enviar.
+## Con "en_vivo" también envía mientras se arrastra (unas 6 veces por segundo), para ver el efecto al momento.
 
 var _arrastrando := false
 var _valor_local := 0.0
+var _t_envio := 0
+var _ultimo_enviado := NAN
 
 
 func _init() -> void:
@@ -42,6 +45,12 @@ func _gui_input(evento: InputEvent) -> void:
 		accept_event()
 	elif evento is InputEventMouseMotion and _arrastrando:
 		_valor_local = _valor_en(evento.position)
+		var ahora := Time.get_ticks_msec()
+		var pide := bool(prop("confirmar", false)) or str(prop("clave", "")) != ""
+		if bool(prop("en_vivo", false)) and not pide and ahora - _t_envio >= 150 and _valor_local != _ultimo_enviado:
+			_t_envio = ahora
+			_ultimo_enviado = _valor_local
+			solicitar(_valor_local)
 		queue_redraw()
 		accept_event()
 

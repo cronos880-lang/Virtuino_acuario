@@ -139,6 +139,11 @@ func _construir() -> void:
 		if alto_dp * s > scroll.size.y and alto_dp > 0.0:
 			s_pag = maxf(scroll.size.y / alto_dp, s * 0.6)   # como mucho al 60 %; si aún no cabe, se desliza
 		vista.construir(pag, s_pag, proyecto.ancho_dp(), proyecto.alto_dp())
+		# Lo que se ve se lee en cada ronda (respuesta rápida); el resto de páginas, de vez en cuando
+		var pines_pag := []
+		for d in pag.get("widgets", []):
+			pines_pag.append_array(Proyecto.pines_de(d))
+		comunicador.fijar_prioritarios(pines_pag)
 		vista.position.x = maxf(0.0, (tam.x - proyecto.ancho_dp() * s_pag) * 0.5)
 		marco.custom_minimum_size = Vector2(tam.x, vista.size.y)
 	for p in comunicador.valores:
